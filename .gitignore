@@ -1,0 +1,12 @@
+# exclude huge files
+*.fa*
+*.gz
+*.bam
+*.sam*
+*.ebwt
+*.tsv
+*.json
+*.png
+
+# exclude tmp directory
+tmp/
