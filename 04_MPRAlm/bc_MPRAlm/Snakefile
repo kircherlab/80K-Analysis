@@ -1,0 +1,14 @@
+### Snakemake workflow for (bc_)MPRAlm analysis of 80K analysis
+
+# First: bc_preparation.sh (/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/bc_preparation.sh) -> filter MPRASnakeflow results to get only oligos with alt and ref
+#! TODO: Problem 12.13.2023: only 32851 variants have alt and ref (for proximal regulator: 117577)
+
+rule bc_preparation:
+    input: 
+        variants="/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/design/final_design/results/final_design/cardiac_neuro_cava_random/variant_region_map.tsv.gz",
+        assignment="/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/experiment/results/experiments/run1counts_run2Assignment_NoDupAss/assignment/assignmentFixDuplicates.tsv.gz",
+        count1="/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/experiment/results/experiments/run1counts_run2Assignment_NoDupAss/assigned_counts/assignmentFixDuplicates/NGN2_1.merged.config.standardConfig.tsv.gz",
+        count2="/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/experiment/results/experiments/run1counts_run2Assignment_NoDupAss/assigned_counts/assignmentFixDuplicates/NGN2_2.merged.config.standardConfig.tsv.gz",
+        count3="/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/experiment/results/experiments/run1counts_run2Assignment_NoDupAss/assigned_counts/assignmentFixDuplicates/NGN2_3.merged.config.standardConfig.tsv.gz",
+    output:
+        final_output="/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/NGN2_filtered_counts_sequences.tsv.gz",

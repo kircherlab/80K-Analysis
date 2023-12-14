@@ -10,3 +10,4 @@
 
 # exclude tmp directory
 tmp/
+*results/*

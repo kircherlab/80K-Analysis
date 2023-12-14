@@ -1,12 +1,18 @@
 #!/usr/bin/env Rscript
 
+if (!require("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+
+BiocManager::install("mpra")
 library(mpra)
 library(dplyr)
 library(arrow)
 
 args = commandArgs(trailingOnly=TRUE)
-input = "/data/humangen_kircherlab/MPRA/tt_mpra_analysis/data/ProxProm/mpralm/mpralm_input_HepG2.tsv" #args[1]
-png(file = "results/HepG2_outputs/mpralm/voom_all.png")
+# input = "/data/humangen_kircherlab/MPRA/tt_mpra_analysis/data/ProxProm/mpralm/mpralm_input_HepG2.tsv" #args[1]
+input = "/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/mpralm_input_NGN2.tsv" #args[1]
+output_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/MPRAlm/"
+png(file=file.path(output_dir, paste("voom_all.png")))
 name = "all" #args[2]
 
 # Reading the barcode level input data
@@ -27,20 +33,23 @@ row.names(dna) <- dna[,1]
 dna[,1] <- NULL
 
 # Running MPRAlm
-mpra <- MPRASet(DNA = dna, RNA = rna, eid = row.names(dna), barcode = NULL)
-design <- data.frame(intcpt = 1, alt = grepl("alt", colnames(mpra)))
+mpralm_set <- MPRASet(DNA = dna, RNA = rna, eid = row.names(dna), barcode = NULL)
+design <- data.frame(intcpt = 1, alt = grepl("alt", colnames(mpralm_set)))
 block_vector <- rep(1:s, 2)
-weights <- mpralm(object = mpra, design = design, aggregate = "none", normalize = TRUE, block = block_vector, model_type = "corr_groups", return_weights=TRUE)
-write_feather(data.frame(weights), paste("./results/HepG2_outputs/mpralm/weights_",name,"_HepG2.feather", sep=""))
+# for 80K: 21102 rows 
+weights_mpralm <- mpralm(object = mpralm_set, design = design, aggregate = "none", normalize = TRUE, block = block_vector, model_type = "corr_groups", return_weights=TRUE)
 
-mpralm_fit <- mpralm(object = mpra, design = design, aggregate = "none", normalize = TRUE, block = block_vector, model_type = "corr_groups", plot = TRUE)
+# writing cannot open local file (no such file) if relative paths
+write_feather(data.frame(weights_mpralm), file.path(output_dir, paste("weights_", name, "_NGN2.feather", sep="")))
+
+mpralm_fit_mpralm <- mpralm(object = mpralm_set, design = design, aggregate = "none", normalize = TRUE, block = block_vector, model_type = "corr_groups", plot = TRUE)
 
 # Finding significant variants
-toptab_allele <- topTable(mpralm_fit, coef = 2, number = Inf)
+toptab_allele <- topTable(mpralm_fit_mpralm, coef = 2, number = Inf)
 toptab_allele$variant_id <- row.names(toptab_allele)
-write_feather(toptab_allele, paste("./results/HepG2_outputs/mpralm/toptable_",name,"_HepG2.feather", sep=""))
-dev.off()
+write_feather(toptab_allele, file.path(output_dir, paste("toptable_",name,"_NGN2.feather", sep="")))
 
+dev.off()
 
 
 
