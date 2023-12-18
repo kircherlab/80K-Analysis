@@ -19,3 +19,12 @@ different_aligners.sh: aligning the sequences with different aligners
 `/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/missing_reference_exact_uniq.tsv`: includes fw and rv in the end for forward and reverse complement sequences -> all are unique
 
 example `cardiac_neuro_cava_random:REF_TRIO|ENSG00000038382.23|EH38E2358113_fwd_tile1-1_fw`: can be found in missing_reference_exact_uniq.tsv and exact_match.0.tsv
+
+tmp/ folder for missing_reference_exact_uniq.tsv / missing_seq_dict.json / old_missing_reference_exact.tsv (it can be interesting for downstream analysis but it is not needed for the workflow)
+
+Find all reads matched to the missing sequences
+- found problem with names in reads: adding "_" in reads name: e.g. `zcat $read_dir"merge_split0.join.fastq.gz" | head -n 30 | awk 'NR%4==2 || NR%4==1' | paste - - | sed -e 's/ /_/g' > $exact_match_dir"exact_match.0.tsv`
+
+align these reads to the reference genome
+
+Check for each aligner: how many reads are aligned to the missing sequences and how many reads are matched to the other sequences?
