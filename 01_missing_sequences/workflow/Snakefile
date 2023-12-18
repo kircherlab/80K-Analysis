@@ -1,0 +1,15 @@
+rule all:
+    input: "/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/resources/align_missing_sequences/missing_reference_exact.tsv"
+
+
+##! TODO: add rule to generate `/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/resources/align_missing_sequences/all_missing_sequences.fa`
+
+rule exact_match:
+    input: 
+        "/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/resources/align_missing_sequences/all_missing_sequences.fa",
+    output:
+        "/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/resources/align_missing_sequences/missing_reference_exact.tsv",
+    params:
+        script="/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/scripts/match_missing_seqs_sbatch.sh"
+    shell:
+        "bash {params.script}"
