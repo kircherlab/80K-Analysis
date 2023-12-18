@@ -16,8 +16,8 @@ bowtie -q bowtie_index0811_uniq <(gzip -dc /data/gpfs-1/users/kisa11_c/work/codi
 
 ## BWA
 cat /data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/all_missing_seqs_270_uniq.fa | awk '{{gsub(/[\]\[]/,"_")}}$0' > /data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/new_alignments/bwa/all_missing_seqs_270_bwa_reference.fa;
-        bwa index -a bwtsw /data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/new_alignments/bwa/all_missing_seqs_270_bwa_reference.fa;
-        samtools faidx /data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/new_alignments/bwa/all_missing_seqs_270_bwa_reference.fa
+bwa index -a bwtsw /data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/new_alignments/bwa/all_missing_seqs_270_bwa_reference.fa;
+samtools faidx /data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/new_alignments/bwa/all_missing_seqs_270_bwa_reference.fa
 
 # bwa mem -t ${threads} -L 80 -M -C /data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/new_alignments/bwa/all_missing_seqs_270_bwa_reference.fa <(
 #             gzip -dc /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/results/assignment/assignIGVFDesignNoTemp/fastq/merge_split${split}.join.fastq.gz
@@ -33,5 +33,5 @@ bwa mem -t ${threads} -L 80 -M -C /data/gpfs-1/users/kisa11_c/work/coding/80K_an
 # bbmap.sh in=reads.fq out=mapped.sam ref=ref.fa
 
 #! Plan: 1. fw and rv hinzufügen
-#! Plan BBmap
+#! Plan BBmap, Minimap2, BWA mem2, Bowtie
 #! Plan 1. bowtie + -k 4 + bowtie + norev (siehe max nachricht)

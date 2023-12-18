@@ -1,4 +1,4 @@
-exact_match_dir=/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/match_missing_sequences
+exact_match_dir=/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/results/match_missing_sequences
 cd $exact_match_dir
 output_file=all_exact_match.tsv
 if [ -e "$output_file" ]; then
