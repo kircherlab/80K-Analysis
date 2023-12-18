@@ -1,0 +1,3 @@
+missing_sequences: "/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/all_missing_sequences.fa"
+exact_match_dir: "/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/match_missing_sequences"
+exact_match_result: "all_exact_match.tsv"
