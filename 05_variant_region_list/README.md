@@ -1,0 +1,1 @@
+The sequence names will be integrated in a dataframe which groups variants and regions and makes it a good source for information on the variants and regions or sequences
