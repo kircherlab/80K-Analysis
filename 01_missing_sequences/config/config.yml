@@ -1,3 +1,14 @@
-missing_sequences: "/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/all_missing_sequences.fa"
-exact_match_dir: "/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/match_missing_sequences"
-exact_match_result: "all_exact_match.tsv"
+general:
+  output_dir: "/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/results"
+directories:
+  fastq_dir: "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/results/assignment/assignIGVFDesignNoTemp/fastq"
+  # fastq_dir: "/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/tmp"
+  exact_match_dir: "/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/match_missing_sequences"
+files:
+  missing_sequences: "/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/all_missing_sequences.fa"
+  exact_match_result: "all_exact_match.tsv"
+  all_matched_reads: "/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/results/match_missing_sequences/matched_missing_reads.fastq"
+  corrected_reads_fastq: "/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/results/match_missing_sequences/corr_matched_missing_reads.fastq"
+  unique_matched_reads: "/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/results/match_missing_sequences/unique_missing_reads.fastq"
+mapping:
+  reference: "/fast/groups/ag_kircher/MPRA/IGVF_Y1_design/resources/association_data/design_no_duplicates_sequence_and_header.fa"
