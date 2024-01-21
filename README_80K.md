@@ -13,15 +13,16 @@ output_file="/fast/groups/ag_kircher/work/MPRA/IGVF_Y1_design/resources/associat
 grep "^>" $input_file | sed 's/^>//g' | awk -F ":" '{print $1":"$2 "\t" $1}' > $output_file
 ```
   - used the following command for testing the snakemake workflow with the labeling file
+    - config at it is:
 ``` bash
 snakemake --use-conda  --configfile config.yaml --snakefile /data/gpfs-1/users/kisa11_c/work/coding/MPRAsnakeflow/workflow/Snakefile --conda-prefix ../../MPRAsnakeflow_projects/conda --keep-going --cluster-config /data/gpfs-1/users/kisa11_c/work/coding/MPRAsnakeflow/config/sbatch.yml --cluster-status status.py --cluster "sbatch --parsable --nodes=1 --ntasks-per-node={cluster.threads} --mem {cluster.mem} -t {cluster.time} -p {cluster.queue} -o {cluster.output} -e {cluster.error}"  --jobs 10 --cluster-cancel scancel -n --quiet
 ```
+    - config with lower thresholds on RNA, DNA and Barcode counts
 ```bash
-snakemake --use-conda  --configfile low_config.yaml --snakefile /data/gpfs-1/users/kisa11_c/work/coding/MPRAsnakeflow/workflow/Snakefile --conda-prefix ../../MPRAsnakeflow_projects/conda --keep-going --cluster-config /data/gpfs-1/users/kisa11_c/work/coding/MPRAsnakeflow/config/sbatch.yml --cluster-status status.py --cluster "sbatch --parsable --nodes=1 --ntasks-per-node={cluster.threads} --mem {cluster.mem} -t {cluster.time} -p {cluster.queue} -o {cluster.output} -e {cluster.error}"  --jobs 40 --cluster-cancel scancel -n --quiet```
+snakemake --use-conda  --configfile low_config.yaml --snakefile /data/gpfs-1/users/kisa11_c/work/coding/MPRAsnakeflow/workflow/Snakefile --conda-prefix ../../MPRAsnakeflow_projects/conda --keep-going --cluster-config /data/gpfs-1/users/kisa11_c/work/coding/MPRAsnakeflow/config/sbatch.yml --cluster-status status.py --cluster "sbatch --parsable --nodes=1 --ntasks-per-node={cluster.threads} --mem {cluster.mem} -t {cluster.time} -p {cluster.queue} -o {cluster.output} -e {cluster.error}"  --jobs 40 --cluster-cancel scancel -n --quiet
+```
 
-Check if lower bc levels have an influence: all\_config\_test.yaml (lowConfig:
-for low bc counts)
-
+### Check if lower bc levels have an influence: all\_config\_test.yaml (lowConfig: for low bc counts)
 - run MPRAsnakeflow with bowtie (only bowtieRun config (standard config but added bowtie call to the MPRAsnakeflow))
 - Bowtie call `bowtie -x <index-base> -m <allow-multiple-alignments> --best (only the best alignement) --strata (only in the best strata)`
   - -x is not there; lets use -n alignment option
@@ -169,6 +170,25 @@ doubleIndexBAM.py, /data/gpfs-1/users/kisa11_c/work/coding/standardMPRAsnakeflow
   - Check if `/home/kisa/coding/80K_MPRA/80K-Analysis/05_variant_region_list/resources/design_no_duplicates_sequence_and_header.fa` has duplicated sequences
     - rows starting with ">" == rows not starting with ">" => header and sequence are alternating (Yes all sequences are unique)
 #### Find them in the bam file and check which quality measure they fail
+- check if all sequences are upper case: ` cat /fast/groups/ag_kircher/MPRA/IGVF_Y1_design/resources/association_data/design_no_duplicates_sequence_and_header.fa | grep -v ">" | awk '$0 !~ /[A-Z]/  {print $0}'`
+- Run `80K_analysis/01_missing_sequences/notebooks/missing_sequences_in_bam.py` => alignments of missing (results/identified_missing_sequences/missing_sequences.bam) => test this with the quality control rule of MPRASnakeflow => the output should be empty
+  - Output of the script: (command line)
+    - found 1579132 reads with missing sequences
+    - found 2639 different oligo_names with missing sequences: max: 2639
+- currently: preparing a python script doing the same as the rule 
+  - run rule call (can be found in `redo_assignment_getBC.py`) => No output was prepared 
+  - run the samtools command in the command line => nothing found so all failed (was expected)
+  - Write script which tests the condition and writes which fail at which quality measure
+    - '/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/results/identified_missing_sequences/missing_sequence_min_quality.bam'
+      - 4227071 reads (weird looking long alignments)
+    - /data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/results/identified_missing_sequences/missing_sequence_alignment_start.bam: 
+      - 394 reads
+    - '/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/results/identified_missing_sequences/missing_sequences_alignment_end.bam', 
+      - 206245 reads
+    - '/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/results/identified_missing_sequences/missing_sequences_sequence_length_min.bam',
+      - 2403378
+    - '/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/results/identified_missing_sequences/missing_sequences_sequence_length_max.bam'
+      - 0 reads
 - TODO!!
 #### Generate the table of all variants and regions
 - at 05_variant_region_list: variant_region_list.ipynb

@@ -1,14 +1,30 @@
 general:
   output_dir: "/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/results"
+  cardiac_neuro_cava_random: False # True for filtering on this label
 directories:
   fastq_dir: "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/results/assignment/assignIGVFDesignNoTemp/fastq"
   # fastq_dir: "/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/tmp"
   exact_match_dir: "/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/match_missing_sequences"
 files:
-  missing_sequences: "/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/all_missing_sequences.fa"
-  exact_match_result: "all_exact_match.tsv"
+  # used in missing_sequences_per_label.ipynb, missing_sequences_in_bam.py
+  missing_sequences: "/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/results/identified_missing_sequences/all_missing_sequences.fa"
+  assigned_barcodes: "/fast/work/groups/ag_kircher/MPRA/IGVF_Y1_design/experiment/results/assignment/assignIGVFDesign/assignment_barcodes.standardConfig.sorted.tsv.gz"
+  all_headers: '/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/assignment/standardAssignIGVFDesignNoTemp/reference/all_headers.tsv'
+  merged_bam: "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/assignment/standardAssignIGVFDesignNoTemp/bam/bwa_merged.bam"
+  missing_sequence_bam: "/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/results/identified_missing_sequences/missing_sequences.bam"
+  missing_sequence_bam_cardiac: "/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/results/identified_missing_sequences/missing_sequences_cardiac_neuro_cava_random.bam"
+  all_exact_match: "/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/results/match_missing_sequences/all_exact_match.tsv"
+  # used somewhere:
   all_matched_reads: "/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/results/match_missing_sequences/matched_missing_reads.fastq"
   corrected_reads_fastq: "/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/results/match_missing_sequences/corr_matched_missing_reads.fastq"
   unique_matched_reads: "/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/results/match_missing_sequences/unique_missing_reads.fastq"
+quality: # from config (/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/standard_config.yaml):
+  sequence_length:
+    min: 265
+    max: 275
+  alignment_start:
+    min: 15
+    max: 17
+  min_mapping_quality: 1
 mapping:
   reference: "/fast/groups/ag_kircher/MPRA/IGVF_Y1_design/resources/association_data/design_no_duplicates_sequence_and_header.fa"
