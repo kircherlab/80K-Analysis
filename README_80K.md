@@ -13,11 +13,11 @@ output_file="/fast/groups/ag_kircher/work/MPRA/IGVF_Y1_design/resources/associat
 grep "^>" $input_file | sed 's/^>//g' | awk -F ":" '{print $1":"$2 "\t" $1}' > $output_file
 ```
   - used the following command for testing the snakemake workflow with the labeling file
-    - config at it is:
+    - config (aka StandardConfig (from Max)):
 ``` bash
 snakemake --use-conda  --configfile config.yaml --snakefile /data/gpfs-1/users/kisa11_c/work/coding/MPRAsnakeflow/workflow/Snakefile --conda-prefix ../../MPRAsnakeflow_projects/conda --keep-going --cluster-config /data/gpfs-1/users/kisa11_c/work/coding/MPRAsnakeflow/config/sbatch.yml --cluster-status status.py --cluster "sbatch --parsable --nodes=1 --ntasks-per-node={cluster.threads} --mem {cluster.mem} -t {cluster.time} -p {cluster.queue} -o {cluster.output} -e {cluster.error}"  --jobs 10 --cluster-cancel scancel -n --quiet
 ```
-    - config with lower thresholds on RNA, DNA and Barcode counts
+- config with lower thresholds on Barcode counts
 ```bash
 snakemake --use-conda  --configfile low_config.yaml --snakefile /data/gpfs-1/users/kisa11_c/work/coding/MPRAsnakeflow/workflow/Snakefile --conda-prefix ../../MPRAsnakeflow_projects/conda --keep-going --cluster-config /data/gpfs-1/users/kisa11_c/work/coding/MPRAsnakeflow/config/sbatch.yml --cluster-status status.py --cluster "sbatch --parsable --nodes=1 --ntasks-per-node={cluster.threads} --mem {cluster.mem} -t {cluster.time} -p {cluster.queue} -o {cluster.output} -e {cluster.error}"  --jobs 40 --cluster-cancel scancel -n --quiet
 ```
@@ -26,7 +26,7 @@ snakemake --use-conda  --configfile low_config.yaml --snakefile /data/gpfs-1/use
 - run MPRAsnakeflow with bowtie (only bowtieRun config (standard config but added bowtie call to the MPRAsnakeflow))
 - Bowtie call `bowtie -x <index-base> -m <allow-multiple-alignments> --best (only the best alignement) --strata (only in the best strata)`
   - -x is not there; lets use -n alignment option
-- (TODO:) Question: Am I interested in all alignments or only in the best alignment?
+- (TODO:) Question: Am I interested in all alignments or only in the best alignment? -> best but (spoiler) the output was not usable from bowtie because barcodes were not streamlined
 ```bash 
 snakemake --use-conda  --configfile bowtie_config.yaml --snakefile /data/gpfs-1/users/kisa11_c/work/coding/MPRAsnakeflow/workflow/Snakefile --conda-prefix ../../MPRAsnakeflow_projects/conda --keep-going --cluster-config /data/gpfs-1/users/kisa11_c/work/coding/MPRAsnakeflow/config/sbatch.yml --cluster-status status.py --cluster "sbatch --parsable --nodes=1 --ntasks-per-node={cluster.threads} --mem {cluster.mem} -t {cluster.time} -p {cluster.queue} -o {cluster.output} -e {cluster.error}"  --jobs 40 --cluster-cancel scancel -n --quiet
 ```
@@ -36,11 +36,13 @@ snakemake --use-conda  --configfile standard_config.yaml --snakefile /data/gpfs-
 ```
 
 - testing bowtie code for split 17: `bowtie --best -x results/assignment/assignIGVFDesignNoTemp/reference/bowtie -q <(gzip -dc results/assignment/assignIGVFDesignNoTemp/fastq/merge_split17.join.fastq.gz) -S -p 4 | samtools sort -l 0 -@ 4 > bowtie_test_split_17.bam`
-- # reads processed: 3803775
-- # reads with at least one alignment: 3463631 (91.06%)
-- # reads that failed to align: 340144 (8.94%)
-- Reported 3463631 alignments
-- [bam_sort_core] merging from 0 files and 4 in-memory blocks...
+- Output of bowtie:
+  - reads processed: 3803775
+  - reads with at least one alignment: 3463631 (91.06%)
+  - reads that failed to align: 340144 (8.94%)
+  - Reported 3463631 alignments
+  - [bam_sort_core] merging from 0 files and 4 in-memory blocks...
+  - ...
 
 ### Bowtie + bowtie2 run:
 - Error in rule assigned_counts_filterAssignment:
@@ -86,12 +88,16 @@ snakemake --use-conda  --configfile standard_config.yaml --snakefile /data/gpfs-
 - standard_config
 - first_bowtie_config: normal config in prior snakemake results (with bowtie as mapper)
 - bowtie_config: new experiment and assignment with bowtie
-- Start snakemake with standardMPRAsnakeflow directory: `snakemake --use-conda  --configfile low_config.yaml --snakefile /data/gpfs-1/users/kisa11_c/work/coding/standardMPRAsnakeflow/workflow/Snake
+- Start snakemake with standardMPRAsnakeflow directory:
+```bash 
+snakemake --use-conda  --configfile low_config.yaml --snakefile /data/gpfs-1/users/kisa11_c/work/coding/standardMPRAsnakeflow/workflow/Snake
 file --conda-prefix ./conda --keep-going --cluster-config /data/gpfs-1/users/kisa11_c/work/coding/MPRAsnakeflow/config/sbatch.yml --cluster-status status.py --cluster "sbatch --parsable --
-nodes=1 --ntasks-per-node={cluster.threads} --mem {cluster.mem} -t {cluster.time} -p {cluster.queue} -o {cluster.output} -e {cluster.error}"  --jobs 40 --cluster-cancel scancel -n`
-
-- next problem: counts_umi_raw_counts test it locally
-Error in rule counts_umi_create_BAM:                                                                                            ```jobid: 172                                                                                                                  input: /fast/groups/ag_kircher/MPRA/IGVF_Y1_design/data/counts/Ngn2-DNA-1_S1_R1_001.fastq.gz, /fast/groups/ag_kircher/M$
+nodes=1 --ntasks-per-node={cluster.threads} --mem {cluster.mem} -t {cluster.time} -p {cluster.queue} -o {cluster.output} -e {cluster.error}"  --jobs 40 --cluster-cancel scancel -n
+```
+- next problem: counts_umi_raw_counts test it locally Error in rule counts_umi_create_BAM: (solved by creating result directory)                                  
+```bash 
+jobid: 172
+input: /fast/groups/ag_kircher/MPRA/IGVF_Y1_design/data/counts/Ngn2-DNA-1_S1_R1_001.fastq.gz, /fast/groups/ag_kircher/M$
 RA/IGVF_Y1_design/data/counts/Ngn2-DNA-1_S1_R3_001.fastq.gz, /fast/groups/ag_kircher/MPRA/IGVF_Y1_design/data/counts/Ngn2-D$
 A-1_S1_R2_001.fastq.gz, /data/gpfs-1/users/kisa11_c/work/coding/standardMPRAsnakeflow/workflow/rules/../scripts/count/FastQ$
 doubleIndexBAM.py, /data/gpfs-1/users/kisa11_c/work/coding/standardMPRAsnakeflow/workflow/rules/../scripts/count/MergeTrimR$adsBAM.py
@@ -121,7 +127,7 @@ doubleIndexBAM.py, /data/gpfs-1/users/kisa11_c/work/coding/standardMPRAsnakeflow
   - use missing_sequenes_per_label.ipynb: create again header dataframe: `cat results/assignment/{assignment}/reference/reference.fa | grep ">" | awk '{print substr($0,2)}' > results/assignment/{assignment}/reference/all_headers.tsv` (`cat reference.fa | grep ">" | awk '{print substr($0,2)}' > all_headers.tsv`)
   - problem bowtie does not include the bc information in the sam file => there is a flag for bowtie2 
 
-### Finding: BWA new has less not found sequences then the initial run
+### Finding: BWA new has less not found sequences then the initial run (spoiler: this was because I took the bam as comparison and didn't look at the subsequent filtering step)
 - try to regenerate the 5084 sequences from the only run
   - directory: `/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/experiment/results/assignment/assignIGVFDesign/bam`
   - merge the bam (`samtools merge -@ 3 -o merged_bwa.bam merge_split*.mapped.bam`)
@@ -139,25 +145,24 @@ doubleIndexBAM.py, /data/gpfs-1/users/kisa11_c/work/coding/standardMPRAsnakeflow
 
 ### check the barcode_others step for bwa and bowtie
 - where is the (merged) bam file?
-- `samtools merge -@ 8 -b /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/assignment/standardAssignIGVFDesignNoTemp/bam/list_of_bams.tsv -o /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/assignment/standardAssignIGVFDesignNoTemp/bam/bwa_merged.bam`
-  - `samtools index -b -@ 8 /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/assignment/standardAssignIGVFDesignNoTemp/bam/bwa_merged.bam`
-  - samtools idxstats /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/assignment/standardAssignIGVFDesignNoTemp/bam/bwa_merged.bam > /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/assignment/standardAssignIGVFDesignNoTemp/bam/idxstats_bwa_1201.tsv
-
+- merge list of bams: `samtools merge -@ 8 -b /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/assignment/standardAssignIGVFDesignNoTemp/bam/list_of_bams.tsv -o /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/assignment/standardAssignIGVFDesignNoTemp/bam/bwa_merged.bam`
+- index merged bam: `samtools index -b -@ 8 /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/assignment/standardAssignIGVFDesignNoTemp/bam/bwa_merged.bam`
+- idxstats of bam: `samtools idxstats /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/assignment/standardAssignIGVFDesignNoTemp/bam/bwa_merged.bam > /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/assignment/standardAssignIGVFDesignNoTemp/bam/idxstats_bwa_1201.tsv`
 - bam: bowtie: `/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/results/assignment/assignIGVFDesignNoTempBowtie/bam/mapped_bowtie.bam`
 - bam: bowtie2: `/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/results/assignment/assignIGVFDesignNoTempBowtie/bam/merged_bowtie2.bam`
 
 - bam: 11G bwa-mem2: `/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/bwa2/assignment/standardAssignIGVFDesignNoTemp/bam/aligned_merged_reads_bwa-mem2.bam` 
-  - index: samtools index -b -@ 8 /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/bwa2/assignment/standardAssignIGVFDesignNoTemp/bam/aligned_merged_reads_bwa-mem2.bam
-  - idxstats: samtools idxstats /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/bwa2/assignment/standardAssignIGVFDesignNoTemp/bam/aligned_merged_reads_bwa-mem2.bam > /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/bwa2/assignment/standardAssignIGVFDesignNoTemp/bam/idxstats_bwa-mem2.tsv
-  - unmapped: awk '$3==0 {print $0}' /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/bwa2/assignment/standardAssignIGVFDesignNoTemp/bam/idxstats_bwa-mem2.tsv | wc -l # (925)
-  - mapped: awk '$3>0 {print $0}' /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/bwa2/assignment/standardAssignIGVFDesignNoTemp/bam/idxstats_bwa-mem2.tsv | wc -l # 79291
-  # => Result of bwa-mem2 is same as bwa 
+  - index: `samtools index -b -@ 8 /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/bwa2/assignment/standardAssignIGVFDesignNoTemp/bam/aligned_merged_reads_bwa-mem2.bam`
+  - idxstats: `samtools idxstats /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/bwa2/assignment/standardAssignIGVFDesignNoTemp/bam/aligned_merged_reads_bwa-mem2.bam > /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/bwa2/assignment/standardAssignIGVFDesignNoTemp/bam/idxstats_bwa-mem2.tsv`
+  - unmapped: `awk '$3==0 {print $0}' /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/bwa2/assignment/standardAssignIGVFDesignNoTemp/bam/idxstats_bwa-mem2.tsv | wc -l` # (925)
+  - mapped: `awk '$3>0 {print $0}' /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/bwa2/assignment/standardAssignIGVFDesignNoTemp/bam/idxstats_bwa-mem2.tsv | wc -l` # 79291
+  - => Result of bwa-mem2 is same as bwa 
 
-# normal bwa mem + samtools view -F 1792
-- samtools view -F 1792 -b /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/assignment/standardAssignIGVFDesignNoTemp/bam/bwa_merged.bam > /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/assignment/standardAssignIGVFDesignNoTemp/bam/bwa_merged_view_1792_output.bam
+### normal bwa mem + samtools view -F 1792
+- filtering samtools 1792: `samtools view -F 1792 -b /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/assignment/standardAssignIGVFDesignNoTemp/bam/bwa_merged.bam > /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/assignment/standardAssignIGVFDesignNoTemp/bam/bwa_merged_view_1792_output.bam`
   - index the resulting bam and idxstats it:
-    - samtools index -b -@ 8 /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/assignment/standardAssignIGVFDesignNoTemp/bam/bwa_merged_view_1792_output.bam
-    - samtools idxstats /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/assignment/standardAssignIGVFDesignNoTemp/bam/bwa_merged_view_1792_output.bam > /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/assignment/standardAssignIGVFDesignNoTemp/bam/idxstats_bwa_merged_view_1792_output.tsv
+    - `samtools index -b -@ 8 /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/assignment/standardAssignIGVFDesignNoTemp/bam/bwa_merged_view_1792_output.bam`
+    - `samtools idxstats /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/assignment/standardAssignIGVFDesignNoTemp/bam/bwa_merged_view_1792_output.bam > /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/assignment/standardAssignIGVFDesignNoTemp/bam/idxstats_bwa_merged_view_1792_output.tsv`
 
 ### Investigating difference of barcode assignment
 - only filtering bwa result with samtools view 1792: `/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/assignment/standardAssignIGVFDesignNoTemp/bam/barcodes_incl_other.bwa_view_1792.tsv`
@@ -178,18 +183,17 @@ doubleIndexBAM.py, /data/gpfs-1/users/kisa11_c/work/coding/standardMPRAsnakeflow
 - currently: preparing a python script doing the same as the rule 
   - run rule call (can be found in `redo_assignment_getBC.py`) => No output was prepared 
   - run the samtools command in the command line => nothing found so all failed (was expected)
-  - Write script which tests the condition and writes which fail at which quality measure
-    - '/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/results/identified_missing_sequences/missing_sequence_min_quality.bam'
+  - Write script which tests the condition and writes which fail at which quality measure (for merged_bam.bam from BWA)
+    - quality: `/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/results/identified_missing_sequences/missing_sequence_min_quality.bam`
       - 4227071 reads (weird looking long alignments)
-    - /data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/results/identified_missing_sequences/missing_sequence_alignment_start.bam: 
+    - alignment start: `/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/results/identified_missing_sequences/missing_sequence_alignment_start.bam` 
       - 394 reads
-    - '/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/results/identified_missing_sequences/missing_sequences_alignment_end.bam', 
+    - alignment end: `/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/results/identified_missing_sequences/missing_sequences_alignment_end.bam`, 
       - 206245 reads
-    - '/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/results/identified_missing_sequences/missing_sequences_sequence_length_min.bam',
+    - length min: `/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/results/identified_missing_sequences/missing_sequences_sequence_length_min.bam`
       - 2403378
-    - '/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/results/identified_missing_sequences/missing_sequences_sequence_length_max.bam'
+    - length maximum: `/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/results/identified_missing_sequences/missing_sequences_sequence_length_max.bam`:
       - 0 reads
-- TODO!!
 #### Generate the table of all variants and regions
 - at 05_variant_region_list: variant_region_list.ipynb
   - writing variants, regions and references to files (smaller subsets for generating one table with meta data)
