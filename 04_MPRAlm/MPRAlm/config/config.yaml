@@ -1,0 +1,9 @@
+files:
+  weights: /home/kisa/coding/80K_MPRA/80K-Analysis/04_MPRAlm/MPRAlm/results/NGN2_output/mpralm/weights_2701_all_NGN2.feather
+  toptable: /home/kisa/coding/80K_MPRA/80K-Analysis/04_MPRAlm/MPRAlm/results/NGN2_output/mpralm/toptable_2701_all_NGN2.feather
+  toptable_annotated: /home/kisa/coding/80K_MPRA/80K-Analysis/04_MPRAlm/MPRAlm/results/NGN2_output/mpralm/toptable_mpralm.csv
+  sign_negative: /home/kisa/coding/80K_MPRA/80K-Analysis/04_MPRAlm/MPRAlm/results/NGN2_output/mpralm/sign_negative_log2FC.csv
+  sign_positive: /home/kisa/coding/80K_MPRA/80K-Analysis/04_MPRAlm/MPRAlm/results/NGN2_output/mpralm/sign_positive_log2FC.csv
+  log2_all_hist: /home/kisa/coding/80K_MPRA/80K-Analysis/04_MPRAlm/MPRAlm/results/NGN2_output/mpralm/log2_all_hist.png
+  log2_p_sig_hist: /home/kisa/coding/80K_MPRA/80K-Analysis/04_MPRAlm/MPRAlm/results/NGN2_output/mpralm/log2_p_sig.png
+  variant_vcf: /home/kisa/coding/80K_MPRA/80K-Analysis/05_variant_region_list/resources/variants_5K.vcf
