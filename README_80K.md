@@ -194,6 +194,37 @@ doubleIndexBAM.py, /data/gpfs-1/users/kisa11_c/work/coding/standardMPRAsnakeflow
       - 2403378
     - length maximum: `/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/results/identified_missing_sequences/missing_sequences_sequence_length_max.bam`:
       - 0 reads
+#### Parse Bam file because bwa returns mapping quality 0 sequences
+- examples for multi mapping reads NOS3 in e.g. `/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/assignment/standardAssignIGVFDesignNoTemp/bam/bwa_merged.bam`
+- Plan: Postprocess the bam file (found duplicates)
+  - check if unmapped: continue
+  - check identity (if ~95% of sequence should be matched) with cigar and md
+    - if mapping quality ($5) >= 1 
+      - optional: expected length of the read (configuration) ~> 265
+    - if mapping quality ($5) < 0:
+      - if mapping on forward ($2 == 0)
+        - check if AS > XS (check how many cases have difference of 5) -> keep and set mapping quality ($5) = 1 (is the best alignment)
+      - if mapping with reversed read ($2 == 16) and strandedness (configuration) is set:
+        - try recovering / finding the correct match
+          - if AS == XS (the line should have a XA)
+            - it can be recovered if only one of the alternatives at XA (separated by ";") can be matched on +strand (XA:Z:<oligo_name>,+/-<pos>,<cigar>,<number_differences>;)
+            - if more than one alternative can be matched on + than we count and throw a warning of the overall number
+  - Write all of this in a file with barcode \t reference_name \t position;cigarstring;NM:i:<number_of_differences>;MD:Z:<MD>;<number I do not understand>
+- example code: `/data/gpfs-1/users/kisa11_c/work/coding/MPRA/bin`
+  - `removeSequenceErrors.py` - cigar found
+- understood the MD parsing and cigar parsing
+- wrote identity check function (computing number of matches from the cigar)
+  - how to check the number of mismatches?
+  - for one split:
+    - unmapped count:  762
+    - high_identity_count:  3791023
+    - count:  3803677
+    - proportion of high quality:  0.9966732190982568
+  - weird examples: 
+    - NB501960:812:HH53WAFX5:1:11309:25329:20408      0       cardiac_neuro_cava_random:REF_AHDC1|ENSG00000126705.15|EH38E1331564_rev_tile1-1 16      3       270M    *       0       0       TCTCTGGGCCTTGGTTTCCTTCCTCCTGCATAGCGAAGGAGGTTGGATTAGTGGCTCCCTAAGGCACCTTCTAGCTCTGACAGGCTCCAAGCCTGTGTTGACTGATGTGTCCTAGGAGATAGGCGCACACAGAGAACCAAGTCAGCTCCGAGAATCCTGTGAAGGTATCGCCACCCCACCCCCAGATGGCTGGAGTGCCTCCCTTCCTGAGACACACCCTTCATGGATACTGGTGGAGGTTGTGGTGGATGGAGGGGGCTTATCACCCAA  AAAAAEE/E/E<EEEEAEEE/AEEEEEEEEE/E/EEEAEEE/EEEEEAE/AEEE/E<EEE/E<E//AEEEA/AEAAA<E/EEE<EE/E///</EEEEE/EAAEE/AE<E//6<AE/AEEEAEEE:B"CHGGHHGEHHHHD<GGHFD<////<</A//////<A<AA<EA/AE/AA<</EAEAA/<E/EEE<EEEE/EA/A/A</EEEE/EE/E/AA/EEEAE6EE/EEAEEAA//EEEA/EEEEE/AEEEEEE/EEEEEE/AEEAAAAAA  NM:i:6  MD:Z:148G4T6C8C16A36G46 AS:i:240        XS:i:235        XA:Z:cardiac_neuro_cava_random:ALT_AHDC1|ENSG00000126705.15|EH38E1331564_rev_tile1-1_AHDC1|ENSG00000126705.15|EH38E1331564|1-27573227-A-G,+16,270M,7;cardiac_neuro_cava_random:ALT_AHDC1|ENSG00000126705.15|EH38E1331564_rev_tile1-1_AHDC1|ENSG00000126705.15|EH38E1331564|1-27573148-C-T,+16,270M,7;   XI:Z:ACGGGAGTCAGTATG,YI:Z://AAAAEEAEEE/EE
+    - NB501960:812:HH53WAFX5:1:11105:15385:4842       0       cardiac_neuro_cava_random:NRXN3|ENSG00000021645.20|EH38E1730612_fwd_tile1-1     16      0       270M    *       0       0       CATGTGTGTGCGTGTGTAAGAGCAATAGATGGAGCAGCCAATGCAGGGAGAAGATCTGAAATTTGGAGCCTATTTAAGAGTGAAAGAACAGCTGCCTTTTAAATGGTTGCTAATTCTGACAATTAATGCTGTTCTGTGAGTGTGTGATTTTCTGTGATAGCAGTTAGGAGGGATGATGGTGTGTAATAGCTCATTTCCTAAGCTTTATGGTAATGTAGCATAGTCAAGACCATAGAACTGAAAGAGAACTGGGTCCCACATGCTCTGCAG  AAAAAEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEAEEEEAEEAEEEEEEEEEEEAEEEEEEEEEEEAEEEEEEEEEEEAEEEAEEEEEE<EEEEEGHHGGGGHHGHHHHGHHHGHHHEEEEAEEAEAAEAEAEA<EAAAA6AAA<6AAAEA<EAEEEEEEEEEEAEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEAAAAA  NM:i:0  MD:Z:270        AS:i:270        XS:i:268        XA:Z:GC_Vista:fb;mb__vistaElementControl|chr14:78308172-78308421,+18,270M,2;    XI:Z:CTGAACTATAATCAG,YI:Z:AAAAAEEEEEEEEEE
+    - NB501960:812:HH53WAFX5:3:11405:4093:19168  16  cardiac_neuro_cava_random:REF_DRD4|ENSG00000069696.7|EH38E2937745_fwd_tile1-1  16  0  270M  *  0  0  TCTGGGAAGGGGGCCCCACAGGCAGCACCTACCGCAGGAGCTCAGTGTGAGCCACTGTCGGCCTGTGGGTGTGTGTCGTGTGTCGCAGCCAGCTCAGTTGCTGTCAGGATTCCACAGGCTGGGCAGCGTAAACCGCAGGTCTTCCTTTTCTTGGTTTTGGAAACTAGACATCTGAGATACCAGCAGGCCTGGTTCCTGGGGAGGCCCCCTTCCTGACTTACAGACGGCCGCCTCCCCGCTGTGACCTCACCTGGCCTTCCCTCATCTAAG  array('B', [32, ..., 32])  [('NM', 1), ('MD', '110A159'), ('AS', 265), ('XS', 265), ('XI', 'CTGAGAGTGACGTTG,YI:Z:AAAAAEEEEEEEEEE')]
+    - I looked into examples of 
 #### Generate the table of all variants and regions
 - at 05_variant_region_list: variant_region_list.ipynb
   - writing variants, regions and references to files (smaller subsets for generating one table with meta data)
