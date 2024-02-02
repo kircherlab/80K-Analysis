@@ -118,7 +118,8 @@ print("Significant but negative log2FC: ", len(sign_negative_log2FC)) # 69
 sign_positive_log2FC = p_sig_toptable[p_sig_toptable["logFC"] > 0]
 print("Significant but positive log2FC: ", len(sign_positive_log2FC)) # 81
 
-
+sign_log2FC_non_zero = p_sig_toptable[p_sig_toptable["logFC"] != 0]
+print("Significant variants with non-zero log2FC", len(sign_log2FC_non_zero))
 ### add the AF information to the variants
 # vcf file: "/home/kisa/coding/80K_MPRA/80K-Analysis/05_variant_region_list/resources/variants_5K.vcf"
 
@@ -129,20 +130,88 @@ found_afs_negative = 0
 found_afs_positive = 0
 found_af = 0
 
-# add af to the mpralm results
-toptable_mpralm
+# add af to the mpralm results with non-zero log2FC
 for record in vcf_in.fetch():
-    for variant in toptable_mpralm.variant_id.tolist():
+    for variant in sign_log2FC_non_zero.variant_id.tolist():
         if record.id in variant:
             found_af += 1
             # add the AF information to the dataframe
-            toptable_mpralm.loc[toptable_mpralm.variant_id == variant, "AF"] = record.info["AF"]
+            sign_log2FC_non_zero.loc[sign_log2FC_non_zero.variant_id == variant, "AF"] = record.info["AF"]
+            sign_log2FC_non_zero.loc[sign_log2FC_non_zero.variant_id == variant, "AC"] = record.info["AC"]
             break
-print("Found: ", found_af) # 21102
-print(len(toptable_mpralm))
+print("Found: ", found_af)
+print("Expected significant results: ", len(sign_log2FC_non_zero))
 
-# store the dataframe with AF information
-toptable_mpralm.to_csv(config["files"]["toptable_annotated"])
+# remove singleton:
+# sign_log2FC_non_zero = sign_log2FC_non_zero[sign_log2FC_non_zero["AC"] != 1]
+
+def split_into_common_rare(df_with_AF_column,  common_threshold=0.05, column="AF"):
+    """Splits df into rare and common at threshold"""
+    common_vars = df_with_AF_column[df_with_AF_column[column] >= common_threshold]
+    rare_vars = df_with_AF_column[df_with_AF_column[column] < common_threshold]
+    print(f"Found {len(common_vars)} ({len(common_vars)/len(df_with_AF_column)}) common variants and {len(rare_vars)} ({len(rare_vars)/len(df_with_AF_column)}) rare variants with the common threshold {common_threshold}")
+    ultra_rare = df_with_AF_column[df_with_AF_column[column] < 0.01]
+    ultra_rare = ultra_rare[ultra_rare["AC"] != 1]
+    print(f"Found {len(ultra_rare)} ultra-rare variants")
+    print(f"Found {len(df_with_AF_column[df_with_AF_column["AC"] == 1])} singleton variants")
+    return common_vars, rare_vars
+
+def split_df_in_pos_neg(df_with_logFC_column, column="logFC"):
+    """Splits a given data frame based on the logFC into positive and negative values"""
+    positive_set = df_with_logFC_column[df_with_logFC_column[column] > 0]
+    negative_set = df_with_logFC_column[df_with_logFC_column[column] < 0]
+    print(f"Found {len(positive_set)} ({len(positive_set)/len(df_with_logFC_column)}) positive results\nFound {len(negative_set)} ({len(negative_set)/len(df_with_logFC_column)}) negative results")
+    return positive_set, negative_set
+
+## divide the variants in common and rare variants (rare = AF<5%) # 150 variants with significant adjusted p value
+common_threshold = 0.05
+common_vars, rare_vars = split_into_common_rare(sign_log2FC_non_zero, common_threshold)
+## check how many have positive and negative results?
+
+### common
+print("Common variants")
+common_pos_vars, common_neg_vars = split_df_in_pos_neg(common_vars)
+### rare
+print("Rare variants")
+rare_pos_vars, rare_neg_vars = split_df_in_pos_neg(rare_vars)
+
+## do the same with rare = AF<1%
+common_threshold = 0.01
+print(f"Change rare definition to {common_threshold}")
+common_vars, rare_vars = split_into_common_rare(sign_log2FC_non_zero, common_threshold)
+
+### common
+print("Common variants")
+common_pos_vars, common_neg_vars = split_df_in_pos_neg(common_vars)
+### rare
+print("Rare variants")
+rare_pos_vars, rare_neg_vars = split_df_in_pos_neg(rare_vars)
+
+## How many are singleton?
+print("Singleton")
+print(len(sign_log2FC_non_zero[sign_log2FC_non_zero["AC"] == 1]))
+# sign_singleton = sign_log2FC_non_zero[sign_log2FC_non_zero["AC"] == 1]
+# singleton_pos_vars, singleton_neg_vars = split_df_in_pos_neg(sign_singleton)
+
+# significant results: 150
+# Found 35 (0.23333333333333334) common variants and 115 (0.7666666666666667) rare variants with the common threshold 0.05
+# Found 65 (0.43333333333333335) common variants and 85 (0.5666666666666667) rare variants with the common threshold 0.01
+# (mobil)
+
+# # add af to the mpralm results
+# toptable_mpralm
+# for record in vcf_in.fetch():
+#     for variant in toptable_mpralm.variant_id.tolist():
+#         if record.id in variant:
+#             found_af += 1
+#             # add the AF information to the dataframe
+#             toptable_mpralm.loc[toptable_mpralm.variant_id == variant, "AF"] = record.info["AF"]
+#             break
+# print("Found: ", found_af) # 
+# print(len(toptable_mpralm))
+
+# # store the dataframe with AF information
+# toptable_mpralm.to_csv(config["files"]["toptable_annotated"])
 
 # # add AF to significant results
 # for record in vcf_in.fetch():
@@ -169,8 +238,30 @@ toptable_mpralm.to_csv(config["files"]["toptable_annotated"])
 # print("Found positive: ", found_afs_positive) # 81
 
 # # store the dataframes with AF information
-sign_negative_log2FC.to_csv(config["files"]["sign_negative"])
-sign_positive_log2FC.to_csv(config["files"]["sign_positive"])
+# sign_negative_log2FC.to_csv(config["files"]["sign_negative"])
+# sign_positive_log2FC.to_csv(config["files"]["sign_positive"])
 
 
-
+# Found:  150
+# Expected significant results:  150
+# Found 35 (0.23333333333333334) common variants and 115 (0.7666666666666667) rare variants with the common threshold 0.05
+# Found 36 ultra-rare variants
+# Found 49 singleton variants
+# Common variants
+# Found 16 (0.45714285714285713) positive results
+# Found 19 (0.5428571428571428) negative results
+# Rare variants
+# Found 65 (0.5652173913043478) positive results
+# Found 50 (0.43478260869565216) negative results
+# Change rare definition to 0.01
+# Found 65 (0.43333333333333335) common variants and 85 (0.5666666666666667) rare variants with the common threshold 0.01
+# Found 36 ultra-rare variants
+# Found 49 singleton variants
+# Common variants
+# Found 27 (0.4153846153846154) positive results
+# Found 38 (0.5846153846153846) negative results
+# Rare variants
+# Found 54 (0.6352941176470588) positive results
+# Found 31 (0.36470588235294116) negative results
+# Singleton
+# 49
