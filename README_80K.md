@@ -230,3 +230,24 @@ doubleIndexBAM.py, /data/gpfs-1/users/kisa11_c/work/coding/standardMPRAsnakeflow
   - writing variants, regions and references to files (smaller subsets for generating one table with meta data)
   - Numbers are 8900 regions, 18582 references and 46456 variants (more variants than expected, less regions than expected, no expectation)
 
+- for checking if subsequent steps work with the new `assignment_barcodes_incl_other.sorted.tsv.gz` file: 
+```bash
+snakemake --use-conda  --configfile standard_config.yaml --snakefile /data/gpfs-1/users/kisa11_c/work/coding/standardMPRAsnakeflow/workflow/Snakefile --conda-prefix ../../MPRAsnakeflow_projects/conda --keep-going --cluster-config /data/gpfs-1/users/kisa11_c/work/coding/standardMPRAsnakeflow/config/sbatch.yml --cluster-status status.py --cluster "sbatch --parsable --nodes=1 --ntasks-per-node={cluster.threads} --mem {cluster.mem} -t {cluster.time} -p {cluster.queue} -o {cluster.output} -e {cluster.error}"  --jobs 40 --cluster-cancel scancel -n --quiet
+```
+- it installs python3 packages
+
+#### Run the new assignment process again (testing with low config) and check how many sequences get through the filter (if we trust the aligner)
+- current results: we want to have high identity alignments
+- now: we trust him but count how many times we would have thrown this read away
+- run MPRAsnakeflow with low config (2 bc 1 dna 1 rna) and the new assignment file
+```bash
+snakemake --use-conda  --configfile low_config.yaml --snakefile /data/gpfs-1/users/kisa11_c/work/coding/standardMPRAsnakeflow/workflow/Snakefile --conda-prefix ../../MPRAsnakeflow_projects/conda --keep-going --cluster-config /data/gpfs-1/users/kisa11_c/work/coding/standardMPRAsnakeflow/config/sbatch.yml --cluster-status status.py --cluster "sbatch --parsable --nodes=1 --ntasks-per-node={cluster.threads} --mem {cluster.mem} -t {cluster.time} -p {cluster.queue} -o {cluster.output} -e {cluster.error}"  --jobs 50 --cluster-cancel scancel -n
+```
+- 135 jobs
+- check the log files
+- got killed at 1 by slurm (thought it would take only 5h)
+- identified
+```bash
+snakemake --use-conda  --configfile low_config.yaml --snakefile /data/gpfs-1/users/kisa11_c/work/coding/standardMPRAsnakeflow/workflow/Snakefile --conda-prefix ../../MPRAsnakeflow_projects/conda --keep-going --cluster-config /data/gpfs-1/users/kisa11_c/work/coding/standardMPRAsnakeflow/config/sbatch.yml --cluster-status status.py --cluster "sbatch --parsable --nodes=1 --ntasks-per-node={cluster.threads} --mem {cluster.mem} -t {cluster.time} -p {cluster.queue} -o {cluster.output} -e {cluster.error}"  --jobs 50 --cluster-cancel scancel --rerun-incomplete -n
+```
+- 107 jobs
