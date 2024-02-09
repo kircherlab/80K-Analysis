@@ -13,11 +13,17 @@ config_path = "/home/kisa/coding/80K_MPRA/80K-Analysis/04_MPRAlm/config/config.y
 with open(config_path) as conf:
     config = yaml.load(conf, Loader=yaml.FullLoader)
     conf.close()
-    
+
+_verbose = config["verbose"]
+enformer_prediction_value = config["enformer_prediction_column"] # "enformer_value"
+variant_sum=5000 
+higher_fraction = 0.7
+lower_fraction = 0.15
+
 ## functions for this type of files
 def load_df_add_columns(file_path):
     """Add column names and return dataframe"""
-    enformer_af_df = pd.read_csv(file_path, sep="\t", header=None)
+    enformer_af_df = pd.read_csv(file_path, sep="\t")
     enformer_af_df.columns = ["CHROM", "POS", "ID", "REF", "ALT", "enformer_value", "max_enformer_column",  "QUAL", "FILTER", "INFO"]
     return enformer_af_df
 
@@ -50,27 +56,24 @@ def get_higher_lower_subset(enformer_df, variant_sum=5000, higher_fraction = 0.7
     enformer_high = enformer_sorted.iloc[:top_rows]
     
     enformer_low = enformer_sorted.iloc[len(enformer_sorted)-bottom_rows:]
-    #! TODO: debugging enformer high: only 2500 rows in current table (at least 5000 are expected)
-    print("expected number of enformer high: ", top_rows)
-    print("current number of enformer high: ", len(enformer_high))
-    print("expected number of enformer low: ", bottom_rows)
-    print("current number of enformer low: ", len(enformer_low))
-    # check if len(enformer_low) equals bottom_rows
-    if len(enformer_high) != top_rows:
-        print("Top rows does not work")
-    else:
-        print("Top rows work")
-    if len(enformer_low) == bottom_rows:
-        print("bottom rows work")
-    else: 
-        print("bottom rows do not work")
+    if _verbose:
+        print("expected number of enformer high: ", top_rows)
+        print("current number of enformer high: ", len(enformer_high))
+        print("expected number of enformer low: ", bottom_rows)
+        print("current number of enformer low: ", len(enformer_low))
+        # check if len(enformer_low) equals bottom_rows
+        if len(enformer_high) != top_rows:
+            print("Top rows does not work")
+        else:
+            print("Top rows work")
+        if len(enformer_low) == bottom_rows:
+            print("bottom rows work")
+        else: 
+            print("bottom rows do not work")
     return enformer_high, enformer_low
     
-_verbose = config["verbose"]
-enformer_prediction_value = "enformer_value"
-variant_sum=5000 
-higher_fraction = 0.7
-lower_fraction = 0.15
+
+
 # read as tab separated file 
 for name in config["condition_names"]:
     print(f"----{name}------")

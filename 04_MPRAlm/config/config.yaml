@@ -1,5 +1,6 @@
 verbose: True # for debuging (e.g. file names will be written with number of rows)
 enformer_results_dir: "/home/kisa/coding/80K_MPRA/80K-Analysis/04_MPRAlm/enformer_results"
-default_name: arbitrary.ultra-rare_variants.vcf # "." is the seperator for the names
+enformer_prediction_column: "enformer_value"
+default_name: arbitrary.ultra-rare_variants_0402.tsv # "." is the seperator for the names
 condition_names: ["cardiac", "cava", "neuro", "random"]
-output_dir: "/home/kisa/coding/80K_MPRA/80K-Analysis/04_MPRAlm/enformer_results/high_low_tables"
+output_dir: "/home/kisa/coding/80K_MPRA/80K-Analysis/04_MPRAlm/enformer_results/high_low_tables_0402"

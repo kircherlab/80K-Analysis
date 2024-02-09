@@ -3,6 +3,7 @@ import requests
 import yaml 
 import matplotlib.pyplot as plt 
 import pysam
+import os
 from pysam import VariantFile
 
 # load config file
@@ -18,6 +19,7 @@ weights_mpralm = pd.read_feather(config["files"]["weights"])
 # print(toptable_mpralm)
 
 ## 
+print(f"number of tested variants: {len(toptable_mpralm)}")
 print(toptable_mpralm.head())
 # [21102 rows x 7 columns]
 # Index(['logFC', 'AveExpr', 't', 'P.Value', 'adj.P.Val', 'B', 'variant_id'], dtype='object')
@@ -25,6 +27,7 @@ print(toptable_mpralm.head())
 print(toptable_mpralm.describe())
 p_sig_toptable = toptable_mpralm[toptable_mpralm["adj.P.Val"] < 0.05]
 print(len(p_sig_toptable)) # 150
+
 
 log2_toptable = toptable_mpralm[toptable_mpralm["logFC"] > 1]
 print("Log2 higher than 1: ", len(log2_toptable)) # 7 
@@ -265,3 +268,21 @@ print(len(sign_log2FC_non_zero[sign_log2FC_non_zero["AC"] == 1]))
 # Found 31 (0.36470588235294116) negative results
 # Singleton
 # 49
+
+
+### Analysis of enformer high and low group
+
+# read enformer low and try to match to significant results
+
+# config["output_dir"]
+# enformer_low_path = "/home/kisa/coding/80K_MPRA/80K-Analysis/04_MPRAlm/enformer_results/high_low_tables/cardiac.ultra-rare_variants_750_750_low.tsv"
+# enformer_low = pd.read_csv(enformer_low_path, sep="\t", header=True)
+# print(enformer_low.head())
+
+# significant results
+# p_sig_toptable   
+
+
+
+
+### Analysis of neuro vs random and cardiac vs random
