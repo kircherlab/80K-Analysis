@@ -4,8 +4,10 @@ general:
   mismatches_threshold: 3 # threshold for mismatches of alignment
   use_expected_alignment_length: True # should a expected alignment length be considered the alignment length
   expected_alignment_length: 265 # expected alignment length
+  verbose: False
 files:
   reference: "/fast/groups/ag_kircher/MPRA/IGVF_Y1_design/resources/association_data/design_no_duplicates_sequence_and_header.fa"
   merged_bam: "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/assignment/standardAssignIGVFDesignNoTemp/bam/bwa_merged.bam"
-  assignment_tbl: "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/assignment/standardAssignIGVFDesignNoTemp/bam_filtering_assignment.tsv"
+  assignment_tbl: "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/assignment/standardAssignIGVFDesignNoTemp/new_assignment_barcodes_incl_other.sorted.tsv"
   old_assignment_tbl: "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/assignment/standardAssignIGVFDesignNoTemp/old_assignment_barcodes_incl_other.sorted.tsv"
+  output_log: "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/assignment/standardAssignIGVFDesignNoTemp/assignment_barcodes_high_mapping.log"
