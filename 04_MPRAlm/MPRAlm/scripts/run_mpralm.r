@@ -10,10 +10,18 @@ library(arrow)
 
 args = commandArgs(trailingOnly=TRUE)
 # input = "/data/humangen_kircherlab/MPRA/tt_mpra_analysis/data/ProxProm/mpralm/mpralm_input_HepG2.tsv" #args[1]
-input = "/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/mpralm_input_NGN2.tsv" #args[1]
+# old assignment
+# input = "/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/mpralm_input_NGN2.tsv" #args[1]
+# output_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/MPRAlm/"
+# name = "all" #args[2]
+# new assignment
+input = "/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/new_assignment_mpralm_input_NGN2.tsv" #args[1]
 output_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/MPRAlm/"
-png(file=file.path(output_dir, paste("voom_all.png")))
-name = "all" #args[2]
+name = "new_assignment" #args[2]
+
+
+png(file=file.path(output_dir, paste0("voom_",name,".png")))
+output_name = paste("toptable_",name,"_NGN2.feather", sep="")
 
 # Reading the barcode level input data
 raw_data <- read.table(file=input, sep='\t', header=TRUE)
@@ -47,7 +55,7 @@ mpralm_fit_mpralm <- mpralm(object = mpralm_set, design = design, aggregate = "n
 # Finding significant variants
 toptab_allele <- topTable(mpralm_fit_mpralm, coef = 2, number = Inf)
 toptab_allele$variant_id <- row.names(toptab_allele)
-write_feather(toptab_allele, file.path(output_dir, paste("toptable_",name,"_NGN2.feather", sep="")))
+write_feather(toptab_allele, file.path(output_dir, output_name))
 
 dev.off()
 

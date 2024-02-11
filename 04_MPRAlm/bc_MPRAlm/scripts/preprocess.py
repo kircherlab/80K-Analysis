@@ -11,10 +11,21 @@ import polars.selectors as cs
 # output_both = "/data/humangen_kircherlab/MPRA/tt_mpra_analysis/data/ProxProm/mpralm/mpralm_input_HepG2.tsv"
 
 ### Mine
-input = "/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/NGN2_filtered_counts_sequences.tsv.gz"
-output_rna = "/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/mpralm_bc_rna_input_NGN2.tsv"
-output_dna = "/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/mpralm_bc_dna_input_NGN2.tsv"
-output_both = "/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/mpralm_input_NGN2.tsv"
+## old assignment
+# input_dir = "/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/" + "results/preprocess/"
+# output_dir = "/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/" + "results/bc_preparation/"
+# input = "/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_preparation/NGN2_filtered_counts_sequences.tsv.gz"
+# output_rna = "/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/mpralm_bc_rna_input_NGN2.tsv"
+# output_dna = "/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/mpralm_bc_dna_input_NGN2.tsv"
+# output_both = "/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/mpralm_input_NGN2.tsv"
+
+## new assignment
+# input_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/" + "results/bc_preparation/"
+# output_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/" + "results/preprocess/"
+input = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/new_assignment_NGN2_filtered_counts_sequences.tsv.gz"
+output_rna = "/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/new_assignment_mpralm_bc_rna_input_NGN2.tsv"
+output_dna = "/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/new_assignment_mpralm_bc_dna_input_NGN2.tsv"
+output_both = "/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/new_assignment_mpralm_input_NGN2.tsv"
 
 df = pl.read_csv(input, separator="\t")
 

@@ -16,11 +16,14 @@ input_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/project
 output_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_MPRAlm/"
 dir.create(file.path(output_dir))
 
-input_rna = paste0(input_dir, "preprocess/mpralm_bc_rna_input_NGN2.tsv") #args[1]
-input_dna = paste0(input_dir, "preprocess/mpralm_bc_dna_input_NGN2.tsv") # args[2]
-weights_file = paste0(input_dir, "MPRAlm/weights_all_NGN2.feather") # args[3]
-png(file = file.path(output_dir, paste("voom_all.png")))
-# name = # args[4]
+# input_rna = paste0(input_dir, "preprocess/mpralm_bc_rna_input_NGN2.tsv") #args[1]
+# input_dna = paste0(input_dir, "preprocess/mpralm_bc_dna_input_NGN2.tsv") # args[2]
+input_rna = paste0(input_dir, "preprocess/new_assignment_mpralm_bc_rna_input_NGN2.tsv") #args[1]
+input_dna = paste0(input_dir, "preprocess/new_assignment_mpralm_bc_dna_input_NGN2.tsv") # args[2]
+weights_file = paste0(input_dir, "MPRAlm/weights_new_assignment_NGN2.feather") # args[3]
+name = "new_assignment" # args[4]
+png(file = file.path(output_dir, paste0("voom_", name, ".png")))
+output_name = paste0("toptable_", name, "NGN2.feather")
 
 # Reading the barcode level input data
 rna <- read.table(file=input_rna, sep='\t', header=TRUE)
@@ -67,6 +70,6 @@ mpralm_fit_bc <- mpralm(object = mpra_bc_set, design = design, aggregate = "none
 # Finding significant variants
 toptab_allele <- topTable(mpralm_fit_bc, coef = 2, number = Inf)
 toptab_allele$variant_id <- row.names(toptab_allele)
-write_feather(toptab_allele, paste(output_dir, "toptable_all_NGN2.feather", sep=""))
+write_feather(toptab_allele, paste(output_dir, output_name, sep=""))
 dev.off()
 
