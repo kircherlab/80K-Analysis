@@ -18,10 +18,11 @@ dir.create(file.path(output_dir))
 
 # input_rna = paste0(input_dir, "preprocess/mpralm_bc_rna_input_NGN2.tsv") #args[1]
 # input_dna = paste0(input_dir, "preprocess/mpralm_bc_dna_input_NGN2.tsv") # args[2]
-input_rna = paste0(input_dir, "preprocess/new_assignment_mpralm_bc_rna_input_NGN2.tsv") #args[1]
-input_dna = paste0(input_dir, "preprocess/new_assignment_mpralm_bc_dna_input_NGN2.tsv") # args[2]
-weights_file = paste0(input_dir, "MPRAlm/weights_new_assignment_NGN2.feather") # args[3]
-name = "new_assignment" # args[4]
+name = "lowConfig" # args[4]
+name = "standard" # args[4]
+input_rna = paste0(input_dir, "preprocess/", name,  "_mpralm_bc_rna_input_NGN2.tsv") #args[1]
+input_dna = paste0(input_dir, "preprocess/", name, "_mpralm_bc_dna_input_NGN2.tsv") # args[2]
+weights_file = paste0(input_dir, "MPRAlm/weights_", name, "_NGN2.feather") # args[3]
 png(file = file.path(output_dir, paste0("voom_", name, ".png")))
 output_name = paste0("toptable_", name, "NGN2.feather")
 

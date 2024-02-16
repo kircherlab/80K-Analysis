@@ -1,5 +1,4 @@
 import pandas as pd 
-import requests
 import yaml 
 import matplotlib.pyplot as plt 
 import pysam
@@ -7,7 +6,8 @@ import os
 from pysam import VariantFile
 
 # load config file
-config_path = "/home/kisa/coding/80K_MPRA/80K-Analysis/04_MPRAlm/MPRAlm/config/config.yaml"
+# config_path = "/home/kisa/coding/80K_MPRA/80K-Analysis/04_MPRAlm/MPRAlm/config/config.yaml"
+config_path = "/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/04_MPRAlm/MPRAlm/config/config.yaml"
 with open(config_path, "r") as f:
     config = yaml.load(f, Loader=yaml.FullLoader)
 
@@ -156,7 +156,7 @@ def split_into_common_rare(df_with_AF_column,  common_threshold=0.05, column="AF
     ultra_rare = df_with_AF_column[df_with_AF_column[column] < 0.01]
     ultra_rare = ultra_rare[ultra_rare["AC"] != 1]
     print(f"Found {len(ultra_rare)} ultra-rare variants")
-    print(f"Found {len(df_with_AF_column[df_with_AF_column["AC"] == 1])} singleton variants")
+    print(f"Found {len(df_with_AF_column[df_with_AF_column['AC'] == 1])} singleton variants")
     return common_vars, rare_vars
 
 def split_df_in_pos_neg(df_with_logFC_column, column="logFC"):

@@ -15,9 +15,10 @@ args = commandArgs(trailingOnly=TRUE)
 # output_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/MPRAlm/"
 # name = "all" #args[2]
 # new assignment
-input = "/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/new_assignment_mpralm_input_NGN2.tsv" #args[1]
+name = "lowConfig" #args[2]
+name = "standard" #args[2]
+input = paste0("/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/", name, "_mpralm_input_NGN2.tsv") #args[1]
 output_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/MPRAlm/"
-name = "new_assignment" #args[2]
 
 
 png(file=file.path(output_dir, paste0("voom_",name,".png")))
