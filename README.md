@@ -9,6 +9,7 @@
   - `02_controls`: plotting the controlls and how well they perform
   - `03_config_check`: try different configurations for the analysis
   - `04_MPRAlm`: Analyze 80K with MPRAlm (e.g. compare to bc_MPRAlm; plots for tiger team)
+  - `05_variant_region_list`: get a table which has for each sequence tested the meta data and the additional information (e.g. enformer class, cell-type)
 - Resulting data is stored in the group folder `/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/project/<folder_name>/`
 
 ### Code

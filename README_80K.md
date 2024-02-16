@@ -251,3 +251,64 @@ snakemake --use-conda  --configfile low_config.yaml --snakefile /data/gpfs-1/use
 snakemake --use-conda  --configfile low_config.yaml --snakefile /data/gpfs-1/users/kisa11_c/work/coding/standardMPRAsnakeflow/workflow/Snakefile --conda-prefix ../../MPRAsnakeflow_projects/conda --keep-going --cluster-config /data/gpfs-1/users/kisa11_c/work/coding/standardMPRAsnakeflow/config/sbatch.yml --cluster-status status.py --cluster "sbatch --parsable --nodes=1 --ntasks-per-node={cluster.threads} --mem {cluster.mem} -t {cluster.time} -p {cluster.queue} -o {cluster.output} -e {cluster.error}"  --jobs 50 --cluster-cancel scancel --rerun-incomplete -n
 ```
 - 107 jobs
+- `barcodes_incl_other.sorted.tsv.gz` with new assignment script: `93159939` (not matched barcodes are missing) => remove the BCs again and redo the workflow
+- fixed script and added the barcode with "other" and "NA" if it cannot be assigned 
+- How many reads do not have an XI tag? # started job with job id 4010688 slurm log in ~/slurm*4010688* => found error in debug script => restart: 4016253
+
+### Work on variant region map (match manually with all the sequences)
+- result can be found in `/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/04_MPRAlm/notebooks/investigate_80K_data.ipynb` 
+  - variant_region_map_var_merged["sequence"].isna().sum() # 46374  (left_on="Variant") between header of design fasta and Variant column is no overlap
+  - variant_region_map_region_merged["sequence"].isna().sum() # 46374  (left_on="Region") between header of design fasta and Region column is no overlap
+  - variant_region_map_ref_merged["sequence"].isna().sum() # 778  (left_on="REF_ID") between header of design fasta and REF_ID column is overlap (not for 778 sequences)
+  - variant_region_alt_merged["sequence"].isna().sum() # 1374  (left_on="ALT_ID") between header of design fasta and ALT_ID column is overlap (not for 1374 sequences)
+- Investigate how it was done for 80K: MPRAOligodesign workflow / github repository 
+  - rule producing: variant_region_map: https://github.com/kircherlab/MPRAOligoDesign/blob/master/workflow/rules/oligo_design.smk
+  - script producing: variant_region_map: https://github.com/kircherlab/MPRAOligoDesign/blob/master/workflow/scripts/oligo_design/getSequencesInclVariants.py
+  - Input of script:
+    - regions: bed file 
+    - variants: vcf file
+    - reference/design: fasta file
+    - outputs for: variants, variants-removed, regions, regions removed, design, design variant map
+    - variant-edge-exclusion: What was given here?
+  - What does this script do? 
+  0. find config for MPRAOligoDesign
+    - 5K_config: `/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/final_design/design_5K.conf.yml`
+  1. find vcf and bed file for 80K data
+    - vcf: `/data/gpfs-1/groups/ag_kircher/MPRA/IGVF_Y1_design/design/final_design/input/variants_5K.vcf`
+    - bed: `/data/gpfs-1/groups/ag_kircher/MPRA/IGVF_Y1_design/design/final_design/input/regions_5K.bed`
+ 
+- Table for mapping headers: sanity checking with Mohan: `/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/scripts/check_sanity_oligomap.ipynb`
+- Changed the IDs in the variant_region_map to the headers of the new design file
+  - script `/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/scripts/modify_variant_table.py`
+- check now the results of (bc)MPRAlm
+  - lowConfig results: `results/experiments/lowConfig_bwa/statistic/barcode/assigned_counts/assignmentFixDuplicates/NGN2_lowConfig_barcode_correlation.tsv`
+  - generate new MPRAlm results with the new `variant_region_map` (`/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/80K_MPRA/design/variant_region_map_deduplicated.tsv.gz`)
+  1. Current results new assignment (found error, old assignment was used)
+  2. New variant region map (whats the influence on the variant numbers)
+  3. New variant region map + lowConfig during MPRAsnakeflow (whats the influence on the region numbers)
+    - run bc_preparation.sh (7min) (job id 4365763) (`sbatch --mem=20G --time=0-09:00 -c 2 --wrap="bash /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/bc_preparation.sh"`) (820 single sequences)
+    `/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/lowConfig_NGN2_filtered_counts_sequences.tsv.gz` (5827836 rows)
+    - run preprocess: `/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/04_MPRAlm/bc_MPRAlm/scripts/preprocess.py` => e.g. `bc_tradeoff/results/preprocess/lowConfig_mpralm_input_NGN2.tsv` (1628686 rows)
+    - run MPRAlm `/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/04_MPRAlm/MPRAlm/scripts/run_mpralm.r` => `MPRAlm/weights_lowConfig_NGN2.feather` (~25000 variants can be tested)
+    - understood what the preprocessing does
+    - results in `25411` variant ids
+- Start the standard workflow again because wrong filtering was used:
+```bash
+snakemake --use-conda  --configfile standard_config.yaml --snakefile /data/gpfs-1/users/kisa11_c/work/coding/standardMPRAsnakeflow/workflow/Snakefile --conda-prefix ../../MPRAsnakeflow_projects/conda --keep-going --cluster-config /data/gpfs-1/users/kisa11_c/work/coding/standardMPRAsnakeflow/config/sbatch.yml --cluster-status status.py --cluster "sbatch --parsable --nodes=1 --ntasks-per-node={cluster.threads} --mem {cluster.mem} -t {cluster.time} -p {cluster.queue} -o {cluster.output} -e {cluster.error}"  --jobs 40 --cluster-cancel scancel -n --quiet
+```
+- Run bc_preparation again: `sbatch --mem=20G --time=0-09:00 -c 2 --wrap="bash /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/bc_preparation.sh"`
+  - job id: 4382367 (10 min) 1058 single sequences (not found ref and alt)
+  - results in `25395` variant ids
+- Checking the MPRAsnakeflow results: there is combined output (less preprocessing needed)
+  - low config:
+    - `/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/lowConfig_bwa/assigned_counts/assignmentFixDuplicates/lowConfig/NGN2_2_barcode_assigned_counts.tsv.gz` (14518686 rows) (BC, assigned oligo, dna_count, rna_count)
+    - `/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/lowConfig_bwa/assigned_counts/assignmentFixDuplicates/lowConfig/NGN2_allreps_merged.combined.tsv.gz` (14518686 rows) (BC, assigned oligo, dna_count, rna_count)
+      - Question at hand: does this contain all information I need for variants and how many are included? (join with variant_region_map)
+        - I have xx variants see presentation
+- Running preprocessing: standard: `41284` variants with > 2 barcodes
+
+- sanity check because shitty cosum script: 
+  - job id: `4538047` for lowConfig (bc_preparation.sh): 42598 
+  - job id: `4538055` for standard (bc_preparation.sh): 42129
+  - Preprocessing: standard: `4538254` => in table: `41284`
+  - Preprocessing: lowConfig: `4538258` => in table: `42137`
