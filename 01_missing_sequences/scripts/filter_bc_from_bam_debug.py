@@ -301,7 +301,6 @@ if config["general"]["verbose"]:
   print("Alignment score equals second best alignment score but no second best alignment is given: ", count_no_second_alignment)
   print("reversed_read_count: ", reversed_read_count) # revered reads
 # not needed anymore: (information content to low)
-  # print("count_low_identity_but_high_score: ", count_low_identity_but_high_score)
-  # print("No xi count: ", no_xi_count) # optional
-  # print("high_quali_reversed_read_count: ", high_quali_reversed_read_count)
-  # print("high_quality_same_as_xs: ", high_quality_same_as_xs)
+  print("No xi count: ", no_xi_count) # optional
+  print("high_quali_reversed_read_count: ", high_quali_reversed_read_count)
+  print("high_quality_same_as_xs: ", high_quality_same_as_xs)
