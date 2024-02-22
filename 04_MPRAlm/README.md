@@ -1,5 +1,5 @@
 # Directory for performing MPRAlm and bc_MPRAlm
-
+## Goal: Get table of sequences with the p-values and log2FCs
 ## Outline
 - Preparing data
 - results and preparation script: `/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff`

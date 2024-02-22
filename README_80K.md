@@ -307,8 +307,12 @@ snakemake --use-conda  --configfile standard_config.yaml --snakefile /data/gpfs-
         - I have xx variants see presentation
 - Running preprocessing: standard: `41284` variants with > 2 barcodes
 
-- sanity check because shitty cosum script: 
+- sanity check because shitty understanding of cosum script: 
   - job id: `4538047` for lowConfig (bc_preparation.sh): 42598 
   - job id: `4538055` for standard (bc_preparation.sh): 42129
   - Preprocessing: standard: `4538254` => in table: `41284`
   - Preprocessing: lowConfig: `4538258` => in table: `42137`
+  - generate new task: 06_variant_analysis
+  - Questions: try to get the numbers of positive and negative effects
+    - Add enformer classes (problems?)
+  

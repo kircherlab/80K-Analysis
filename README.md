@@ -8,8 +8,9 @@
   - `01_missing_sequences`: analysis of the missing sequences (mapping problem)
   - `02_controls`: plotting the controlls and how well they perform
   - `03_config_check`: try different configurations for the analysis
-  - `04_MPRAlm`: Analyze 80K with MPRAlm (e.g. compare to bc_MPRAlm; plots for tiger team)
+  - `04_MPRAlm`: get the data from MPRAsnakeflow and prepare the count matrix for statistical analysis using (bc_MPRAlm) (+ e.g. plots for tiger team)
   - `05_variant_region_list`: get a table which has for each sequence tested the meta data and the additional information (e.g. enformer class, cell-type)
+  - `06_variant_analysis`: analysis of the variants in 80K (e.g. signigicant positive and negative log2; enformer group prediction) 
 - Resulting data is stored in the group folder `/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/project/<folder_name>/`
 
 ### Code
