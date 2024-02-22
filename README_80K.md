@@ -306,7 +306,6 @@ snakemake --use-conda  --configfile standard_config.yaml --snakefile /data/gpfs-
       - Question at hand: does this contain all information I need for variants and how many are included? (join with variant_region_map)
         - I have xx variants see presentation
 - Running preprocessing: standard: `41284` variants with > 2 barcodes
-
 - sanity check because shitty understanding of cosum script: 
   - job id: `4538047` for lowConfig (bc_preparation.sh): 42598 
   - job id: `4538055` for standard (bc_preparation.sh): 42129
@@ -315,4 +314,6 @@ snakemake --use-conda  --configfile standard_config.yaml --snakefile /data/gpfs-
   - generate new task: 06_variant_analysis
   - Questions: try to get the numbers of positive and negative effects
     - Add enformer classes (problems?)
-  
+#### metadata format in variant_region_list.ipynb
+- output in `MPRA/IGVF_Y1_design/80K_MPRA/design`
+- variant and sequence position is missing
