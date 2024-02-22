@@ -1,3 +1,6 @@
+## 17.02 - Optional script, took Mohans scripts and added variant type and enformer prediction result
+# example row: 
+# chr6	43797164	VEGFA|ENSG00000112715.26|EH38E3709352|6-43797164-G-A	G	A	4254.341	392_DNASE:CD14-positive 	1	PASS	AF=6.57168e-06;AC=1	cardiac	singleton	enformer_high
 ## This notebook is meant to be a module to read and filter and prepare the enformer and AF tables of mohan
 # - last column: AF=...;AC=... (remove AF= and split to two column)
 # - add a header

@@ -1,0 +1,24 @@
+general: # general settings/thresholds
+  output_dir: /home/kisa/coding/80K_MPRA/80K-Analysis/06_variant_analysis/results/
+  input_dir: /home/kisa/coding/80K_MPRA/80K-Analysis/06_variant_analysis/resources/
+files: # all files used for the analysis
+  # toptable (results from bc_mpralm)
+  toptable_lowConfig: /home/kisa/coding/80K_MPRA/bc_MPRAlm/results/toptable_lowConfigNGN2.feather  
+  toptable_standard: /home/kisa/coding/80K_MPRA/bc_MPRAlm/results/toptable_standardNGN2.feather
+  # enformer 
+  enformer_cardiac_single: /home/kisa/coding/80K_MPRA/server_results/enformer_results/enformer_class/cardiac.singleton_enformer_class.tsv
+  enformer_cardiac_ultra: /home/kisa/coding/80K_MPRA/server_results/enformer_results/enformer_class/cardiac.ultra-rare_enformer_class.tsv
+  enformer_cava_single: /home/kisa/coding/80K_MPRA/server_results/enformer_results/enformer_class/cava.singleton_enformer_class.tsv
+  enformer_cava_ultra: /home/kisa/coding/80K_MPRA/server_results/enformer_results/enformer_class/cava.ultra-rare_enformer_class.tsv
+  enformer_neuro_single: /home/kisa/coding/80K_MPRA/server_results/enformer_results/enformer_class/neuro.singleton_enformer_class.tsv
+  enformer_neuro_ultra: /home/kisa/coding/80K_MPRA/server_results/enformer_results/enformer_class/neuro.ultra-rare_enformer_class.tsv
+  enformer_random_single: "/home/kisa/coding/80K_MPRA/missing wait for mohan"
+  enformer_random_ultra: /home/kisa/coding/80K_MPRA/server_results/enformer_results/enformer_class/random.ultra-rare_enformer_class.tsv
+plots:
+  # log2FC distribution (for all and for significant)
+  log2_p_sig_hist: /home/kisa/coding/80K_MPRA/80K-Analysis/06_variant_analysis/results/plots/sig_log2_distribution.png
+  log2_all_hist: /home/kisa/coding/80K_MPRA/80K-Analysis/06_variant_analysis/results/plots/all_log2_distribution.png
+  # p-value distribution (adjusted)
+  all_adj_p_hist: /home/kisa/coding/80K_MPRA/80K-Analysis/06_variant_analysis/results/plots/all_adj_p_distribution.png
+  sig_adj_p_hist: /home/kisa/coding/80K_MPRA/80K-Analysis/06_variant_analysis/results/plots/sig_adj_p_distribution.png
+  

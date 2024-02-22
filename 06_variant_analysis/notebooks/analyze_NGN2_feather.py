@@ -36,7 +36,6 @@ log2_low_toptable = toptable_mpralm[toptable_mpralm["logFC"] < -1]
 print("Log2 lower than -1: ", len(log2_low_toptable)) # 4
 
 
-
 # log2 foldchange distribution histogram from significant variants
 plt.hist(toptable_mpralm["logFC"], bins=100)
 plt.savefig(config["files"]["log2_all_hist"])
