@@ -1,0 +1,7 @@
+rule barcode_preparation:
+    input: 
+        script = '/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/bc_preparation.sh',
+        variants = '/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/80K_MPRA/design/variant_region_map_deduplicated.tsv.gz',
+        
+    output: 'barcode_preparation.py'
+    shell: 'cp {input} {output}'
