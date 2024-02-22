@@ -8,7 +8,7 @@
 *.json
 *.png
 *.vcf
-
+*.yaml
 # exclude tmp directory
 tmp/
 *results/*

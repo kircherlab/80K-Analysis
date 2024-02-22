@@ -1,0 +1,13 @@
+files:
+  weights: /data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/04_MPRAlm/MPRAlm/results/NGN2_output/mpralm/weights_all_NGN2.feather
+  # toptable: /data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/04_MPRAlm/MPRAlm/results/NGN2_output/mpralm/toptable_all_NGN2.feather # old assignment
+  # toptable: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_MPRAlm/toptable_new_assignmentNGN2.feather
+  toptable: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_MPRAlm/toptable_lowConfigNGN2.feather
+  # toptable: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_MPRAlm/toptable_standardNGN2.feather
+  # toptable_annotated: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_MPRAlm/toptable_new_assignmentNGN2_annotated.csv
+  # toptable_annotated: /data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/04_MPRAlm/MPRAlm/results/NGN2_output/mpralm/toptable_mpralm.csv # old assignment
+  # sign_negative: /data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/04_MPRAlm/MPRAlm/results/NGN2_output/mpralm/sign_negative_log2FC.csv
+  # sign_positive: /data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/04_MPRAlm/MPRAlm/results/NGN2_output/mpralm/sign_positive_log2FC.csv
+  # log2_all_hist: /data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/04_MPRAlm/MPRAlm/results/NGN2_output/mpralm/log2_all_hist.png
+  # log2_p_sig_hist: /data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/04_MPRAlm/MPRAlm/results/NGN2_output/mpralm/log2_p_sig.png
+  # variant_vcf: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/final_design/input/variants_5K.vcf

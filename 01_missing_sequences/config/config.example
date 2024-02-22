@@ -37,4 +37,4 @@ mapping:
   reference: "/fast/groups/ag_kircher/MPRA/IGVF_Y1_design/resources/association_data/design_no_duplicates_sequence_and_header.fa"
   forward_revcomp_reference_tbl: "/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/results/fixed_design/design_no_duplicates_sequence_and_header_forw_revc.tsv"
   forward_revcomp_reference: "/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/results/fixed_design/design_no_duplicates_sequence_and_header_forw_revc.fa"
-  duplicate_reference: "/home/kisa/coding/80K_MPRA/80K-Analysis/05_variant_region_list/resources/design.fa.gz"
+  duplicate_reference: "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/final_design/results/final_design/design.fa.gz"
