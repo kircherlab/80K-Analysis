@@ -317,3 +317,23 @@ snakemake --use-conda  --configfile standard_config.yaml --snakefile /data/gpfs-
 #### metadata format in variant_region_list.ipynb
 - output in `MPRA/IGVF_Y1_design/80K_MPRA/design`
 - variant and sequence position is missing
+### Check quality controll of MPRAsnakeflow
+- DNA plot less than RNA plot (`scripts/plot_perBCCounts_correlation.R`)
+  - problems with on demand portal: tidyverse not installable and session crashes alot
+  - Testing only with 2 replicates (all barcodes in merged files: e.g. `/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/standard_bwa/assigned_counts/assignmentFixDuplicates/NGN2_1.merged.config.standardConfig.tsv.gz`)
+```R
+% DNA
+correlation_plots <- cowplot::plot_grid(plotlist = plots_correlations_dna, ncol = 1)
+ggsave("test_plot_corrlation_dna.png", correlation_plots, width = 15, height = 10 * length(plots_correlations_dna), dpi=96, type="cairo")
+% rna:
+correlation_plots_rna <- cowplot::plot_grid(plotlist = plots_correlations_rna, ncol = 1)
+ggsave("test_plot_corrlation_rna.png", correlation_plots_rna, width = 15, height = 10 * length(plots_correlations_rna), dpi=96, type="cairo")
+```
+- resulting plots locally in documents folder (both plotting objects have 100000 elements but the DNA plot is not showing the same amount of barcodes)
+
+- label problem for inserts
+  - rule: statistic_correlation_calculate: `workflow/scripts/count/plot_perInsertCounts_correlation.R`
+    - input: `results/experiments/{{project}}/assigned_counts/{{assignment}}/{{config}}/{{condition}}_{replicate}_merged_assigned_counts.tsv.gz` for replicate 1: 74691 rows (header: `name    dna_counts      rna_counts      dna_normalized  rna_normalized  ratio   log2    n_obs_bc`)
+    - with legend position bottom plot looks better
+    - increased size of plot: looks nice (stored locally) but increase of file size
+    - For inserts the number is not different because of zero counts (Pia idea)
