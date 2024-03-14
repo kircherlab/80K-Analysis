@@ -329,8 +329,37 @@ ggsave("test_plot_corrlation_dna.png", correlation_plots, width = 15, height = 1
 correlation_plots_rna <- cowplot::plot_grid(plotlist = plots_correlations_rna, ncol = 1)
 ggsave("test_plot_corrlation_rna.png", correlation_plots_rna, width = 15, height = 10 * length(plots_correlations_rna), dpi=96, type="cairo")
 ```
+  - Checking for reasons why less dots are in the DNA barcode plot than in the RNA plot (data which is plotted in the script (`res_plot`) is 100000 rows long and has for each value (`DNA_normalized_log2.x`, `DNA_normalized_log2.y`) and (`RNA_normalized_log2.x`, `RNA_normalized_log2.y`) entries 
+    - Possibility: more duplicates in DNA_normalized_log2 x and y values than in RNA
+      - `sum(duplicated(res_plot[c("DNA_normalized_log2.x", "DNA_normalized_log2.y")]))` => 99622
+      - `sum(duplicated(res_plot[c("RNA_normalized_log2.x", "RNA_normalized_log2.y")]))` => 98417
+        - We plot 100000 values the DNA and RNA values differ in percent of duplicates: DNA: 99.622% and RNA: 98.417%
+        - 1 - 0.99622 is the proportion of dots in the DNA plot
+        - check the number of unique values `DNA_normalized_log2` and `DNA_normalized_log2`
+          - `nrow(unique(res_plot[c("DNA_normalized_log2.x", "DNA_normalized_log2.y")]))` => 378 (for all data: 876)
+          - `nrow(unique(res_plot[c("RNA_normalized_log2.x", "RNA_normalized_log2.y")]))` => 1583 (for all data: 5040)
+  - in RNA_plot per barcode found error (?) (it fixes the error)
+  ```R  
+  min <- min(data$`RNA_normalized.x_log2`) # should be min(data$`RNA_normalized_log2.x`)
+  max <- max(data$`RNA_normalized.y_log2`) # should be max(data$`RNA_normalized_log2.y`)
+  ``` 
+  - check the unique values of log DNA and RNA normalized log2 values for this data
+```R
+length(unique(plots_correlations_dna_list[[1]]$data$dna_normalized_log2.x)) # => 12922
+length(unique(plots_correlations_dna_list[[1]]$data$dna_normalized_log2.y)) # => 12056
+length(unique(plots_correlations_dna_list[[1]]$data$rna_normalized_log2.y)) # => 25786
+length(unique(plots_correlations_dna_list[[1]]$data$rna_normalized_log2.x)) # => 25022
+```
+- have the warning for RNA plot: (it is because ggplot removes some values to have a nicer looking plot but all data is used to compute (summary) statistics according to [stack](https://stackoverflow.com/questions/32505298/explain-ggplot2-warning-removed-k-rows-containing-missing-values))
+```
+Warnmeldungen:
+1: Removed 1533 rows containing missing values or values outside the scale range
+(`geom_point()`). 
+2: Removed 697 rows containing missing values or values outside the scale range
+(`geom_point()`).
+```
+- tested all plots with different number of labels and looks better with lables underneath the plot
 - resulting plots locally in documents folder (both plotting objects have 100000 elements but the DNA plot is not showing the same amount of barcodes)
-
 - label problem for inserts
   - rule: statistic_correlation_calculate: `workflow/scripts/count/plot_perInsertCounts_correlation.R`
     - input: `results/experiments/{{project}}/assigned_counts/{{assignment}}/{{config}}/{{condition}}_{replicate}_merged_assigned_counts.tsv.gz` for replicate 1: 74691 rows (header: `name    dna_counts      rna_counts      dna_normalized  rna_normalized  ratio   log2    n_obs_bc`)
