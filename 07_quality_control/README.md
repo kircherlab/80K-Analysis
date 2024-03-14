@@ -1,0 +1,2 @@
+- in scripts 
+  - `plot_perBCCounts_correlation.R`, `plot_perInsertCounts_correlation.R`: modified for local testing of plotting
