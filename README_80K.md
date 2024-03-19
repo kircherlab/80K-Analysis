@@ -306,7 +306,7 @@ snakemake --use-conda  --configfile standard_config.yaml --snakefile /data/gpfs-
       - Question at hand: does this contain all information I need for variants and how many are included? (join with variant_region_map)
         - I have xx variants see presentation
 - Running preprocessing: standard: `41284` variants with > 2 barcodes
-- sanity check because shitty understanding of cosum script: 
+- sanity check because shitty understanding of custom script: 
   - job id: `4538047` for lowConfig (bc_preparation.sh): 42598 
   - job id: `4538055` for standard (bc_preparation.sh): 42129
   - Preprocessing: standard: `4538254` => in table: `41284`
@@ -317,7 +317,7 @@ snakemake --use-conda  --configfile standard_config.yaml --snakefile /data/gpfs-
 #### metadata format in variant_region_list.ipynb
 - output in `MPRA/IGVF_Y1_design/80K_MPRA/design`
 - variant and sequence position is missing
-### Check quality controll of MPRAsnakeflow
+### Check quality control of MPRAsnakeflow
 - DNA plot less than RNA plot (`scripts/plot_perBCCounts_correlation.R`)
   - problems with on demand portal: tidyverse not installable and session crashes alot
   - Testing only with 2 replicates (all barcodes in merged files: e.g. `/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/standard_bwa/assigned_counts/assignmentFixDuplicates/NGN2_1.merged.config.standardConfig.tsv.gz`)
@@ -366,3 +366,14 @@ Warnmeldungen:
     - with legend position bottom plot looks better
     - increased size of plot: looks nice (stored locally) but increase of file size
     - For inserts the number is not different because of zero counts (Pia idea)
+
+### Compute plots for 80K data
+- run MPRAsnakeflow + Report 
+- get everything together in excel file ([in sharepoint](https://charitede-my.sharepoint.com/:x:/r/personal/kilian_salomon_bih-charite_de/_layouts/15/Doc.aspx?sourcedoc=%7BD586D4C6-D692-4638-A51C-943F1BAECE8B%7D&file=sanity_check_NGN2.xlsx&action=default&mobileredirect=true))
+
+### Investigating Controls
+- haveing 6275 controls on the experiment
+  - element inactive control    5019
+  - variant negative control     967
+  - element active control      198
+  - variant positive control     91
