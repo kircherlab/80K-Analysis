@@ -1,9 +1,12 @@
 files:
   output:
     plotting: /data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/80K_MPRA/plots/ 
+  creating:
+    name_header_match: /home/kisa/coding/80K_MPRA/80K-Analysis/05_variant_region_list/resources/id_matching_table.tsv
+    metadata_table: /home/kisa/coding/80K_MPRA/80K-Analysis/05_variant_region_list/resources/IGVF_metadata_table.tsv
   final_design:
     design_with_duplicates: /data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/design/final_design/results/final_design/design.fa.gz
-    design_fasta: /fast/groups/ag_kircher/MPRA/IGVF_Y1_design/resources/association_data/design_no_duplicates_sequence_and_header.fa
+    design_fasta: /home/kisa/coding/80K_MPRA/80K-Analysis/05_variant_region_list/resources/design_no_duplicates_sequence_and_header.fa
     bed_file: /data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/design/final_design/input/regions_5K.bed
     vcf_file: /data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/design/final_design/input/variants_5K.vcf
     variant_table_duplicates: /data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/design/final_design/results/final_design/cardiac_neuro_cava_random/variant_region_map.tsv.gz
