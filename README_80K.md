@@ -372,8 +372,35 @@ Warnmeldungen:
 - get everything together in excel file ([in sharepoint](https://charitede-my.sharepoint.com/:x:/r/personal/kilian_salomon_bih-charite_de/_layouts/15/Doc.aspx?sourcedoc=%7BD586D4C6-D692-4638-A51C-943F1BAECE8B%7D&file=sanity_check_NGN2.xlsx&action=default&mobileredirect=true))
 
 ### Investigating Controls
+- Found directory with files for controls: `/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/resources/controls`
+  - README points you to the files in the folder 
+    - Seem to be the original files
+    - e.g. fasta folder: 
+      - andrew_cardio_positive-controls.fasta => all spaces (" ") are replaced by ":" in the current version
+      - went through all files and matched a subset to the original header => only andrew_cardio_positive-controls.fasta: spaces replaced by ":"
+    - e.g. meta folder: 
+      - bed: `in-house.bed` => no ID column (Not matchable?)
+- SLEA controls: n=200 100 positive an 100 negative (tested in HepG2)
+- control groups with variants: `grep "variant" '/home/kisa/coding/80K_MPRA/80K-Analysis/05_variant_region_list/metadata_example_1903.tsv' | grep "control" | cut -f 14 | sort | uniq | wc -l` => 8
+  - C_positive_heart_CAD
+  - C_positive_neuron_CD => has references without matching alternative and alternatives without matching references: Mohan said these are element variants as well
+  - GC_Atrial_fib
+  - GC_Kircher
+  - GC_Liang
+  - GC_Mendelian_variants
+  - GC_Mohlke
+  - GC_Selvarajan (199 ALT)
+- C_positive_neuron_CD: According to Mohan: conversation gitter 20.03.2024 C_positive_neuron_CD: has no variant controls (we got 100 positive controls with highest effect in NGN2 from Chengyu)
+  - Reference without alternative: 'C_positive_neuron_CD:n2_rs11876_C_T_ref_50::chr16:2038176-2038446-mean_ratio1.93' (looked for matching rsID)
+  - Alternative without reference: 'C_positive_neuron_CD:p1_rs55985730_T_G_alt_50_T::chr7:128776855-128777125-mean_ratio2.34' (looked for matching rsID)
 - haveing 6275 controls on the experiment
   - element inactive control    5019
   - variant negative control     967
   - element active control      198
   - variant positive control     91
+
+#### Questions about controls:
+- GC_Mendelian_variants: 
+  - e.g.:
+    - REF1: GC_Mendelian_variants:REF_chr10:23219434A*G|PTF1A, REF2: GC_Mendelian_variants:REF_chr10:23219376A*C|PTF1A 
+    - ALT: GC_Mendelian_variants:ALT_chr10:23219434A*G|PTF1A_chr10:23219376A*C|PTF1A
