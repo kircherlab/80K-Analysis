@@ -382,15 +382,17 @@ Warnmeldungen:
       - bed: `in-house.bed` => no ID column (Not matchable?)
 - SLEA controls: n=200 100 positive an 100 negative (tested in HepG2)
 - control groups with variants: `grep "variant" '/home/kisa/coding/80K_MPRA/80K-Analysis/05_variant_region_list/metadata_example_1903.tsv' | grep "control" | cut -f 14 | sort | uniq | wc -l` => 8
-  - C_positive_heart_CAD
-  - C_positive_neuron_CD => has references without matching alternative and alternatives without matching references: Mohan said these are element variants as well
-  - GC_Atrial_fib
-  - GC_Kircher
-  - GC_Liang
-  - GC_Mendelian_variants
-  - GC_Mohlke
-  - GC_Selvarajan (199 ALT)
-- C_positive_neuron_CD: According to Mohan: conversation gitter 20.03.2024 C_positive_neuron_CD: has no variant controls (we got 100 positive controls with highest effect in NGN2 from Chengyu)
+  - info                   class                     number of variants   after assignment (with elements)
+  - C_positive_heart_CAD   variant negative control     97                    92
+  - C_positive_neuron_CD   variant positive control     91                    88 (has references without matching alternative and alternatives without matching references: Mohan said these are element variants conversation: 20.03)
+  - GC_Atrial_fib          variant negative control     44                    45
+  - GC_Kircher             variant negative control    203                    185
+  - GC_Liang               variant negative control     16                    16
+  - GC_Mendelian_variants  variant negative control    209                    185
+  - GC_Mohlke              variant negative control     34                    31
+  - GC_Selvarajan          variant negative control    364                    356 (364 in design and 356 after assignment with elements (199 ALT in design and 194 in assignment (standard_bwa))
+#### Additional notes
+ C_positive_neuron_CD: According to Mohan: conversation gitter 20.03.2024 C_positive_neuron_CD: has no variant controls (we got 100 positive controls with highest effect in NGN2 from Chengyu)
   - Reference without alternative: 'C_positive_neuron_CD:n2_rs11876_C_T_ref_50::chr16:2038176-2038446-mean_ratio1.93' (looked for matching rsID)
   - Alternative without reference: 'C_positive_neuron_CD:p1_rs55985730_T_G_alt_50_T::chr7:128776855-128777125-mean_ratio2.34' (looked for matching rsID)
 - haveing 6275 controls on the experiment
@@ -404,3 +406,28 @@ Warnmeldungen:
   - e.g.:
     - REF1: GC_Mendelian_variants:REF_chr10:23219434A*G|PTF1A, REF2: GC_Mendelian_variants:REF_chr10:23219376A*C|PTF1A 
     - ALT: GC_Mendelian_variants:ALT_chr10:23219434A*G|PTF1A_chr10:23219376A*C|PTF1A
+- GC_Selvarajan: has one variant which does not match a reference
+  - `GC_Selvarajan:ALT_rs2297787|STARR-seq-HepG2_fwd_tile1-1_rs2297787`
+
+#### Using control match table to get them into barcode MPRAlm
+- first attempt: no output in final table (filtering too harsh?)
+- inverstigating step by step: 
+  - counts_per_bc_sorted (basically join) => worked
+  - found out that controls variant map does not include a region column but script assumed one => fixed 
+- we have 181 alternative sequences in GC_Selvarajan sequences => 
+- merge mpralm_dna and mpralm_rna tables for test variants and controls:
+  - variant table: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_preparation/controls/GC_Selvarajan_standard_NGN2_filtered_counts_sequences.tsv.gz 
+```bash
+first=1
+for f in /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/standard_NGN2_filtered_counts_sequences.tsv.gz /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_preparation/controls/GC_Selvarajan_standard_NGN2_filtered_counts_sequences.tsv.gz
+do
+    if [ "$first" ]
+    then
+        zcat "$f"
+        first=
+    else
+        zcat "$f" | tail -n +2
+    fi
+done > /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_preparation/test_controls_concat/GC_Selvarajan_standard_NGN2_filtered_counts_sequences.tsv
+```
+- concatinated variant table has 42305 unique alternative sequences

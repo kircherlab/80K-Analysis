@@ -2,6 +2,7 @@
 ## to make sure the same sequences are used in both. 
 import polars as pl
 import polars.selectors as cs
+import os
 
 ### Pia
 # input = "/data/humangen_kircherlab/MPRA/tt_mpra_analysis/data/ProxProm/malacoda/malacoda_input_HepG2.tsv.gz" # 6552204 rows
@@ -18,15 +19,25 @@ import polars.selectors as cs
 # output_dna = "/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/mpralm_bc_dna_input_NGN2.tsv"
 # output_both = "/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/mpralm_input_NGN2.tsv"
 
-## new assignment
-# input_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/" + "results/bc_preparation/"
-# output_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/" + "results/preprocess/"
+# ## new assignment
+# # input_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/" + "results/bc_preparation/"
+# # output_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/" + "results/preprocess/"
+# name = "standard"
+# name = "lowConfig"
+# input = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/%s_NGN2_filtered_counts_sequences.tsv.gz"%(name)
+# output_rna = "/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/%s_mpralm_bc_rna_input_NGN2.tsv"%(name)
+# output_dna = "/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/%s_mpralm_bc_dna_input_NGN2.tsv"%(name)
+# output_both = "/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/%s_mpralm_input_NGN2.tsv"%(name)
+
+## Controls
 name = "standard"
-name = "lowConfig"
-input = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/%s_NGN2_filtered_counts_sequences.tsv.gz"%(name)
-output_rna = "/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/%s_mpralm_bc_rna_input_NGN2.tsv"%(name)
-output_dna = "/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/%s_mpralm_bc_dna_input_NGN2.tsv"%(name)
-output_both = "/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/%s_mpralm_input_NGN2.tsv"%(name)
+control_name = "GC_Selvarajan"
+input_dir="/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_preparation/test_controls_concat"
+output_dir="/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/test_controls_concat"
+input = os.path.join(input_dir, "%s_%s_NGN2_filtered_counts_sequences.tsv"%(control_name, name))
+output_rna = os.path.join(output_dir, "%s_%s_mpralm_bc_rna_input_NGN2.tsv"%(control_name, name))
+output_dna = os.path.join(output_dir, "%s_%s_mpralm_bc_dna_input_NGN2.tsv"%(control_name, name))
+output_both = os.path.join(output_dir, "%s_%s_mpralm_input_NGN2.tsv"%(control_name, name))
 
 print("Reading data... ", input)
 df = pl.read_csv(input, separator="\t")

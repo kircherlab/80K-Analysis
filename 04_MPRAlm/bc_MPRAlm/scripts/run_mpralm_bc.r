@@ -12,17 +12,29 @@ library(arrow)
 # png(file = "results/HepG2_outputs/mpralm_bc/voom_all.png")
 args = commandArgs(trailingOnly=TRUE)
 
-input_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/"
-output_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_MPRAlm/"
-dir.create(file.path(output_dir))
+# # general 80K input
+# input_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/"
+# output_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_MPRAlm/"
+# dir.create(file.path(output_dir))
 
-# input_rna = paste0(input_dir, "preprocess/mpralm_bc_rna_input_NGN2.tsv") #args[1]
-# input_dna = paste0(input_dir, "preprocess/mpralm_bc_dna_input_NGN2.tsv") # args[2]
-name = "lowConfig" # args[4]
-name = "standard" # args[4]
-input_rna = paste0(input_dir, "preprocess/", name,  "_mpralm_bc_rna_input_NGN2.tsv") #args[1]
-input_dna = paste0(input_dir, "preprocess/", name, "_mpralm_bc_dna_input_NGN2.tsv") # args[2]
-weights_file = paste0(input_dir, "MPRAlm/weights_", name, "_NGN2.feather") # args[3]
+# # input_rna = paste0(input_dir, "preprocess/mpralm_bc_rna_input_NGN2.tsv") #args[1]
+# # input_dna = paste0(input_dir, "preprocess/mpralm_bc_dna_input_NGN2.tsv") # args[2]
+# name = "lowConfig" # args[4]
+# name = "standard" # args[4]
+# input_rna = paste0(input_dir, "preprocess/", name,  "_mpralm_bc_rna_input_NGN2.tsv") #args[1]
+# input_dna = paste0(input_dir, "preprocess/", name, "_mpralm_bc_dna_input_NGN2.tsv") # args[2]
+# weights_file = paste0(input_dir, "MPRAlm/weights_", name, "_NGN2.feather") # args[3]
+# png(file = file.path(output_dir, paste0("voom_", name, ".png")))
+# output_name = paste0("toptable_", name, "NGN2.feather")
+
+## 80K with controls test (only GC_Selvarajan):
+name = "GC_Selvarajan_standard"
+input_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/"
+output_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_MPRAlm/test_controls_concat/"
+
+input_dna = paste0(input_dir, 'preprocess/test_controls_concat/', name, "_mpralm_bc_dna_input_NGN2.tsv")
+input_rna = paste0(input_dir, 'preprocess/test_controls_concat/', name, "_mpralm_bc_rna_input_NGN2.tsv")
+weights_file = paste0(input_dir, "MPRAlm/test_controls_concat/weights_", name, "_NGN2.feather") # args[3]
 png(file = file.path(output_dir, paste0("voom_", name, ".png")))
 output_name = paste0("toptable_", name, "NGN2.feather")
 

@@ -9,16 +9,23 @@ library(dplyr)
 library(arrow)
 
 args = commandArgs(trailingOnly=TRUE)
-# input = "/data/humangen_kircherlab/MPRA/tt_mpra_analysis/data/ProxProm/mpralm/mpralm_input_HepG2.tsv" #args[1]
-# old assignment
-# input = "/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/mpralm_input_NGN2.tsv" #args[1]
+# # input = "/data/humangen_kircherlab/MPRA/tt_mpra_analysis/data/ProxProm/mpralm/mpralm_input_HepG2.tsv" #args[1]
+# # old assignment
+# # input = "/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/mpralm_input_NGN2.tsv" #args[1]
+# # output_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/MPRAlm/"
+# # name = "all" #args[2]
+# # new assignment
+# name = "lowConfig" #args[2]
+# name = "standard" #args[2]
+# input = paste0("/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/", name, "_mpralm_input_NGN2.tsv") #args[1]
 # output_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/MPRAlm/"
-# name = "all" #args[2]
-# new assignment
-name = "lowConfig" #args[2]
-name = "standard" #args[2]
-input = paste0("/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/", name, "_mpralm_input_NGN2.tsv") #args[1]
-output_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/MPRAlm/"
+
+
+# control example + cardiac_neuro_cava_random
+name = "GC_Selvarajan_standard"
+input_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/test_controls_concat/"
+output_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/MPRAlm/test_controls_concat/"
+input = paste0(input_dir, name, "_mpralm_input_NGN2.tsv") #args[1]
 
 
 png(file=file.path(output_dir, paste0("voom_",name,".png")))

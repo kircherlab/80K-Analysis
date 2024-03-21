@@ -12,7 +12,7 @@ with open(config_path, "r") as f:
     config = yaml.load(f, Loader=yaml.FullLoader)
 
 
-toptable_mpralm = pd.read_feather(config["files"]["toptable"])
+toptable_mpralm = pd.read_feather(config["files"]["toptable_standard_control_table"])
 weights_mpralm = pd.read_feather(config["files"]["weights"])
 
 # print(weights_mpralm)
