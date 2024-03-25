@@ -431,3 +431,7 @@ do
 done > /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_preparation/test_controls_concat/GC_Selvarajan_standard_NGN2_filtered_counts_sequences.tsv
 ```
 - concatinated variant table has 42305 unique alternative sequences
+- add chrom, pos, ref alt to the table for controls and tested oligos
+  - bed file for tested sequences `(/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/final_design/input/regions_5K.bed)` (not for controls!) (after replacing ~ with , in the names matching was possible)
+  - where is the bed for the controls?
+  - do same for elements and find control bed file 
