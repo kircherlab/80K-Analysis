@@ -435,3 +435,64 @@ done > /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_t
   - bed file for tested sequences `(/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/final_design/input/regions_5K.bed)` (not for controls!) (after replacing ~ with , in the names matching was possible)
   - where is the bed for the controls?
   - do same for elements and find control bed file 
+  - ``found`` bed files for 
+    - GC_Atrial_fib
+    - GC_Liang
+    - GC_Selvarajan
+    - GC_Mohlke
+    - GC_Kircher       
+    - GC_Cort_Chengyu
+    - GC_GABA_Chengyu
+    - GC_Glut_Chengyu
+    - GC_Hon
+    - GC_Mendelian_variants
+    - C_positive_heart_CAD
+    - GC_Vista
+    - GC_DNase_positive
+    - GC_DNase_negative_brain
+    - GC_DNase_negative_blood      
+    - MK
+- bed files ``missing`` for:
+  - C_negative_heart_MK
+  - C_negative_neuron_MK
+  - C_negative_neuron_NP
+  - C_positive_heart_MK
+  - C_positive_neuron_CD
+  - C_positive_neuron_MK
+  - C_positive_neuron_NP
+  - C_positive_heart_AB
+  - C_SLEA
+  - GC_DNase_positive_shuffeled
+  - GC_DNase_negative_brain_shuffeled
+  - GC_DNase_negative_blood_shuffeled
+- current questions: missing controls have chrom, start end in header
+- Beispiel header von `MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/controls/negative_250_heart_MK.fa`
+```
+>tile_6903_chr11_9614045_9614314_reference__0.958461950470297
+>tile_35543_chr5_173245685_173245954_reference__0.556701926768965
+>tile_36416_chr6_35490266_35490535_reference__0.494964379737065
+>tile_16405_chr16_58119639_58119908_reference__0.479510907361922
+>tile_27236_chr22_37986181_37986450_reference__0.476821379685758
+```
+- Beispiel header von `MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/controls/negative_250_neuron_MK.fa`
+```
+>tile_14444_chr15_67066278_67066547_reference__1.1385203581298
+>tile_9599_chr12_65742272_65742541_reference__1.12348297546129
+>tile_9256_chr12_26114182_26114451_reference__1.06883601881989
+>tile_44145_chr8_80578146_80578415_reference__1.04321190480237
+>tile_1999_chr1_88462556_88462825_G_C_19__0.955831785228529
+```
+- Beispiel von `MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/controls/positive_100_neuron_CD.fa`
+```
+>p1_rs9975055_T_G_alt_50_G::chr21:44929969-44930239-mean_ratio2.18
+>n1_rs2279982_G_A_alt_50::chr2:164841902-164842172-mean_ratio2.16
+>p1_rs34761481_G_A_alt_50_G::chr7:129161739-129162009-mean_ratio2.14
+>p1_rs7115714_G_A_alt_50_A::chr11:120424017-120424287-mean_ratio2.13
+```
+- Beispiel von `MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/controls/positive_100_neuron_NP.fa`
+```
+>GW18_PFC_ABC_chr15_89400286_89400556_0.830617698776558
+>NGN2_iPSC_ABC_chr4_112626228_112626498_1.11594727946851
+>Midfetal_Cortex_Trevino_chr20_63366571_63366841_1.30229686520284
+>NGN2_iPSC_ABC_chr2_2759136_2759406_1.42242758369854
+```
