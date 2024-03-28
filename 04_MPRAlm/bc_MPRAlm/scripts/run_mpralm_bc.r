@@ -54,16 +54,11 @@ bcs <- ncol(dna) / (s*2)
 
 mpra_bc_set <- MPRASet(DNA = dna, RNA = rna, eid = row.names(dna), barcode = NULL)
 design <- data.frame(intcpt = 1, alt = grepl("alt", colnames(mpra_bc_set)))
+
+# to do element level, use only intercept: design <- data.frame(intcpt = 1)
+
 # the replicate where each barcode belongs to is a blocking factor, indicated by the block_vector. 
 block_vector <- rep(1:s, each=bcs*2)
-
-# Get the weights as calculated from the aggregated data, and manipulate to fit to the structure of the barcode data. 
-# This is a bit hard coded using the column names
-agg_weights <- read_feather(weights_file, as_data_frame = TRUE, mmap = TRUE)
-col_order <- gsub("_bc[0-9]*","",colnames(mpra_bc_set))
-weights <- agg_weights[col_order]
-
-get_precision_weights2 <- function(...) {return(weights)}
 
 compute_logratio2 <- function(object, aggregate = c("mean", "sum", "none")) {
 	dna <- getDNA(object, aggregate = FALSE)
@@ -85,4 +80,11 @@ toptab_allele <- topTable(mpralm_fit_bc, coef = 2, number = Inf)
 toptab_allele$variant_id <- row.names(toptab_allele)
 write_feather(toptab_allele, paste(output_dir, output_name, sep=""))
 dev.off()
+
+# For element levels, use treat instead of toptable:
+# define user-defined-threshold by plotting the logFC of the negative controls. Find the logFC of the 95th percentile of the negative controls, and set this as the user defined thrshold.
+# With the following code, all elements above this threshold will be seen as active.
+
+# tr <- treat(fit, lfc=<user-defined-threshold>)
+# mpra_result <- topTreat(tr, coef = 1, number = Inf)
 
