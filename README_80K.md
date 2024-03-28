@@ -496,3 +496,34 @@ done > /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_t
 >Midfetal_Cortex_Trevino_chr20_63366571_63366841_1.30229686520284
 >NGN2_iPSC_ABC_chr2_2759136_2759406_1.42242758369854
 ```
+- made matching correct for elements and variants (found that bed file is not what I assumed it is)
+- Found region file is not helpful: `MPRA/IGVF_Y1_design/design/final_design/input/regions_5K.bed` (not 270 bp but from 150 - 370 long regions)
+  - create Sam file from matches of sequences without adapter yourself (use blat locally) `blat GCF_000001405.26_GRCh38_genomic.fna /data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/05_variant_region_list/tested_ref_and_elements.fasta blat_matched_file.psl` => (generate table: `tail -n +6 blat_matched_file.psl > blat_result_without_header.tsv`)
+  - header list: `['match', 'mismatch', 'rep_match', 'Ns', 'Q_gap_count', 'Q_gap_bases', 'T_gap_count', 'T_gap_bases', 'strand', 'Q_name', 'Q_size', 'Q_start', 'Q_end', 'T_name', 'T_size', 'T_start', 'T_end', 'block_count', 'blockSizes', 'qStarts', 'tStarts']`
+  - start positions have difference from over 1kb this is **sus** 
+    - 39    1955
+    - 38    1508
+    - 35    1380
+    - 40    1364
+    - 37    1231
+- Todo: metadata table
+  - check control region (length check first)
+    - Not all controls have region files but for these who have: region files are 270 bp long
+  - verify if regions are fine (after mapping to the reference)
+  - add regions to the alternative sequences with alt_ref_map_table
+  - add SPDI (for variants)
+  - add for each reference the SPDI of each variant it is responsible for
+- Todo: variant analysis
+  - Check numbers of controls
+  - Add all controls to bcMPRAlm
+  - make workflow for bcMPRAlm data preparation
+  - make elementwise bcMPRAlm (notes on how to do it)
+- check if control bed files are what they look like
+  - GC_Cort_Chengyu has only 270bp regions
+  - GC_GABA_Chengyu has only 270bp regions
+  - GC_Glut_Chengyu has only 270bp regions
+  - GC_Hon has only 270bp regions
+  - GC_Vista has only 270bp regions
+  - GC_DNase_positive has only 270bp regions
+  - GC_DNase_negative_brain has only 270bp regions
+  - GC_DNase_negative_blood has only 270bp regions
