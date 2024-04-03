@@ -5,10 +5,13 @@ files:
     name_header_match: /home/kisa/coding/80K_MPRA/80K-Analysis/05_variant_region_list/resources/id_matching_table.tsv
     # metadata_table: /home/kisa/coding/80K_MPRA/80K-Analysis/05_variant_region_list/resources/IGVF_metadata_table.tsv
     metadata_table: /data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/05_variant_region_list/resources/IGVF_metadata_table.tsv
+    old_metadata_table: /home/kisa/coding/80K_MPRA/80K-Analysis/05_variant_region_list/metadata_example_1903.tsv
+    bc_MPRAlm: /home/kisa/coding/80K_MPRA/server_results/bc_MPRAlm/toptable_GC_Selvarajan_standardNGN2.tsv
   final_design:
     design_with_duplicates: /data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/design/final_design/results/final_design/design.fa.gz
     design_fasta: /home/kisa/coding/80K_MPRA/80K-Analysis/05_variant_region_list/resources/design_no_duplicates_sequence_and_header.fa
-    test_seqs_region_file: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/final_design/input/regions_5K.bed
+    # test_seqs_region_file: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/final_design/input/regions_5K.bed
+    test_seqs_region_file: /home/kisa/coding/80K_MPRA/80K-Analysis/05_variant_region_list/resources/regions/regions_5K.bed
     vcf_file: /data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/design/final_design/input/variants_5K.vcf
     variant_table_duplicates: /data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/design/final_design/results/final_design/cardiac_neuro_cava_random/variant_region_map.tsv.gz
     variant_table: /data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/80K_MPRA/design/variant_region_map_deduplicated.tsv.gz

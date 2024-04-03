@@ -367,6 +367,23 @@ Warnmeldungen:
     - increased size of plot: looks nice (stored locally) but increase of file size
     - For inserts the number is not different because of zero counts (Pia idea)
 
+### Combine enformer class files (information from the prioritized variants)
+- using local files stored at `/home/kisa/coding/80K_MPRA/server_results/enformer_results/enformer_class/`
+- following code leads to `/home/kisa/coding/80K_MPRA/server_results/enformer_results/enformer_class/merged_enformer_class.tsv`
+```bash
+first=1
+for f in /home/kisa/coding/80K_MPRA/server_results/enformer_results/enformer_class/cava.singleton_enformer_class.tsv /home/kisa/coding/80K_MPRA/server_results/enformer_results/enformer_class/random.ultra-rare_enformer_class.tsv /home/kisa/coding/80K_MPRA/server_results/enformer_results/enformer_class/cardiac.singleton_enformer_class.tsv /home/kisa/coding/80K_MPRA/server_results/enformer_results/enformer_class/neuro.ultra-rare_enformer_class.tsv /home/kisa/coding/80K_MPRA/server_results/enformer_results/enformer_class/neuro.singleton_enformer_class.tsv /home/kisa/coding/80K_MPRA/server_results/enformer_results/enformer_class/cava.ultra-rare_enformer_class.tsv /home/kisa/coding/80K_MPRA/server_results/enformer_results/enformer_class/cardiac.ultra-rare_enformer_class.tsv
+do
+    if [ "$first" ]
+    then
+        cat "$f"
+        first=
+    else
+        cat "$f" | tail -n +2
+    fi
+done > /home/kisa/coding/80K_MPRA/server_results/enformer_results/enformer_class/merged_enformer_class.tsv
+```
+
 ### Compute plots for 80K data
 - run MPRAsnakeflow + Report 
 - get everything together in excel file ([in sharepoint](https://charitede-my.sharepoint.com/:x:/r/personal/kilian_salomon_bih-charite_de/_layouts/15/Doc.aspx?sourcedoc=%7BD586D4C6-D692-4638-A51C-943F1BAECE8B%7D&file=sanity_check_NGN2.xlsx&action=default&mobileredirect=true))
@@ -511,13 +528,16 @@ done > /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_t
     - Not all controls have region files but for these who have: region files are 270 bp long
   - verify if regions are fine (after mapping to the reference)
   - add regions to the alternative sequences with alt_ref_map_table
+    - go over variant_region_map and make dict: ref: [corresponding alt]
   - add SPDI (for variants)
   - add for each reference the SPDI of each variant it is responsible for
 - Todo: variant analysis
   - Check numbers of controls
   - Add all controls to bcMPRAlm
+    - Generated alt_ref_maps for analysis: `80K-Analysis/05_variant_region_list/results/variant_control_map`
+    - combine these with variant region map
   - make workflow for bcMPRAlm data preparation
-  - make elementwise bcMPRAlm (notes on how to do it)
+  - make elementwise bcMPRAlm (notes on how to do it in perform bc R script)
 - check if control bed files are what they look like
   - GC_Cort_Chengyu has only 270bp regions
   - GC_GABA_Chengyu has only 270bp regions
