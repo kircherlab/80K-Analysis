@@ -408,7 +408,7 @@ done > /home/kisa/coding/80K_MPRA/server_results/enformer_results/enformer_class
   - GC_Mendelian_variants  variant negative control    209                    185
   - GC_Mohlke              variant negative control     34                    31
   - GC_Selvarajan          variant negative control    364                    356 (364 in design and 356 after assignment with elements (199 ALT in design and 194 in assignment (standard_bwa))
-#### Additional notes
+#### Additional notes about controls
  C_positive_neuron_CD: According to Mohan: conversation gitter 20.03.2024 C_positive_neuron_CD: has no variant controls (we got 100 positive controls with highest effect in NGN2 from Chengyu)
   - Reference without alternative: 'C_positive_neuron_CD:n2_rs11876_C_T_ref_50::chr16:2038176-2038446-mean_ratio1.93' (looked for matching rsID)
   - Alternative without reference: 'C_positive_neuron_CD:p1_rs55985730_T_G_alt_50_T::chr7:128776855-128777125-mean_ratio2.34' (looked for matching rsID)
@@ -513,16 +513,28 @@ done > /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_t
 >Midfetal_Cortex_Trevino_chr20_63366571_63366841_1.30229686520284
 >NGN2_iPSC_ABC_chr2_2759136_2759406_1.42242758369854
 ```
+#### Using blat to get genomic coordinates of the sequences for the metadata file
 - made matching correct for elements and variants (found that bed file is not what I assumed it is)
 - Found region file is not helpful: `MPRA/IGVF_Y1_design/design/final_design/input/regions_5K.bed` (not 270 bp but from 150 - 370 long regions)
   - create Sam file from matches of sequences without adapter yourself (use blat locally) `blat GCF_000001405.26_GRCh38_genomic.fna /data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/05_variant_region_list/tested_ref_and_elements.fasta blat_matched_file.psl` => (generate table: `tail -n +6 blat_matched_file.psl > blat_result_without_header.tsv`)
   - header list: `['match', 'mismatch', 'rep_match', 'Ns', 'Q_gap_count', 'Q_gap_bases', 'T_gap_count', 'T_gap_bases', 'strand', 'Q_name', 'Q_size', 'Q_start', 'Q_end', 'T_name', 'T_size', 'T_start', 'T_end', 'block_count', 'blockSizes', 'qStarts', 'tStarts']`
-  - start positions have difference from over 1kb this is **sus** 
+  - start positions have small differences (e.g. 39 bases)
     - 39    1955
     - 38    1508
     - 35    1380
     - 40    1364
     - 37    1231
+  - sanity check:
+    - are all sequences of blat inbetween the regions of region_5k.bed (old file):
+      - No: 11538 sequences are not inbetween because they are not as large as the 270bps (their length is <= 271)
+    - I checked in UCSC: 
+      - `cardiac_neuro_cava_random:PRDM16|ENSG00000142611.17|EH38E2779779_fwd_tile1-1` one example region where the ucsc does not show any information about a cCRE from encode: 
+        - blat regions: NC_000001.11 (chr1) 3210194 3210464
+        - region_5k regions: chr1 3210229 3210430
+        - [UCSC with blat regions](https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&lastVirtModeType=default&lastVirtModeExtraState=&virtModeType=default&virtMode=0&nonVirtPosition=&position=chr1%3A3210194%2D3210464&hgsid=2082689898_VAczbUehrymUlkaWiiYiCorrQZsL)
+#### Found gene names per gene set: 
+- Github repo [MPRA_design](https://github.com/kircherlab/MPRA_design/tree/main) resources: `MPRA_design/resources/gene_lists`
+
 - Todo: metadata table
   - check control region (length check first)
     - Not all controls have region files but for these who have: region files are 270 bp long
@@ -547,3 +559,8 @@ done > /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_t
   - GC_DNase_positive has only 270bp regions
   - GC_DNase_negative_brain has only 270bp regions
   - GC_DNase_negative_blood has only 270bp regions
+
+#### Significant results 
+- neuro: 
+  - high positive result: e.g. 'KCNT2|ENSG00000162687.19|EH38E2855757|1-196494459-G-A'
+    - in R could only find one high logfc alt, Na at ref (2 vs NA) and a bit higher alt vs ref: 1.7 vs 1.41

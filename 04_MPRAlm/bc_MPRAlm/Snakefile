@@ -2,7 +2,7 @@
 
 # First: bc_preparation.sh (/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/bc_preparation.sh) -> filter MPRASnakeflow results to get only oligos with alt and ref
 #! TODO: Problem 12.13.2023: only 32851 variants have alt and ref (for proximal regulator: 117577)
-
+#! TODO: add config file
 rule bc_preparation:
     input: 
         variants="/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/design/final_design/results/final_design/cardiac_neuro_cava_random/variant_region_map.tsv.gz",
@@ -12,3 +12,32 @@ rule bc_preparation:
         count3="/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/experiment/results/experiments/run1counts_run2Assignment_NoDupAss/assigned_counts/assignmentFixDuplicates/NGN2_3.merged.config.standardConfig.tsv.gz",
     output:
         final_output="/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/NGN2_filtered_counts_sequences.tsv.gz",
+    # run bash script
+    # /home/kisa/coding/80K_MPRA/80K-Analysis/04_MPRAlm/notebooks/bc_preparation.sh
+
+condition_name="GC_Selvarajan_standard",
+rule preprocess:
+    input:
+        filtered_counts_sequence="/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_preparation/test_controls_concat/{condition_name}_NGN2_filtered_counts_sequences.tsv
+        input_dir="/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_preparation/test_controls_concat",
+    output:
+        output_rna="/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/test_controls_concat/{condition_name}_mpralm_bc_rna_input_NGN2.tsv",
+        output_dna="/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/test_controls_concat/{condition_name}_mpralm_bc_dna_input_NGN2.tsv",
+        output_both="/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/test_controls_concat/{condition_name}_mpralm_input_NGN2.tsv",
+    # run python skript
+    # /home/kisa/coding/80K_MPRA/80K-Analysis/04_MPRAlm/bc_MPRAlm/scripts/preprocess.py
+
+rule bc_mpralm:
+    input:
+        rna_input="/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/test_controls_concat/{condition_name}_mpralm_bc_rna_input_NGN2.tsv",
+        dna_input="/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/test_controls_concat/{condition_name}_mpralm_bc_dna_input_NGN2.tsv",
+        input_both="/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/test_controls_concat/{condition_name}_mpralm_input_NGN2.tsv",
+name = "standard"
+control_name = "GC_Selvarajan"
+input_dir="/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_preparation/test_controls_concat"
+output_dir="/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/test_controls_concat"
+input = os.path.join(input_dir, "%s_NGN2_filtered_counts_sequences.tsv"%(name))
+output_rna = os.path.join(output_dir, "%s_mpralm_bc_rna_input_NGN2.tsv"%(name))
+output_dna = os.path.join(output_dir, "%s_mpralm_bc_dna_input_NGN2.tsv"%(name))
+output_both = os.path.join(output_dir, "%s_mpralm_input_NGN2.tsv"%(name))
+

@@ -34,9 +34,24 @@ output_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projec
 
 input_dna = paste0(input_dir, 'preprocess/test_controls_concat/', name, "_mpralm_bc_dna_input_NGN2.tsv")
 input_rna = paste0(input_dir, 'preprocess/test_controls_concat/', name, "_mpralm_bc_rna_input_NGN2.tsv")
-weights_file = paste0(input_dir, "MPRAlm/test_controls_concat/weights_", name, "_NGN2.feather") # args[3]
+# weights_file = paste0(input_dir, "MPRAlm/test_controls_concat/weights_", name, "_NGN2.feather") # args[3]
+# output_name = paste0("toptable_", name, "NGN2.feather")
+# local: 
+name = "standard"
+input_dir = "/home/kisa/coding/80K_MPRA/80K-Analysis/04_MPRAlm/results/preprocess/"
+output_dir = "/home/kisa/coding/80K_MPRA/80K-Analysis/04_MPRAlm/results/bc_MPRAlm/locally_computed/"
+
+# local windows: 
+name = "standard"
+input_dir = "C:\\Users\\user\\OneDrive - Charité - Universitätsmedizin Berlin\\Documents\\coding\\80K_analysis\\bc_mpralm\\results\\preprocess\\"
+
+output_dir = "C:\\Users\\user\\OneDrive - Charité - Universitätsmedizin Berlin\\Documents\\coding\\80K_analysis\\bc_mpralm\\results\\bc_MPRAlm\\locally_computed\\"
+
+
+input_dna = paste0(input_dir, name, "_mpralm_bc_dna_input_NGN2.tsv")
+input_rna = paste0(input_dir, name, "_mpralm_bc_rna_input_NGN2.tsv")
 png(file = file.path(output_dir, paste0("voom_", name, ".png")))
-output_name = paste0("toptable_", name, "NGN2.feather")
+output_name = paste0("toptable_local_", name, "NGN2.feather")
 
 # Reading the barcode level input data
 rna <- read.table(file=input_rna, sep='\t', header=TRUE)
