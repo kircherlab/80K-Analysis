@@ -30,14 +30,13 @@ import os
 # output_both = "/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/%s_mpralm_input_NGN2.tsv"%(name)
 
 ## Controls
-name = "standard"
-control_name = "GC_Selvarajan"
-input_dir="/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_preparation/test_controls_concat"
+name = "standard_with_variant_controls" # was renamed during combination step
+input_dir="/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/"
 output_dir="/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/test_controls_concat"
-input = os.path.join(input_dir, "%s_%s_NGN2_filtered_counts_sequences.tsv"%(control_name, name))
-output_rna = os.path.join(output_dir, "%s_%s_mpralm_bc_rna_input_NGN2.tsv"%(control_name, name))
-output_dna = os.path.join(output_dir, "%s_%s_mpralm_bc_dna_input_NGN2.tsv"%(control_name, name))
-output_both = os.path.join(output_dir, "%s_%s_mpralm_input_NGN2.tsv"%(control_name, name))
+input = os.path.join(input_dir, "%s_NGN2_filtered_counts_sequences.tsv.gz"%(name))
+output_rna = os.path.join(output_dir, "%s_mpralm_bc_rna_input_NGN2.tsv"%(name))
+output_dna = os.path.join(output_dir, "%s_mpralm_bc_dna_input_NGN2.tsv"%(name))
+output_both = os.path.join(output_dir, "%s_mpralm_input_NGN2.tsv"%(name))
 
 print("Reading data... ", input)
 df = pl.read_csv(input, separator="\t")

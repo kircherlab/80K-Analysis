@@ -5,16 +5,16 @@ output_name=standard_with_controls
 
 
 # output files:
-counts_per_bc_gz_name=/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/${output_name}_NGN2_counts_per_bc_sorted.tsv.gz
-counts_per_bc_name=/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/${output_name}_NGN2_counts_per_bc_sorted.tsv
+counts_per_bc_gz_name=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/projects/bc_tradeoff/${output_name}_NGN2_counts_per_bc_sorted.tsv.gz
+counts_per_bc_name=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/projects/bc_tradeoff/${output_name}_NGN2_counts_per_bc_sorted.tsv
 
 # variants ref and alt 
-sequences_to_oligos=/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/${output_name}_NGN2_seqs_to_oligos_sorted.tsv.gz
-joined_counts_and_seqs=/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/${output_name}_NGN2_counts_sequences.tsv.gz
-joined_counts_and_seqs_unzipped=/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/${output_name}_NGN2_counts_sequences.tsv
-single_seqs=/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/${output_name}_NGN2_single_seqs.tsv
-temp=/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/${output_name}_NGN2_tmp.tsv
-final_output=/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/${output_name}_NGN2_filtered_counts_sequences.tsv.gz # 3649963
+sequences_to_oligos=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/projects/bc_tradeoff/${output_name}_NGN2_seqs_to_oligos_sorted.tsv.gz
+joined_counts_and_seqs=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/projects/bc_tradeoff/${output_name}_NGN2_counts_sequences.tsv.gz
+joined_counts_and_seqs_unzipped=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/projects/bc_tradeoff/${output_name}_NGN2_counts_sequences.tsv
+single_seqs=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/projects/bc_tradeoff/${output_name}_NGN2_single_seqs.tsv
+temp=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/projects/bc_tradeoff/${output_name}_NGN2_tmp.tsv
+final_output=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/projects/bc_tradeoff/${output_name}_NGN2_filtered_counts_sequences.tsv.gz # 3649963
 
 
 # input files:
@@ -28,10 +28,10 @@ final_output=/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc
 
 # standard with variant controls
 variants=/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/05_variant_region_list/resources/controls_variant_region_map.tsv
-assignment=/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/${config}_bwa/assignment/assignmentFixDuplicates.tsv.gz
-count1=/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/${config}_bwa/assigned_counts/assignmentFixDuplicates/NGN2_1.merged.config.standardConfig.tsv.gz
-count2=/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/${config}_bwa/assigned_counts/assignmentFixDuplicates/NGN2_2.merged.config.standardConfig.tsv.gz
-count3=/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/${config}_bwa/assigned_counts/assignmentFixDuplicates/NGN2_3.merged.config.standardConfig.tsv.gz
+assignment=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/${config}_bwa/assignment/assignmentFixDuplicates.tsv.gz
+count1=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/${config}_bwa/assigned_counts/assignmentFixDuplicates/NGN2_1.merged.config.standardConfig.tsv.gz
+count2=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/${config}_bwa/assigned_counts/assignmentFixDuplicates/NGN2_2.merged.config.standardConfig.tsv.gz
+count3=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/${config}_bwa/assigned_counts/assignmentFixDuplicates/NGN2_3.merged.config.standardConfig.tsv.gz
 
 
 # # low config

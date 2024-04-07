@@ -8,7 +8,8 @@ files:
     old_metadata_table: /home/kisa/coding/80K_MPRA/80K-Analysis/05_variant_region_list/metadata_example_1903.tsv
     bc_MPRAlm: /home/kisa/coding/80K_MPRA/server_results/bc_MPRAlm/toptable_GC_Selvarajan_standardNGN2.tsv
     # toptable_bcMPRAlm: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_MPRAlm/toptable_standardNGN2.tsv.gz
-    toptable_bcMPRAlm: /home/kisa/coding/80K_MPRA/80K-Analysis/04_MPRAlm/results/toptable_standardNGN2.tsv.gz
+    # toptable_bcMPRAlm: /home/kisa/coding/80K_MPRA/80K-Analysis/04_MPRAlm/results/toptable_standardNGN2.tsv.gz
+    toptable_bcMPRAlm: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_MPRAlm/test_controls_concat/toptable_local_standard_with_variant_controlsNGN2.tsv
   final_design:
     design_with_duplicates: /data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/design/final_design/results/final_design/design.fa.gz
     design_fasta: /home/kisa/coding/80K_MPRA/80K-Analysis/05_variant_region_list/resources/design_no_duplicates_sequence_and_header.fa

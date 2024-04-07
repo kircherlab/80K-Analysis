@@ -3,6 +3,7 @@
 library(mpra)
 library(dplyr)
 library(arrow)
+install.packages("arrow")
 
 
 # old input
@@ -10,7 +11,7 @@ library(arrow)
 # input_dna = "/data/humangen_kircherlab/MPRA/tt_mpra_analysis/data/ProxProm/mpralm/mpralm_bc_dna_input_HepG2.tsv"
 # weights_file = "results/HepG2_outputs/mpralm/weights_all_HepG2.feather"
 # png(file = "results/HepG2_outputs/mpralm_bc/voom_all.png")
-args = commandArgs(trailingOnly=TRUE)
+# # args = commandArgs(trailingOnly=TRUE)
 
 # # general 80K input
 # input_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/"
@@ -28,7 +29,8 @@ args = commandArgs(trailingOnly=TRUE)
 # output_name = paste0("toptable_", name, "NGN2.feather")
 
 ## 80K with controls test (only GC_Selvarajan):
-name = "GC_Selvarajan_standard"
+# name = "GC_Selvarajan_standard"
+name = "standard_with_variant_controls"
 input_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/"
 output_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_MPRAlm/test_controls_concat/"
 
@@ -36,22 +38,22 @@ input_dna = paste0(input_dir, 'preprocess/test_controls_concat/', name, "_mpralm
 input_rna = paste0(input_dir, 'preprocess/test_controls_concat/', name, "_mpralm_bc_rna_input_NGN2.tsv")
 # weights_file = paste0(input_dir, "MPRAlm/test_controls_concat/weights_", name, "_NGN2.feather") # args[3]
 # output_name = paste0("toptable_", name, "NGN2.feather")
-# local: 
-name = "standard"
-input_dir = "/home/kisa/coding/80K_MPRA/80K-Analysis/04_MPRAlm/results/preprocess/"
-output_dir = "/home/kisa/coding/80K_MPRA/80K-Analysis/04_MPRAlm/results/bc_MPRAlm/locally_computed/"
+# # local: 
+# name = "standard"
+# input_dir = "/home/kisa/coding/80K_MPRA/80K-Analysis/04_MPRAlm/results/preprocess/"
+# output_dir = "/home/kisa/coding/80K_MPRA/80K-Analysis/04_MPRAlm/results/bc_MPRAlm/locally_computed/"
 
-# local windows: 
-name = "standard"
-input_dir = "C:\\Users\\user\\OneDrive - Charité - Universitätsmedizin Berlin\\Documents\\coding\\80K_analysis\\bc_mpralm\\results\\preprocess\\"
+# # local windows: 
+# name = "standard"
+# input_dir = "C:\\Users\\user\\OneDrive - Charité - Universitätsmedizin Berlin\\Documents\\coding\\80K_analysis\\bc_mpralm\\results\\preprocess\\"
 
-output_dir = "C:\\Users\\user\\OneDrive - Charité - Universitätsmedizin Berlin\\Documents\\coding\\80K_analysis\\bc_mpralm\\results\\bc_MPRAlm\\locally_computed\\"
+# output_dir = "C:\\Users\\user\\OneDrive - Charité - Universitätsmedizin Berlin\\Documents\\coding\\80K_analysis\\bc_mpralm\\results\\bc_MPRAlm\\locally_computed\\"
 
 
-input_dna = paste0(input_dir, name, "_mpralm_bc_dna_input_NGN2.tsv")
-input_rna = paste0(input_dir, name, "_mpralm_bc_rna_input_NGN2.tsv")
+# input_dna = paste0(input_dir, name, "_mpralm_bc_dna_input_NGN2.tsv")
+# input_rna = paste0(input_dir, name, "_mpralm_bc_rna_input_NGN2.tsv")
 png(file = file.path(output_dir, paste0("voom_", name, ".png")))
-output_name = paste0("toptable_local_", name, "NGN2.feather")
+output_name = paste0("toptable_", name, "NGN2.feather")
 
 # Reading the barcode level input data
 rna <- read.table(file=input_rna, sep='\t', header=TRUE)
@@ -93,7 +95,8 @@ mpralm_fit_bc <- mpralm(object = mpra_bc_set, design = design, aggregate = "none
 # Finding significant variants
 toptab_allele <- topTable(mpralm_fit_bc, coef = 2, number = Inf)
 toptab_allele$variant_id <- row.names(toptab_allele)
-write_feather(toptab_allele, paste(output_dir, output_name, sep=""))
+write.table(toptab_allele, file=paste(output_dir, output_name, sep=""), sep="\t", row.names = FALSE)
+#write_feather(toptab_allele, paste(output_dir, output_name, sep=""))
 dev.off()
 
 # For element levels, use treat instead of toptable:

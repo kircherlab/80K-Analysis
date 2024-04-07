@@ -11,7 +11,7 @@ rule bc_preparation:
         count2="/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/experiment/results/experiments/run1counts_run2Assignment_NoDupAss/assigned_counts/assignmentFixDuplicates/NGN2_2.merged.config.standardConfig.tsv.gz",
         count3="/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/experiment/results/experiments/run1counts_run2Assignment_NoDupAss/assigned_counts/assignmentFixDuplicates/NGN2_3.merged.config.standardConfig.tsv.gz",
     output:
-        final_output="/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/NGN2_filtered_counts_sequences.tsv.gz",
+        final_output="/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/NGN2_filtered_counts_sequences.tsv.gz", 
     # run bash script
     # /home/kisa/coding/80K_MPRA/80K-Analysis/04_MPRAlm/notebooks/bc_preparation.sh
 
@@ -32,6 +32,7 @@ rule bc_mpralm:
         rna_input="/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/test_controls_concat/{condition_name}_mpralm_bc_rna_input_NGN2.tsv",
         dna_input="/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/test_controls_concat/{condition_name}_mpralm_bc_dna_input_NGN2.tsv",
         input_both="/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/test_controls_concat/{condition_name}_mpralm_input_NGN2.tsv",
+
 name = "standard"
 control_name = "GC_Selvarajan"
 input_dir="/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_preparation/test_controls_concat"

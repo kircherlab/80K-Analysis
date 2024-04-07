@@ -1,5 +1,5 @@
 # script for load feather file and save as tsv file
-# Usage: python feather_to_tsv.py input.feather output.tsv
+# Usage: python feather_to_tsv.py --input-feather input.feather --output-tsv output.tsv
 
 import pandas as pd
 import click

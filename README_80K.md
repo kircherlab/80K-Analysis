@@ -482,6 +482,40 @@ done > /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_t
   - GC_DNase_positive_shuffeled
   - GC_DNase_negative_brain_shuffeled
   - GC_DNase_negative_blood_shuffeled
+- All variant related barcode sequences: generated from  (after filtering: 16264 barcodes) (path: `/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/standard_with_controls_NGN2_filtered_counts_sequences.tsv.gz`) 
+  - filtered out because single sequences 5; => 194 different variant ids (different variants (considering ref and alt as different: 387 sequences))
+    - combine: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/standard_with_controls_NGN2_filtered_counts_sequences.tsv.gz and /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/standard_NGN2_filtered_counts_sequences.tsv.gz
+```bash
+first=1
+for f in /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/standard_NGN2_filtered_counts_sequences.tsv.gz /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/standard_with_controls_NGN2_filtered_counts_sequences.tsv.gz
+do
+    if [ "$first" ]
+    then
+        zcat "$f"
+        first=
+    else
+        zcat "$f" | tail -n +2
+    fi
+done > /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/standard_with_variant_controls_NGN2_filtered_counts_sequences.tsv
+gzip /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/standard_with_variant_controls_NGN2_filtered_counts_sequences.tsv
+```
+  - Summary: `standard_NGN2_filtered_counts_sequences.tsv.gz`:
+    - different variant ids: 42130 (ref and alt different: 84242) (41284 variants end in mpralm)
+    - 3531738 different barcodes
+  - filtered_counts_sequences based on controls: now combine with the tested sequence result and go to mpralm (preprocessing)
+  - use python script: `/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/04_MPRAlm/bc_MPRAlm/scripts/preprocess.py`
+    - generate input for mpralm from filtered counts (barcodes per variant sequences)
+    - input number: 42322: filtering: at least 2 barcodes for variant and ref and alt (=> 41474 still valid)
+    - preprocessing: 41474 variants with >= 2 barcodes in alt and ref
+    - after bc_mpralm: with all variant controls (filtering for 2 barcodes per ref and alt): 41474
+    - group distribution with variant controls:
+      - cardiac_neuro_cava_random    41284
+      - GC_Selvarajan                  112
+      - C_positive_heart_CAD            43
+      - GC_Atrial_fib                   17
+      - GC_Mohlke                       11
+      - GC_Liang                         7
+#### Regions of controls (solvable with blat)
 - current questions: missing controls have chrom, start end in header
 - Beispiel header von `MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/controls/negative_250_heart_MK.fa`
 ```
