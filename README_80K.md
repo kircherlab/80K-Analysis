@@ -368,6 +368,7 @@ Warnmeldungen:
     - For inserts the number is not different because of zero counts (Pia idea)
 
 ### Combine enformer class files (information from the prioritized variants)
+- enformer files: `/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k` 
 - using local files stored at `/home/kisa/coding/80K_MPRA/server_results/enformer_results/enformer_class/`
 - following code leads to `/home/kisa/coding/80K_MPRA/server_results/enformer_results/enformer_class/merged_enformer_class.tsv`
 ```bash
@@ -383,6 +384,12 @@ do
     fi
 done > /home/kisa/coding/80K_MPRA/server_results/enformer_results/enformer_class/merged_enformer_class.tsv
 ```
+
+#### Get sequences of variants (1KB around the variant) for enformer predictions
+- how many variants do I expect?
+- cat /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/resources/association_data/design_no_duplicates_sequence_and_header.fa | grep -E 'ALT_|REF_' | grep "~" | wc -l
+- wanted to add region information for the variant sequences: for the tested sequences this was simple and for the variant controls (`GC_Mendelian_variants` and `C_positive_heart_CAD`) this is not possible with the region information in `/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/final_design/results/final_design` because no region information for these control groups exists
+- solution: create region file first with blat (see "Regions of controls" below)
 
 ### Compute plots for 80K data
 - run MPRAsnakeflow + Report 
@@ -417,15 +424,43 @@ done > /home/kisa/coding/80K_MPRA/server_results/enformer_results/enformer_class
   - variant negative control     967
   - element active control      198
   - variant positive control     91
+- many variant control get lost on the way to MPRAlm (filtering for barcodes per allele)
+  - before filtering for bc_MPRAlm:
+    - C_positive_heart_CAD	49
+    - GC_Atrial_fib	23
+    - GC_Kircher	198
+    - GC_Liang	8
+    - GC_Mendelian_variants	174
+    - GC_Mohlke	20
+	  - GC_Selvarajan	198
+  - after filtering:
+    - C_positive_heart_CAD     43
+    - GC_Atrial_fib            17
+    - GC_Liang                  7
+    - GC_Mohlke                11
+    - GC_Selvarajan           112
+
+- GC_Liang: eQTLs from neural 8 variants: 7 matching the ref/alt >= 2 barcodes
+  - all non-significant
+- GC_Mohlke: Hep and NonHep controls
+- GC_Selvarajan: HepG2 controls
+- GC_Atrial_fib: Atrial fibroblast controls
+- during adding variant controls to bc_MPRAlm matching problem with headers again => check and fix it => mendelian variants and gc kircher variants in bc_MPRAlm
+
 
 #### Questions about controls:
 - GC_Mendelian_variants: 
   - e.g.:
     - REF1: GC_Mendelian_variants:REF_chr10:23219434A*G|PTF1A, REF2: GC_Mendelian_variants:REF_chr10:23219376A*C|PTF1A 
     - ALT: GC_Mendelian_variants:ALT_chr10:23219434A*G|PTF1A_chr10:23219376A*C|PTF1A
+  - in current design file: changed A>C to A*C
+  - problems with: GC_Mendelian_variants:REF_chr7:156791472C*T|SHH: seems like only ALTs are there (no REFs)
 - GC_Selvarajan: has one variant which does not match a reference
   - `GC_Selvarajan:ALT_rs2297787|STARR-seq-HepG2_fwd_tile1-1_rs2297787`
-
+- Is this a reference? Which variant is associated? 
+  - reference: `>C_negative_neuron_MK:rdhs_475428_chr3_148289221_148289490_reference__0.420408294159496`
+  - alt: `>C_negative_neuron_MK:tile_22397_chr2_103176684_103176953_A_T_257__0.418330976255658`
+- `GC_Mohlke:REF_NC000001.11|230158967|C|A|MohlkeHepControls,NC000001.11|230159168|C|T|MohlkeHepControls,NC000001.11|230159329|CTTAAAGTGTTCAGCACTCCCCT|CT|MohlkeHepControls_fwd_tile3-3` is a duplicated header in the variant region map (REF_ID) => cannot be matched
 #### Using control match table to get them into barcode MPRAlm
 - first attempt: no output in final table (filtering too harsh?)
 - inverstigating step by step: 
@@ -482,7 +517,7 @@ done > /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_t
   - GC_DNase_positive_shuffeled
   - GC_DNase_negative_brain_shuffeled
   - GC_DNase_negative_blood_shuffeled
-- All variant related barcode sequences: generated from  (after filtering: 16264 barcodes) (path: `/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/standard_with_controls_NGN2_filtered_counts_sequences.tsv.gz`) 
+- All variant related barcode sequences: generated from (after filtering: 16264 barcodes) (path: `/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/standard_with_controls_NGN2_filtered_counts_sequences.tsv.gz`) 
   - filtered out because single sequences 5; => 194 different variant ids (different variants (considering ref and alt as different: 387 sequences))
     - combine: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/standard_with_controls_NGN2_filtered_counts_sequences.tsv.gz and /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/standard_NGN2_filtered_counts_sequences.tsv.gz
 ```bash
@@ -547,7 +582,19 @@ gzip /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tra
 >Midfetal_Cortex_Trevino_chr20_63366571_63366841_1.30229686520284
 >NGN2_iPSC_ABC_chr2_2759136_2759406_1.42242758369854
 ```
-#### Using blat to get genomic coordinates of the sequences for the metadata file
+- Use blat to get control regions: (first approach was not so good, because not filtered for reference sequences: I will show here only improved process)
+  - all control sequences (meant to be variant controls (problems in variant map therefore not entirely sure)) with REF in name from design: `/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/05_variant_region_list/results/control_sequences/control_variant_reference_sequence.fasta` # 312
+  - all sequences are unique and all sequences have a length of 300 with 15bp adapter
+  - needed to remove the adapter and filter for the ":REF_" pattern
+  - use blat to find perfect matches in hg38
+    - `blat GCF_000001405.26_GRCh38_genomic.fna /data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/05_variant_region_list/results/control_sequences/control_variant_reference_sequence.fasta blat_variant_control_sequences_matched_file.psl`
+    - generate table: `tail -n +6 blat_variant_control_sequences_matched_file.psl > blat_variant_control_sequence_result_without_header.tsv`
+    - header list: `['match', 'mismatch', 'rep_match', 'Ns', 'Q_gap_count', 'Q_gap_bases', 'T_gap_count', 'T_gap_bases', 'strand', 'Q_name', 'Q_size', 'Q_start', 'Q_end', 'T_name', 'T_size', 'T_start', 'T_end', 'block_count', 'blockSizes', 'qStarts', 'tStarts']`
+  - Next step: 08.04: generate tsv and only get the 270 matchings (check if only 1 per sequence and check the strand information)
+  - 'GC_Kircher' make still problems: header too long for blat and in `/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/05_variant_region_list/resources/controls_variant_region_map.tsv.gz` different variant ids than in bed and vcf files (I think I can merge them directly to vcf)
+  - merged with vcf IDs and resulting table has 203 unique headers but only 100 unique IDs which is odd
+    - I cannot take these as IDs
+#### Using blat to get genomic coordinates of the sequences for the metadata file (used: GCF_000001405.26_GRCh38_genomic.fna)
 - made matching correct for elements and variants (found that bed file is not what I assumed it is)
 - Found region file is not helpful: `MPRA/IGVF_Y1_design/design/final_design/input/regions_5K.bed` (not 270 bp but from 150 - 370 long regions)
   - create Sam file from matches of sequences without adapter yourself (use blat locally) `blat GCF_000001405.26_GRCh38_genomic.fna /data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/05_variant_region_list/tested_ref_and_elements.fasta blat_matched_file.psl` => (generate table: `tail -n +6 blat_matched_file.psl > blat_result_without_header.tsv`)
@@ -598,3 +645,13 @@ gzip /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tra
 - neuro: 
   - high positive result: e.g. 'KCNT2|ENSG00000162687.19|EH38E2855757|1-196494459-G-A'
     - in R could only find one high logfc alt, Na at ref (2 vs NA) and a bit higher alt vs ref: 1.7 vs 1.41
+
+#### 09.04.2024: Meeting with Mohan about matching and bc_MPRAlm
+- control: ref alt id match: check if ref and alt id are not there than they did not make it in the design
+- check the header modifications
+- enformer results:
+  - he will prepare enformer predictions from fasta like tsv files
+  - Process for variant effects (delta)
+    - default by enformer with variants: takes the whole context (>190KB) from vcf
+    - NOT 1kb and not only sequence
+  - enformer is doing a alt - ref => positive if alt is higher than ref and negative if ref is higher than alt
