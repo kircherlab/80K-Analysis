@@ -385,12 +385,30 @@ do
 done > /home/kisa/coding/80K_MPRA/server_results/enformer_results/enformer_class/merged_enformer_class.tsv
 ```
 
+- combine all variants 
+
+```bash
+first=1
+for f in /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/merging_variants/cardiac.common_variants.tsv /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/merging_variants/cardiac.rare_variants.tsv /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/merging_variants/cardiac.ultra-rare_variants.tsv /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/merging_variants/cardiac.singleton_variants.tsv /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/merging_variants/cava.common_variants.tsv /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/merging_variants/cava.rare_variants.tsv /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/merging_variants/cava.ultra-rare_variants.tsv /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/merging_variants/cava.singleton_variants.tsv /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/merging_variants/neuro.common_variants.tsv /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/merging_variants/neuro.rare_variants.tsv /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/merging_variants/neuro.ultra-rare_variants.tsv /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/merging_variants/neuro.singleton_variants.tsv /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/merging_variants/random.common_variants.tsv /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/merging_variants/random.rare_variants.tsv /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/merging_variants/random.ultra-rare_variants.tsv /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/merging_variants/random.singleton_variants.tsv
+do
+    if [ "$first" ]
+    then
+        cat "$f"
+        first=
+    else
+        cat "$f" | tail -n +2
+    fi
+done > /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/merging_variants/merged_prioritized_variants.tsv
+```
+- number of variants: 71410 (what to do with elements which are in two groups e.g. neuro and cava)? Two entries at the moment
+
 #### Get sequences of variants (1KB around the variant) for enformer predictions
 - how many variants do I expect?
 - cat /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/resources/association_data/design_no_duplicates_sequence_and_header.fa | grep -E 'ALT_|REF_' | grep "~" | wc -l
 - wanted to add region information for the variant sequences: for the tested sequences this was simple and for the variant controls (`GC_Mendelian_variants` and `C_positive_heart_CAD`) this is not possible with the region information in `/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/final_design/results/final_design` because no region information for these control groups exists
 - solution: create region file first with blat (see "Regions of controls" below)
-
+##### Investigate enformner merged file and how to connect the ID to the oligos
+- example: `
 ### Compute plots for 80K data
 - run MPRAsnakeflow + Report 
 - get everything together in excel file ([in sharepoint](https://charitede-my.sharepoint.com/:x:/r/personal/kilian_salomon_bih-charite_de/_layouts/15/Doc.aspx?sourcedoc=%7BD586D4C6-D692-4638-A51C-943F1BAECE8B%7D&file=sanity_check_NGN2.xlsx&action=default&mobileredirect=true))
@@ -446,8 +464,6 @@ done > /home/kisa/coding/80K_MPRA/server_results/enformer_results/enformer_class
 - GC_Selvarajan: HepG2 controls
 - GC_Atrial_fib: Atrial fibroblast controls
 - during adding variant controls to bc_MPRAlm matching problem with headers again => check and fix it => mendelian variants and gc kircher variants in bc_MPRAlm
-
-
 #### Questions about controls:
 - GC_Mendelian_variants: 
   - e.g.:
@@ -461,6 +477,41 @@ done > /home/kisa/coding/80K_MPRA/server_results/enformer_results/enformer_class
   - reference: `>C_negative_neuron_MK:rdhs_475428_chr3_148289221_148289490_reference__0.420408294159496`
   - alt: `>C_negative_neuron_MK:tile_22397_chr2_103176684_103176953_A_T_257__0.418330976255658`
 - `GC_Mohlke:REF_NC000001.11|230158967|C|A|MohlkeHepControls,NC000001.11|230159168|C|T|MohlkeHepControls,NC000001.11|230159329|CTTAAAGTGTTCAGCACTCCCCT|CT|MohlkeHepControls_fwd_tile3-3` is a duplicated header in the variant region map (REF_ID) => cannot be matched
+
+- check matchable headers with modified headers
+  - ref: 
+    - "GC_Mohlke:REF_NC000001.11|230158967|C|A|MohlkeHepControls,NC000001.11|230159168|C|T|MohlkeHepControls,NC000001.11|230159329|CTTAAAGTGTTCAGCACTCCCCT|CT|MohlkeHepControls_fwd_tile1-3" - tiling what does this mean?
+    - GC_Mendelian_variants:ALT_chr7:156791472C>T|SHH_chr7:156791413A>C|SHH (no GC_Mendelian_variants:ALT_chr7:156791472C>T)
+    - GC_Mohlke:ALT_NC000010.11|100315721|G|A|MohlkeNonHepControl_fwd_tile1-1_NC000010_11_100315721_G_A
+  - Groups
+    - From variant_maps
+       - label
+        - GC_Selvarajan            198
+        - GC_Kircher               198
+        - GC_Mendelian_variants    174
+        - C_positive_heart_CAD      49
+        - GC_Atrial_fib             23
+        - GC_Mohlke                 20
+        - GC_Liang                   8
+    - matchable
+      - ref 
+        - label
+          - GC_Selvarajan            198
+          - GC_Kircher               198
+          - GC_Mendelian_variants    163
+          - C_positive_heart_CAD      48
+          - GC_Atrial_fib             23
+          - GC_Mohlke                 18
+          - GC_Liang                   8
+      - alt 
+        - label
+          - GC_Selvarajan            198
+          - GC_Kircher               198
+          - GC_Mendelian_variants    161
+          - C_positive_heart_CAD      48
+          - GC_Atrial_fib             23
+          - GC_Mohlke                 17
+          - GC_Liang                   8
 #### Using control match table to get them into barcode MPRAlm
 - first attempt: no output in final table (filtering too harsh?)
 - inverstigating step by step: 
@@ -655,3 +706,12 @@ gzip /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tra
     - default by enformer with variants: takes the whole context (>190KB) from vcf
     - NOT 1kb and not only sequence
   - enformer is doing a alt - ref => positive if alt is higher than ref and negative if ref is higher than alt
+
+### 11.04.2024: investigate bc_MPRAlm results
+- all bc_MPRAlm sequences have 10 barcodes: no, 4300 don't have
+  - why? looking into mprasnakeflow: rule assigned_counts_make_master_tables (`/workflow/rules/assigned_counts.smk`) uses the threshold and produces
+    - Input for bc_MPRAlm_preparation: count files from mprasnakeflow (unfiltered!!) (after producing these the workflow filters for the specified thresholds in the config file)
+    - `bc_merged="results/experiments/{project}/assigned_counts/{assignment}/{config}/{condition}_allreps_merged_barcode_assigned_counts.tsv.gz",` is the filtered and merged file
+    - current filter function was only checking for at least 2 barcodes (42322 is number of sequences with at least 2 barcodes (with part of control))
+    - if filtered for 10 barcodes only 34683 variants can be found 
+    - if filtered for 5 barcodes only 38858 variants can be found
