@@ -465,6 +465,7 @@ done > /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_d
 - GC_Atrial_fib: Atrial fibroblast controls
 - during adding variant controls to bc_MPRAlm matching problem with headers again => check and fix it => mendelian variants and gc kircher variants in bc_MPRAlm
 #### Questions about controls:
+- _headerDuplicate: 2 from Mendelian_variants and 1 Mohlke (what is the reason?)
 - GC_Mendelian_variants: 
   - e.g.:
     - REF1: GC_Mendelian_variants:REF_chr10:23219434A*G|PTF1A, REF2: GC_Mendelian_variants:REF_chr10:23219376A*C|PTF1A 
@@ -512,6 +513,37 @@ done > /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_d
           - GC_Atrial_fib             23
           - GC_Mohlke                 17
           - GC_Liang                   8
+  - identifying discrepance between number of headers before matching in the old variant map and after matching with the design file (17 not matching) 4 references
+    - expectation: filtering of these sequences resulted in removing many sequences
+    - manually checked examples
+      - not in design anymore
+        - GC_Mohlke:ALT_NC000001.11|230158967|C|A|MohlkeHepControls,NC000001.11|230159168|C|T|MohlkeHepControls,NC000001.11|230159329|CTTAAAGTGTTCAGCACTCCCCT|CT|MohlkeHepControls_fwd_tile1-3_NC000001_11_230158967_C_A
+        - 'C_positive_heart_CAD:ALT_rs12721051_rs12721051' not there anymore but same rsid is in another group (Selvarajan)
+        - GC_Mohlke:ALT_NC000010.11|100315721|G|A|MohlkeNonHepControl_fwd_tile1-1_NC000010_11_100315721_G_A (gone because ref is gone)
+      - 'GC_Mendelian_variants:ALT_chr7:156791472C>T not in the design anymore (ref gone)
+        - 'GC_Mendelian_variants:ALT_chr7:156791472C>T|SHH_chr7:156791413A>C|SHH',
+        - 'GC_Mendelian_variants:ALT_chr7:156791472C>T|SHH_chr7:156791459T>C|SHH',
+        - 'GC_Mendelian_variants:ALT_chr7:156791472C>T|SHH_chr7:156791472C>G|SHH',
+        - 'GC_Mendelian_variants:ALT_chr7:156791472C>T|SHH_chr7:156791472C>T|SHH',
+        - 'GC_Mendelian_variants:ALT_chr7:156791472C>T|SHH_chr7:156791474G>A|SHH',
+        - 'GC_Mendelian_variants:ALT_chr7:156791472C>T|SHH_chr7:156791480G>A|SHH',
+        - 'GC_Mendelian_variants:ALT_chr7:156791472C>T|SHH_chr7:156791542A>C|SHH',
+        - 'GC_Mendelian_variants:ALT_chr7:156791472C>T|SHH_chr7:156791547A>G|SHH',
+        - 'GC_Mendelian_variants:ALT_chr7:156791472C>T|SHH_chr7:156791571T>A|SHH',
+        - 'GC_Mendelian_variants:ALT_chr7:156791472C>T|SHH_chr7:156791579C>T|SHH',
+        - 'GC_Mendelian_variants:ALT_chr7:156791472C>T|SHH_chr7:156791581A>G|SHH',
+      - Kombination of two alts and one is not a SNV?
+        - GC_Mendelian_variants:ALT_chr8:11703860G>T|GATA4_chr8:11703890AG>A|GATA4 (Was soll das heißen??? Alt kombiniert mit anderem alt?)
+        - GC_Mendelian_variants:ALT_chr8:11703890AG>A|GATA4_chr8:11703890AG>A|GATA4
+  - in new variant region map of controls: 653 control variants
+    - label
+      - GC_Selvarajan            198
+      - GC_Kircher               198
+      - GC_Mendelian_variants    161
+      - C_positive_heart_CAD      48
+      - GC_Atrial_fib             23
+      - GC_Mohlke                 17
+      - GC_Liang                   8
 #### Using control match table to get them into barcode MPRAlm
 - first attempt: no output in final table (filtering too harsh?)
 - inverstigating step by step: 
