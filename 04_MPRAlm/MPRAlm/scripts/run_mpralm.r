@@ -1,9 +1,9 @@
 #!/usr/bin/env Rscript
 
-if (!require("BiocManager", quietly = TRUE))
-  install.packages("BiocManager")
+# if (!require("BiocManager", quietly = TRUE))
+#   install.packages("BiocManager")
 
-BiocManager::install("mpra")
+# BiocManager::install("mpra")
 library(mpra)
 library(dplyr)
 library(arrow)
@@ -21,15 +21,31 @@ args = commandArgs(trailingOnly=TRUE)
 # output_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/MPRAlm/"
 
 
-# control example + cardiac_neuro_cava_random
-name = "GC_Selvarajan_standard"
-input_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/test_controls_concat/"
-output_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/MPRAlm/test_controls_concat/"
-input = paste0(input_dir, name, "_mpralm_input_NGN2.tsv") #args[1]
+
+## 80K with some variant controls and barcode filter of 10
+name = "standard_with_variant_controls_no_downsampling"
+
+# newest version: matching problem of mendelian solved
+name = "standard_with_all_variant_controls_mendelian"
+
+# newest version: matching problem of mendelian solved + no downsampling
+name = "standard_with_all_variant_controls_mendelian_no_downsampling"
+
+input_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/no_downsampling/"
+output_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/MPRAlm/no_downsampling/"
+
+input = paste0(input_dir, name, "_bc_10_mpralm_input_NGN2.tsv") #args[1]
+
+# # control example + cardiac_neuro_cava_random
+# name = "GC_Selvarajan_standard"
+# input_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/test_controls_concat/"
+# output_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/MPRAlm/test_controls_concat/"
+# input = paste0(input_dir, name, "_mpralm_input_NGN2.tsv") #args[1]
 
 
-png(file=file.path(output_dir, paste0("voom_",name,".png")))
-output_name = paste("toptable_",name,"_NGN2.feather", sep="")
+png(file=file.path(output_dir, paste0("voom_mpralm_",name,".png")))
+output_name_feather = paste0("toptable_", name, "_mpralm_NGN2.feather")
+output_name = paste0("toptable_", name, "_mpralm_NGN2.tsv")
 
 # Reading the barcode level input data
 raw_data <- read.table(file=input, sep='\t', header=TRUE)
@@ -56,14 +72,15 @@ block_vector <- rep(1:s, 2)
 weights_mpralm <- mpralm(object = mpralm_set, design = design, aggregate = "none", normalize = TRUE, block = block_vector, model_type = "corr_groups", return_weights=TRUE)
 
 # writing cannot open local file (no such file) if relative paths
-write_feather(data.frame(weights_mpralm), file.path(output_dir, paste("weights_", name, "_NGN2.feather", sep="")))
+write_feather(data.frame(weights_mpralm), file.path(output_dir, paste("weights_", name, "_mpralm_NGN2.feather", sep="")))
 
 mpralm_fit_mpralm <- mpralm(object = mpralm_set, design = design, aggregate = "none", normalize = TRUE, block = block_vector, model_type = "corr_groups", plot = TRUE)
 
 # Finding significant variants
-toptab_allele <- topTable(mpralm_fit_mpralm, coef = 2, number = Inf)
-toptab_allele$variant_id <- row.names(toptab_allele)
-write_feather(toptab_allele, file.path(output_dir, output_name))
+toptab_allele_mpralm <- topTable(mpralm_fit_mpralm, coef = 2, number = Inf)
+toptab_allele_mpralm$variant_id <- row.names(toptab_allele_mpralm)
+write.table(toptab_allele_mpralm, file=paste(output_dir, output_name, sep=""), sep="\t", row.names = FALSE)
+#write_feather(toptab_allele_mpralm, file.path(output_dir, output_name))
 
 dev.off()
 

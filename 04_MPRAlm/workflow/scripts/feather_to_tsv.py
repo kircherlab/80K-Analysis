@@ -1,5 +1,6 @@
 # script for load feather file and save as tsv file
 # Usage: python feather_to_tsv.py --input-feather input.feather --output-tsv output.tsv
+# Usage: python /data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/04_MPRAlm/workflow/scripts/feather_to_tsv.py --input-feather /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_MPRAlm/test_controls_concat//toptable_standard_with_variant_controls_no_downsamplingmpralm_NGN2.feather --output-tsv /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_MPRAlm/test_controls_concat//toptable_standard_with_variant_controls_no_downsampling_mpralm_NGN2.tsv
 
 import pandas as pd
 import click

@@ -29,14 +29,15 @@ import os
 # output_dna = "/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/%s_mpralm_bc_dna_input_NGN2.tsv"%(name)
 # output_both = "/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/%s_mpralm_input_NGN2.tsv"%(name)
 
-## Controls
-name = "standard_with_variant_controls" # was renamed during combination step
-input_dir="/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/"
-output_dir="/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/test_controls_concat"
+## all Controls
+name = "standard_with_all_variant_controls" # was renamed during combination step
+name = "standard_with_all_variant_controls_mendelian" # was renamed during combination step
+input_dir="/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_preparation"
+output_dir="/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/no_downsampling"
 input = os.path.join(input_dir, "%s_NGN2_filtered_counts_sequences.tsv.gz"%(name))
-output_rna = os.path.join(output_dir, "%s_mpralm_bc_rna_input_NGN2.tsv"%(name))
-output_dna = os.path.join(output_dir, "%s_mpralm_bc_dna_input_NGN2.tsv"%(name))
-output_both = os.path.join(output_dir, "%s_mpralm_input_NGN2.tsv"%(name))
+output_rna = os.path.join(output_dir, "%s_no_downsampling_bc_10_mpralm_bc_rna_input_NGN2.tsv"%(name))
+output_dna = os.path.join(output_dir, "%s_no_downsampling_bc_10_mpralm_bc_dna_input_NGN2.tsv"%(name))
+output_both = os.path.join(output_dir, "%s_no_downsampling_bc_10_mpralm_input_NGN2.tsv"%(name))
 
 print("Reading data... ", input)
 df = pl.read_csv(input, separator="\t")
@@ -45,14 +46,14 @@ print("Number of variants with ref and alt after MPRAsnakeflow: ", df.n_unique("
 #df = df.filter(pl.all_horizontal(pl.col("^DNA.*$") > 0))
 #df = df.filter(pl.all_horizontal(pl.col("^RNA.*$") > 0))
 print("Number of variants after optional filtering on DNA or RNA counts: ", df.n_unique("variant_id"))
-# filter for oligos with at least 2 barcodes in both alleles
-df = df.filter(pl.count().over(["variant_id", "allele"]) >= 2)
+# filter for oligos with at least 10 barcodes in both alleles
+df = df.filter(pl.count().over(["variant_id", "allele"]) >= 10)
 df = df.filter(pl.n_unique("allele").over("variant_id") == 2)
 print("Number of variants after filtering for number of barcodes: ", df.n_unique("variant_id"))
 
 # the max number of barcodes used per oligo is the number of barcodes of the 0.95th quantile of the sequences.
+# otherwise the matrix is as huge as the sequence with the most barcodes
 max_bc = df.group_by(["variant_id", "allele"]).count().select("count").quantile(0.95).item()
-
 # downsample barcodes
 df = df.filter(pl.int_range(0, pl.count()).shuffle().over(["variant_id", "allele"]) < max_bc)
 

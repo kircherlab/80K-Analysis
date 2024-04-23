@@ -1,20 +1,33 @@
 #!/bin/bash
 
 config=standard
-output_name=standard_with_controls
+output_name=standard_with_all_variant_controls
+output_name=standard_with_all_variant_controls_mendelian
 
-
-# output files:
-counts_per_bc_gz_name=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/projects/bc_tradeoff/${output_name}_NGN2_counts_per_bc_sorted.tsv.gz
-counts_per_bc_name=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/projects/bc_tradeoff/${output_name}_NGN2_counts_per_bc_sorted.tsv
+output_dir="/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_preparation"
+mpra_results_dir="/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/experiment/standard_results/results"
+# output files: 
+counts_per_bc_gz_name="${output_dir}/${output_name}_NGN2_counts_per_bc_sorted.tsv.gz"
+counts_per_bc_name="${output_dir}/${output_name}_NGN2_counts_per_bc_sorted.tsv"
 
 # variants ref and alt 
-sequences_to_oligos=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/projects/bc_tradeoff/${output_name}_NGN2_seqs_to_oligos_sorted.tsv.gz
-joined_counts_and_seqs=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/projects/bc_tradeoff/${output_name}_NGN2_counts_sequences.tsv.gz
-joined_counts_and_seqs_unzipped=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/projects/bc_tradeoff/${output_name}_NGN2_counts_sequences.tsv
-single_seqs=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/projects/bc_tradeoff/${output_name}_NGN2_single_seqs.tsv
-temp=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/projects/bc_tradeoff/${output_name}_NGN2_tmp.tsv
-final_output=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/projects/bc_tradeoff/${output_name}_NGN2_filtered_counts_sequences.tsv.gz # 3649963
+sequences_to_oligos="${output_dir}/${output_name}_NGN2_seqs_to_oligos_sorted.tsv.gz"
+joined_counts_and_seqs="${output_dir}/${output_name}_NGN2_counts_sequences.tsv.gz"
+joined_counts_and_seqs_unzipped="${output_dir}/${output_name}_NGN2_counts_sequences.tsv"
+single_seqs="${output_dir}/${output_name}_NGN2_single_seqs.tsv"
+temp="${output_dir}/${output_name}_NGN2_tmp.tsv"
+final_output="${output_dir}/${output_name}_NGN2_filtered_counts_sequences.tsv.gz"
+# # output files: 
+# counts_per_bc_gz_name=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/projects/bc_tradeoff/${output_name}_NGN2_counts_per_bc_sorted.tsv.gz
+# counts_per_bc_name=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/projects/bc_tradeoff/${output_name}_NGN2_counts_per_bc_sorted.tsv
+
+# # variants ref and alt 
+# sequences_to_oligos=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/projects/bc_tradeoff/${output_name}_NGN2_seqs_to_oligos_sorted.tsv.gz
+# joined_counts_and_seqs=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/projects/bc_tradeoff/${output_name}_NGN2_counts_sequences.tsv.gz
+# joined_counts_and_seqs_unzipped=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/projects/bc_tradeoff/${output_name}_NGN2_counts_sequences.tsv
+# single_seqs=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/projects/bc_tradeoff/${output_name}_NGN2_single_seqs.tsv
+# temp=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/projects/bc_tradeoff/${output_name}_NGN2_tmp.tsv
+# final_output=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/projects/bc_tradeoff/${output_name}_NGN2_filtered_counts_sequences.tsv.gz # 3649963
 
 
 # input files:
@@ -27,11 +40,15 @@ final_output=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/pro
 # count3=/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/${config}_bwa/assigned_counts/assignmentFixDuplicates/NGN2_3.merged.config.standardConfig.tsv.gz
 
 # standard with variant controls
-variants=/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/05_variant_region_list/resources/controls_variant_region_map.tsv
-assignment=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/${config}_bwa/assignment/assignmentFixDuplicates.tsv.gz
-count1=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/${config}_bwa/assigned_counts/assignmentFixDuplicates/NGN2_1.merged.config.standardConfig.tsv.gz
-count2=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/${config}_bwa/assigned_counts/assignmentFixDuplicates/NGN2_2.merged.config.standardConfig.tsv.gz
-count3=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/${config}_bwa/assigned_counts/assignmentFixDuplicates/NGN2_3.merged.config.standardConfig.tsv.gz
+variants=/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/05_variant_region_list/resources/controls_variant_region_map.tsv.gz
+# with all control groups
+variants=/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/unifying_headers_kilian_042024/variant_map_with_unified_headers.tsv.gz # need to be in gz format
+# with all control groups mendelian focus
+variants=/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/unifying_headers_kilian_042024/variant_map_with_unified_headers_mendelian_focus.tsv.gz # need to be in gz format
+assignment="${mpra_results_dir}/experiments/${config}_bwa/assignment/assignmentFixDuplicates.tsv.gz"
+count1="${mpra_results_dir}/experiments/${config}_bwa/assigned_counts/assignmentFixDuplicates/NGN2_1.merged.config.standardConfig.tsv.gz"
+count2="${mpra_results_dir}/experiments/${config}_bwa/assigned_counts/assignmentFixDuplicates/NGN2_2.merged.config.standardConfig.tsv.gz"
+count3="${mpra_results_dir}/experiments/${config}_bwa/assigned_counts/assignmentFixDuplicates/NGN2_3.merged.config.standardConfig.tsv.gz"
 
 
 # # low config
@@ -56,7 +73,7 @@ join -1 2 -2 2  <(zcat $sequences_to_oligos) <(zcat $counts_per_bc_gz_name) -t $
 gzip $joined_counts_and_seqs_unzipped
 
 # storing all sequences once
-zcat $joined_counts_and_seqs | awk 'NR >1{print $1","$2}' | uniq | awk -v FS="," '{print $1 "\t" $2}' | cut -f 1 |sort | uniq -c |  awk '$1 != 2' |  awk '{print $2}' > $single_seqs
+zcat $joined_counts_and_seqs | awk 'NR >1{print $1","$2}' | uniq | awk -v FS="," '{print $1 "\t" $2}' | cut -f 1 | sort | uniq -c |  awk '$1 != 2' |  awk '{print $2}' > $single_seqs
 
 # identifying sequences that have ref and alt
 join -v 1 <(zcat $joined_counts_and_seqs) $single_seqs -t $'\t' | gzip -c > $temp

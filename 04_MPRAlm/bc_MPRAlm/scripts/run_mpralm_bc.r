@@ -3,7 +3,7 @@
 library(mpra)
 library(dplyr)
 library(arrow)
-install.packages("arrow")
+# install.packages("arrow")
 
 
 # old input
@@ -30,12 +30,19 @@ install.packages("arrow")
 
 ## 80K with controls test (only GC_Selvarajan):
 # name = "GC_Selvarajan_standard"
-name = "standard_with_variant_controls"
-input_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/"
-output_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_MPRAlm/test_controls_concat/"
 
-input_dna = paste0(input_dir, 'preprocess/test_controls_concat/', name, "_mpralm_bc_dna_input_NGN2.tsv")
-input_rna = paste0(input_dir, 'preprocess/test_controls_concat/', name, "_mpralm_bc_rna_input_NGN2.tsv")
+## 80K with some variant controls and barcode filter of 10
+name = "standard_with_all_controls"
+name = "standard_with_all_variant_controls"
+name = "standard_with_all_variant_controls_mendelian_no_downsampling"
+
+input_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/"
+output_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_MPRAlm/no_downsampling/"
+
+png(file = file.path(output_dir, paste0("voom_", name, ".png")))
+
+input_dna = paste0(input_dir, 'preprocess/no_downsampling/', name, "_bc_10_mpralm_bc_dna_input_NGN2.tsv")
+input_rna = paste0(input_dir, 'preprocess/no_downsampling/', name, "_bc_10_mpralm_bc_rna_input_NGN2.tsv")
 # weights_file = paste0(input_dir, "MPRAlm/test_controls_concat/weights_", name, "_NGN2.feather") # args[3]
 # output_name = paste0("toptable_", name, "NGN2.feather")
 # # local: 
@@ -52,8 +59,9 @@ input_rna = paste0(input_dir, 'preprocess/test_controls_concat/', name, "_mpralm
 
 # input_dna = paste0(input_dir, name, "_mpralm_bc_dna_input_NGN2.tsv")
 # input_rna = paste0(input_dir, name, "_mpralm_bc_rna_input_NGN2.tsv")
-png(file = file.path(output_dir, paste0("voom_", name, ".png")))
-output_name = paste0("toptable_", name, "NGN2.feather")
+# png(file = file.path(output_dir, paste0("voom_", name, ".png")))
+output_name_feather = paste0("toptable_", name, "_NGN2.feather")
+output_name = paste0("toptable_", name, "_NGN2.tsv")
 
 # Reading the barcode level input data
 rna <- read.table(file=input_rna, sep='\t', header=TRUE)
@@ -93,10 +101,10 @@ mpralm_fit_bc <- mpralm(object = mpra_bc_set, design = design, aggregate = "none
 #weights <- mpralm(object = mpra_bc_set, design = design, aggregate = "none", normalize = TRUE, model_type = "corr_groups", plot = TRUE, block = block_vector, return_weights=TRUE)
 
 # Finding significant variants
-toptab_allele <- topTable(mpralm_fit_bc, coef = 2, number = Inf)
-toptab_allele$variant_id <- row.names(toptab_allele)
-write.table(toptab_allele, file=paste(output_dir, output_name, sep=""), sep="\t", row.names = FALSE)
-#write_feather(toptab_allele, paste(output_dir, output_name, sep=""))
+toptab_allele_bc <- topTable(mpralm_fit_bc, coef = 2, number = Inf)
+toptab_allele_bc$variant_id <- row.names(toptab_allele_bc)
+write.table(toptab_allele_bc, file=paste(output_dir, output_name, sep=""), sep="\t", row.names = FALSE)
+#write_feather(toptab_allele_bc, paste(output_dir, output_name_feather, sep=""))
 dev.off()
 
 # For element levels, use treat instead of toptable:
