@@ -466,6 +466,8 @@ done > /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_d
 - during adding variant controls to bc_MPRAlm matching problem with headers again => check and fix it => mendelian variants and gc kircher variants in bc_MPRAlm
 #### Questions about controls:
 - _headerDuplicate: 2 from Mendelian_variants and 1 Mohlke (what is the reason?)
+- looking for the reason of variant_ids: rs1218584|KCNN3|STARR-seq-AF~rs76749863|KCNN3|STARR-seq-AF_fwd_tile1-1
+  - I find alt with multiple rsIDs (what does this mean?) GC_Atrial_fib:ALT_rs1218584|KCNN3|STARR-seq-AF~rs76749863|KCNN3|STARR-seq-AF_fwd_tile1-1_rs76749863
 - GC_Mendelian_variants: 
   - e.g.:
     - REF1: GC_Mendelian_variants:REF_chr10:23219434A*G|PTF1A, REF2: GC_Mendelian_variants:REF_chr10:23219376A*C|PTF1A 
@@ -513,6 +515,16 @@ done > /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_d
           - GC_Atrial_fib             23
           - GC_Mohlke                 17
           - GC_Liang                   8
+    - final numbers from current design 16042024
+      - label
+        - cardiac_neuro_cava_random    46374
+        - GC_Selvarajan                  198
+        - GC_Kircher                     198
+        - GC_Mendelian_variants          161
+        - C_positive_heart_CAD            48
+        - GC_Atrial_fib                   23
+        - GC_Mohlke                       17
+        - GC_Liang                         8
   - identifying discrepance between number of headers before matching in the old variant map and after matching with the design file (17 not matching) 4 references
     - expectation: filtering of these sequences resulted in removing many sequences
     - manually checked examples
@@ -544,6 +556,15 @@ done > /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_d
       - GC_Atrial_fib             23
       - GC_Mohlke                 17
       - GC_Liang                   8
+  - controls have non unique variant ids: (Problem I dont't know how the variant Ids are computed)
+    - GC_Selvarajan Group has non unique variant ids: (all, unique) 198 170 (because of tiling I think)
+    - GC_Kircher  has unique variant ids
+    - GC_Mendelian_variants Group has non unique variant ids: (all, unique) 161 50 (probably also tiling)
+    - C_positive_heart_CAD  has unique variant ids
+    - GC_Atrial_fib  has unique variant ids
+    - GC_Mohlke Group has non unique variant ids: (all, unique) 17 16
+    - GC_Liang  has unique variant ids
+
 #### Using control match table to get them into barcode MPRAlm
 - first attempt: no output in final table (filtering too harsh?)
 - inverstigating step by step: 
@@ -633,6 +654,14 @@ gzip /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tra
       - GC_Atrial_fib                   17
       - GC_Mohlke                       11
       - GC_Liang                         7
+
+- using variant region map with variant controls (all sets)
+  - filtered_counts_sequences (barcode to ref and alt association and counts for each replicate): 3548001
+  - unique varaint_id + allele: 84628
+  - after MPRAsnakeflow and variants with ref and alt: 42611
+  - filtering for 10 barcodes for ref and alt: 34933
+  - for a table of these controls see share point progress from Kilian (https://charitede-my.sharepoint.com/:p:/r/personal/kilian_salomon_bih-charite_de/_layouts/15/Doc.aspx?sourcedoc=%7BC8A28A99-FF4A-4A83-AABD-8BB0C7606192%7D&file=20240301_0601progress.pptx&action=edit&mobileredirect=true)
+
 #### Regions of controls (solvable with blat)
 - current questions: missing controls have chrom, start end in header
 - Beispiel header von `MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/controls/negative_250_heart_MK.fa`
@@ -670,7 +699,7 @@ gzip /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tra
   - all sequences are unique and all sequences have a length of 300 with 15bp adapter
   - needed to remove the adapter and filter for the ":REF_" pattern
   - use blat to find perfect matches in hg38
-    - `blat GCF_000001405.26_GRCh38_genomic.fna /data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/05_variant_region_list/results/control_sequences/control_variant_reference_sequence.fasta blat_variant_control_sequences_matched_file.psl`
+    - `blat /data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/kilian_projects/hg38/ncbi_dataset/data/GCF_000001405.26/GCF_000001405.26_GRCh38_genomic.fna /data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/05_variant_region_list/results/control_sequences/control_variant_reference_sequence.fasta blat_variant_control_sequences_matched_file.psl`
     - generate table: `tail -n +6 blat_variant_control_sequences_matched_file.psl > blat_variant_control_sequence_result_without_header.tsv`
     - header list: `['match', 'mismatch', 'rep_match', 'Ns', 'Q_gap_count', 'Q_gap_bases', 'T_gap_count', 'T_gap_bases', 'strand', 'Q_name', 'Q_size', 'Q_start', 'Q_end', 'T_name', 'T_size', 'T_start', 'T_end', 'block_count', 'blockSizes', 'qStarts', 'tStarts']`
   - Next step: 08.04: generate tsv and only get the 270 matchings (check if only 1 per sequence and check the strand information)
@@ -678,9 +707,10 @@ gzip /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tra
   - merged with vcf IDs and resulting table has 203 unique headers but only 100 unique IDs which is odd
     - I cannot take these as IDs
 #### Using blat to get genomic coordinates of the sequences for the metadata file (used: GCF_000001405.26_GRCh38_genomic.fna)
+- code: `/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/05_variant_region_list/notebooks/blat_for_design.ipynb`
 - made matching correct for elements and variants (found that bed file is not what I assumed it is)
 - Found region file is not helpful: `MPRA/IGVF_Y1_design/design/final_design/input/regions_5K.bed` (not 270 bp but from 150 - 370 long regions)
-  - create Sam file from matches of sequences without adapter yourself (use blat locally) `blat GCF_000001405.26_GRCh38_genomic.fna /data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/05_variant_region_list/tested_ref_and_elements.fasta blat_matched_file.psl` => (generate table: `tail -n +6 blat_matched_file.psl > blat_result_without_header.tsv`)
+  - create Sam file from matches of sequences without adapter yourself (use blat locally) `blat /data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/kilian_projects/hg38/ncbi_dataset/data/GCF_000001405.26/GCF_000001405.26_GRCh38_genomic.fna /data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/05_variant_region_list/tested_ref_and_elements.fasta /data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/kilian_projects/hg38/ncbi_dataset/data/GCF_000001405.26/blat_matched_file.psl` => (generate table: `tail -n +6 blat_matched_file.psl > blat_result_without_header.tsv`)
   - header list: `['match', 'mismatch', 'rep_match', 'Ns', 'Q_gap_count', 'Q_gap_bases', 'T_gap_count', 'T_gap_bases', 'strand', 'Q_name', 'Q_size', 'Q_start', 'Q_end', 'T_name', 'T_size', 'T_start', 'T_end', 'block_count', 'blockSizes', 'qStarts', 'tStarts']`
   - start positions have small differences (e.g. 39 bases)
     - 39    1955
@@ -696,10 +726,29 @@ gzip /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tra
         - blat regions: NC_000001.11 (chr1) 3210194 3210464
         - region_5k regions: chr1 3210229 3210430
         - [UCSC with blat regions](https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&lastVirtModeType=default&lastVirtModeExtraState=&virtModeType=default&virtMode=0&nonVirtPosition=&position=chr1%3A3210194%2D3210464&hgsid=2082689898_VAczbUehrymUlkaWiiYiCorrQZsL)
+- 22.04: still problems with the headers and afraid of having matching problems if done too fast (deadline for bed to Thorben)
+  - create fasta of sequences for "interesting" sequences (are in NP, MK or CD neuro positive / negative control group)
+    - `/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/05_variant_region_list/results/control_sequences/blat_interesting_neuro_controls.fa`
+    - `blat /data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/kilian_projects/hg38/ncbi_dataset/data/GCF_000001405.26/GCF_000001405.26_GRCh38_genomic.fna /data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/05_variant_region_list/results/control_sequences/blat_interesting_neuro_controls.fa /data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/kilian_projects/hg38/ncbi_dataset/data/GCF_000001405.26/blat_interesting_neuro_controls_matched.psl`
+    - `tail -n +6 /data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/kilian_projects/hg38/ncbi_dataset/data/GCF_000001405.26/blat_interesting_neuro_controls_matched.psl > /data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/kilian_projects/hg38/ncbi_dataset/data/GCF_000001405.26/blat_interesting_neuro_controls_matched.tsv`
+  - investigate interesting control headers and create parsing strategy for each group (for neuro use _chr as split)
+    - `MK`: (coordinates not checked yet)
+      - `>MK:SNRNP70|chr19-49085144+49085413|reference`
+    - `C_positive_neuron_NP`: _chr_start_end (start, end]
+      - `>C_positive_neuron_NP:GW18_PFC_ABC_Midfetal_Cortex_Trevino_Midfetal_Cortex_Ziffra_ABC_chr10_79221115_79221385_5.21059445249138`
+    - `C_positive_neuron_MK`: chr_ start _ end (both within the range [start,end])
+      - `>C_positive_neuron_MK:tile_35742_chr6_3247831_3248100_reference_0.892141141777512`
+    - `C_negative_neuron_MK`: chr_ start _ end (both within the range [start,end])
+    - `C_positive_neuron_CD`: ::chr: start - end (start, end]
+      - `>C_positive_neuron_CD:p1_rs55985730_T_G_alt_50_T::chr7:128776855-128777125-mean_ratio2.34`
+    - excluded cases: 
+      - `C_positive_neuron_CD`:
+        - `>C_positive_neuron_CD:c1_NA_NA_NA_NA::72hr_top_94-mean_ratio2.31`
 #### Found gene names per gene set: 
 - Github repo [MPRA_design](https://github.com/kircherlab/MPRA_design/tree/main) resources: `MPRA_design/resources/gene_lists`
 
 - Todo: metadata table
+  - investigated variant information (vcf like file) and identifier from there are without "," or "~" so remember to split the ids by "~" later in order to match the variant information
   - check control region (length check first)
     - Not all controls have region files but for these who have: region files are 270 bp long
   - verify if regions are fine (after mapping to the reference)
@@ -747,3 +796,46 @@ gzip /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tra
     - current filter function was only checking for at least 2 barcodes (42322 is number of sequences with at least 2 barcodes (with part of control))
     - if filtered for 10 barcodes only 34683 variants can be found 
     - if filtered for 5 barcodes only 38858 variants can be found
+
+
+### 18.04.2024: 
+
+#### download re-sequencing
+- infor from GNU ftp wget manual (https://ftp.gnu.org/old-gnu/Manuals/wget-1.8.1/html_mono/wget.html)
+- ftp://user:password@host:port it needs pretty long to connect (what means long?) over 5 minutes
+- checksums: (found all manually)
+- md5sum Ngn2-DNA-1_S1_R1_001.fastq.gz
+  - cb19ab721a996189e721641641c7f64a  Ngn2-DNA-1_S1_R1_001.fastq.gz
+  - 1745e7c6ae3a9e2a6b52668fc2b8f2d4  Ngn2-DNA-1_S1_R2_001.fastq.gz
+
+
+#### investigate why only 41 Mendelian variant controls in the final design
+- current analysis: check how many will pass the quality standard of 75% of the barcodes need to be matched to one sequence
+- check from assignment file how many sequences would have at least 10 barcodes => 197
+- Why do we only find 41 variants: 
+```bash
+awk -F'\t' '{
+    split($NF, arr, "/");
+    ratio = arr[2] / arr[1];
+    if (ratio > 0.75) print $0
+}' <( zcat /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/standard_bwa/assignment/assignmentFixDuplicates.tsv.gz | grep "Mendelian" ) | cut -f2 | sort | awk '{ count[$0]++ } END { for (entry in count) if (count[entry] >= 10) print entry }' | less -S
+```
+- check counts + assignment:
+```bash
+zcat /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_preparation/standard_with_all_variant_controls_NGN2_counts_per_bc_sorted.tsv.gz | grep "Mendelian" | cut -f2 | sort | uniq | wc -l
+# 204 / 209 design
+zcat /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_preparation/standard_with_all_variant_controls_NGN2_counts_per_bc_sorted.tsv.gz | grep "Mendelian" | cut -f2 | sort | uniq | grep "ALT" | wc -l
+# 157 / 161 design
+zcat /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_preparation/standard_with_all_variant_controls_NGN2_counts_per_bc_sorted.tsv.gz | grep "Mendelian" | cut -f2 | sort | uniq | grep "REF" | wc -l
+# 47 / 49 design
+```
+- counts_sequences 
+```bash
+zcat /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_preparation/standard_with_all_variant_controls_NGN2_counts_sequences.tsv.gz | grep "Mendelian" | cut -f 1 | sort | uniq | wc -l
+# 49
+```
+- new variant controls
+```bash
+zcat /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_preparation/standard_with_all_variant_controls_mendelian_NGN2_counts_sequences.tsv.gz | grep "Mendelian" | cut -f 1 | sort |uniq | wc -l
+# 160
+```
