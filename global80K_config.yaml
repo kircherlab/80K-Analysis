@@ -28,17 +28,22 @@ files:
     # design_fasta: /home/kisa/coding/80K_MPRA/80K-Analysis/05_variant_region_list/resources/design_no_duplicates_sequence_and_header.fa
     # test_seqs_region_file: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/final_design/input/regions_5K.bed
     test_seqs_region_file: /home/kisa/coding/80K_MPRA/80K-Analysis/05_variant_region_list/resources/regions/regions_5K.bed
-    vcf_file: /data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/design/final_design/input/variants_5K.vcf
+    vcf_file_5k: /data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/design/final_design/input/variants_5K.vcf
+    vcf_file: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/final_design/results/final_design/variants.vcf.gz
+    vcf_file_tested: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/final_design/results/final_design/cardiac_neuro_cava_random_variants.vcf.gz
     variant_table_duplicates: /data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/design/final_design/results/final_design/cardiac_neuro_cava_random/variant_region_map.tsv.gz
     # variant_table: /home/kisa/coding/80K_MPRA/80K-Analysis/05_variant_region_list/resources/variant_region_map/variant_map_deduplicated.tsv
     variant_table: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/final_design/results/final_design/variant_region_map.tsv.gz
     variant_table_deduplicated: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/final_design/results/final_design/cardiac_neuro_cava_random/variant_region_map_deduplicated.tsv.gz 
     variant_region_map: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/unifying_headers_kilian_042024/variant_map_with_unified_headers_mendelian_focus.tsv
+    final_design_variant_region_map: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/final_design/results/final_design/variant_region_map.tsv.gz
     # old variant_region_map: /home/kisa/coding/80K_MPRA/80K-Analysis/05_variant_region_list/resources/variant_region_map/variant_region_map.tsv.gz
     variant_region_map_controls: /data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/05_variant_region_list/resources/controls_variant_region_map.tsv.gz
     region_bed: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/final_design/results/final_design/regions.bed.gz
+    region_bed_5k: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/final_design/input/regions_5K.bed
     # variant_region_map_controls: /home/kisa/coding/80K_MPRA/80K-Analysis/05_variant_region_list/resources/variant_region_map/controls_variant_region_map.tsv
     assignment_file: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/standard_bwa/assignment/assignmentFixDuplicates.tsv.gz
     barcodes_rep1: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/standard_bwa/assigned_counts/assignmentFixDuplicates/NGN2_1.merged.config.standardConfig.tsv.gz
     barcodes_rep2: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/standard_bwa/assigned_counts/assignmentFixDuplicates/NGN2_2.merged.config.standardConfig.tsv.gz
     barcodes_rep3: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/standard_bwa/assigned_counts/assignmentFixDuplicates/NGN2_3.merged.config.standardConfig.tsv.gz
+    blat_region_tested: "/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/05_variant_region_list/resources/blat/cardiac_neuro_cava_random_regions_design_style_header.tsv"

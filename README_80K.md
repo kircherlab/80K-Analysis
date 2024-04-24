@@ -839,3 +839,50 @@ zcat /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tra
 zcat /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_preparation/standard_with_all_variant_controls_mendelian_NGN2_counts_sequences.tsv.gz | grep "Mendelian" | cut -f 1 | sort |uniq | wc -l
 # 160
 ```
+
+### 23.04.2024
+- found output workflow in `final_design/results/final_design/region.bed`
+- label
+  - cardiac_neuro_cava_random    27556
+  - GC_Vista                       256
+  - GC_Cort_Chengyu                185
+  - GC_Selvarajan                  166
+  - GC_GABA_Chengyu                 85
+  - GC_Glut_Chengyu                 83
+  - GC_Atrial_fib                   22
+  - GC_Mohlke                       18
+  - GC_Liang                         8
+  - GC_Hon                           6
+  - GC_Kircher                       5
+
+- found non snv in final region.bed 
+  - 'C_positive_heart_CAD:rs34091558'
+    - 'rs34091558'
+  - 'GC_Mendelian_variants:chr1:209816133C>CA|IRF6'
+    - 'chr1:209816133C>CA|IRF6'
+  - 'GC_Mohlke:NC000001_11_230159329_CTTAAAGTGTTCAGCACTCCCCT_CT'
+    - 'NC000001.11|230158967|C|A|MohlkeHepControls,NC000001.11|230159168|C|T|MohlkeHepControls,NC000001.11|230159329|CTTAAAGTGTTCAGCACTCCCCT|CT|MohlkeHepControls_fwd_tile3-3'
+  - 'GC_Mendelian_variants:chr7:156791274T>TTAAGGAAGTGATT|SHH'
+    - 'chr7:156791255G>C|SHH', 'chr7:156791257G>A|SHH', 'chr7:156791274T>TTAAGGAAGTGATT|SHH'
+  - 'GC_Mendelian_variants:chr8:11703890AG>A|GATA4'
+    - 'chr8:11703860G>T|GATA4', 'chr8:11703890AG>A|GATA4'
+
+- found that regions in vcf file are not the same as regions id in bed file
+- changing bed file (adding new column without group information ( split ":" ))
+- multiple regions can be found (641 in cardiac_neuro_cava_random)
+- both regions do not need to be the same
+- I tried to map one variant position to the region of interest but over 700 variants have multiple regions and some of the listed region ids from the vcf file do not exist in the bed file (=> this in not unique)
+  - Example: `cardiac_neuro_cava_random:ARV1|ENSG00000173409.14|EH38E2873164|1-231021494-T-C`
+- Procedure I will only take the first region and hope the best
+- Found 136 regions in the vcf file which are not in the region.bed they remain because of a bug in the MPRAOligoDesign
+- region cannot be found for some sequences: 
+  - For all sequences: (example: GC_Mendelian_variants:chr1:21564170G>A|ALPL)
+    - Empty region_list:  0
+    - Region not findable:  65
+    - Skipped, because multiple regions 789 
+  - Only for tested:
+    - Region not findable:  0
+    - Skipped, because multiple regions 641)
+
+- Found 94 ref and alt sequences from the old designed headers / I havent checked all but they apear in the new design file as well but neither in the variant map nor in the variant.vcf are not in the variant region map of the new design
+- Check in the MPRAoligo design code: check previous unfiltered results and where these sequences get lost. (Issue in the code?)
