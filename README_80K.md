@@ -886,3 +886,8 @@ zcat /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tra
 
 - Found 94 ref and alt sequences from the old designed headers / I havent checked all but they apear in the new design file as well but neither in the variant map nor in the variant.vcf are not in the variant region map of the new design
 - Check in the MPRAoligo design code: check previous unfiltered results and where these sequences get lost. (Issue in the code?)
+  - variants which are filtered out remain in the design.fasta (e.g. ALT_LMNA|ENSG00000160789.24|EH38E2840374_fwd_tile1-1_LMNA|ENSG00000160789.24|EH38E2840374|1-156033864-A-T)
+- Filtered best 100, low 100 and 200 random for >50 barcodes
+  - all these we have regions for
+- Number of tested sequences we have regions for: 73846
+- Overall number of sequences in the deduplicated design: 73940
