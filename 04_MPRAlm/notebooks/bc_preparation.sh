@@ -3,9 +3,11 @@
 config=standard
 output_name=standard_with_all_variant_controls
 output_name=standard_with_all_variant_controls_mendelian
+output_name=different_filtering_variant_controls_mendelian
 
 output_dir="/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_preparation"
 mpra_results_dir="/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/experiment/standard_results/results"
+mpra_results_dir="/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/resequencing_results/old_bam_filtering/results"
 # output files: 
 counts_per_bc_gz_name="${output_dir}/${output_name}_NGN2_counts_per_bc_sorted.tsv.gz"
 counts_per_bc_name="${output_dir}/${output_name}_NGN2_counts_per_bc_sorted.tsv"

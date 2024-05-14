@@ -368,9 +368,26 @@ Warnmeldungen:
     - For inserts the number is not different because of zero counts (Pia idea)
 
 ### Combine enformer class files (information from the prioritized variants)
-- enformer files: `/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k` 
-- using local files stored at `/home/kisa/coding/80K_MPRA/server_results/enformer_results/enformer_class/`
+- enformer files: `/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k`
+- `merged_enformer_all_max_value.tsv`
 - following code leads to `/home/kisa/coding/80K_MPRA/server_results/enformer_results/enformer_class/merged_enformer_class.tsv`
+- first remove unused columns of the enformer file: results in: `{gene_type}.{variant_type}_680_columns.tsv`
+- merge max_value enformer: 
+```bash
+first=1
+for f in /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/cardiac/enformer/cardiac.ultra-rare_max_values.tsv /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/cardiac/enformer/cardiac.singleton_max_values.tsv /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/cava/enformer/cava.ultra-rare_max_values.tsv /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/cava/enformer/cava.singleton_max_values.tsv /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/neuro/enformer/neuro.ultra-rare_max_values.tsv /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/neuro/enformer/neuro.singleton_max_values.tsv /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/random/enformer/random.ultra-rare_max_values.tsv /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/random/enformer/random.singleton_max_values.tsv
+
+do
+    if [ "$first" ]
+    then
+        zcat "$f"
+        first=
+    else
+        zcat "$f" | tail -n +2
+    fi
+done > /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/merging_enformer_info/merged_enformer_all_max_value.tsv
+```
+- this was the old version locally (did the sampling again myself but no seed was given => could not reproduce the sampling like mohan did)
 ```bash
 first=1
 for f in /home/kisa/coding/80K_MPRA/server_results/enformer_results/enformer_class/cava.singleton_enformer_class.tsv /home/kisa/coding/80K_MPRA/server_results/enformer_results/enformer_class/random.ultra-rare_enformer_class.tsv /home/kisa/coding/80K_MPRA/server_results/enformer_results/enformer_class/cardiac.singleton_enformer_class.tsv /home/kisa/coding/80K_MPRA/server_results/enformer_results/enformer_class/neuro.ultra-rare_enformer_class.tsv /home/kisa/coding/80K_MPRA/server_results/enformer_results/enformer_class/neuro.singleton_enformer_class.tsv /home/kisa/coding/80K_MPRA/server_results/enformer_results/enformer_class/cava.ultra-rare_enformer_class.tsv /home/kisa/coding/80K_MPRA/server_results/enformer_results/enformer_class/cardiac.ultra-rare_enformer_class.tsv
@@ -401,14 +418,20 @@ do
 done > /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/merging_variants/merged_prioritized_variants.tsv
 ```
 - number of variants: 71410 (what to do with elements which are in two groups e.g. neuro and cava)? Two entries at the moment
+- 13.05: new way to combine the variants of common and enformer prioritized into one file with unique ids: merging of enformer variant information into a list of tuples (gene_set, variant_type, enformer_class)
+- Idea merge to the variant region map by cutting the group
+
+##### Investigate enformer merged file and how to connect the ID to the oligos
+- found duplicates in the variant region list: Max: 06.05.2024 said that this is because variants are connected to different genes
+- For the workflow remove one pair of the ref and alt from the fasta file
+
 
 #### Get sequences of variants (1KB around the variant) for enformer predictions
 - how many variants do I expect?
 - cat /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/resources/association_data/design_no_duplicates_sequence_and_header.fa | grep -E 'ALT_|REF_' | grep "~" | wc -l
 - wanted to add region information for the variant sequences: for the tested sequences this was simple and for the variant controls (`GC_Mendelian_variants` and `C_positive_heart_CAD`) this is not possible with the region information in `/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/final_design/results/final_design` because no region information for these control groups exists
 - solution: create region file first with blat (see "Regions of controls" below)
-##### Investigate enformner merged file and how to connect the ID to the oligos
-- example: `
+
 ### Compute plots for 80K data
 - run MPRAsnakeflow + Report 
 - get everything together in excel file ([in sharepoint](https://charitede-my.sharepoint.com/:x:/r/personal/kilian_salomon_bih-charite_de/_layouts/15/Doc.aspx?sourcedoc=%7BD586D4C6-D692-4638-A51C-943F1BAECE8B%7D&file=sanity_check_NGN2.xlsx&action=default&mobileredirect=true))
@@ -734,6 +757,7 @@ gzip /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tra
   - investigate interesting control headers and create parsing strategy for each group (for neuro use _chr as split)
     - `MK`: (coordinates not checked yet)
       - `>MK:SNRNP70|chr19-49085144+49085413|reference`
+    - According to blat: coordinates are the same for MK but for NP: header_start-1 = blat_start
     - `C_positive_neuron_NP`: _chr_start_end (start, end]
       - `>C_positive_neuron_NP:GW18_PFC_ABC_Midfetal_Cortex_Trevino_Midfetal_Cortex_Ziffra_ABC_chr10_79221115_79221385_5.21059445249138`
     - `C_positive_neuron_MK`: chr_ start _ end (both within the range [start,end])
@@ -891,3 +915,106 @@ zcat /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tra
   - all these we have regions for
 - Number of tested sequences we have regions for: 73846
 - Overall number of sequences in the deduplicated design: 73940
+- Answer Chengyu
+Hi Chengyu, Hi Nadav,
+Thank you for the additional sequencing data, after some issues with our firewall, I was now able to download it. I will keep you posted with the results after running MPRAsnakeflow on the combined data. 
+Btw, apparently, I have made some incorrect assumptions about your control set (aka C_positive_neuron_CD). I had thought that you had given us 100 positive and negative sequences during my presentation at the call two weeks ago. That was wrong, I confused it with the SLEA control group where we have 100 positive and 100 negative sequences. Turns out that these were supposed to be only positive controls. 
+I have looked at the correlation between the values in the headers and our mean ratios of the 3 replicates. Unfortunately, the correlation between these two experiments does not look so good. However, if I increase the number of required barcodes per insert (e.g. to 70), then the correlation increases (see plots attached for a min. of 15, 30 and a min. of 70 barcodes per insert). However, I am wondering whether I am using the correct values for the previous read-out of these elements. I assumed that the numerical value in the header is the value from your experiment. For example:
+>C_positive_neuron_CD:p1_rs6813360_A_C_ref_50_A::chr4:155359187-155359457-mean_ratio2.42
+Is this correct?
+Best,
+Kilian
+>C_positive_neuron_CD:p1_rs6813360_A_C_ref_50_A::chr4:155359187-155359457-mean_ratio2.42
+>C_positive_neuron_CD:p1_rs55985730_T_G_alt_50_T::chr7:128776855-128777125-mean_ratio2.34
+- investigating neuro insteresting
+  - C_negative_neuron_MK:rdhs_441080_chr3_13042165_13042434_reference__0.47708598278664
+    - negative strand hit coordinates not (start, end]
+
+### Resequencing data seems like only 15bp reads are there
+
+- Ngn2-DNA-1_S1_R1_001.fastq.gz
+- @NB501960:958:H3FCMBGXW:1:11101:19983:1040 1:N:0:TTGAACTNAG
+- TGGGTCCATGCCTGA
+- +
+- AAAAAEEEEEEEEEE
+
+- Ngn2-DNA-1_S1_R2_001.fastq.gz
+- @NB501960:958:H3FCMBGXW:1:11101:19983:1040 2:N:0:TTGAACTNAG
+- CCAGGGCACNGGCTAC
+- +
+- AAAAAEEEE#EEEEEE
+
+- Ngn2-DNA-1_S1_R3_001.fastq.gz
+- @NB501960:958:H3FCMBGXW:1:11101:19983:1040 3:N:0:TTGAACTNAG
+- TCAGGCNTGNACCCN
+- +
+- AAAAAE#EE#EEEE#
+
+
+- Ngn2-DNA-2_S2_R1_001.fastq.gz
+- @NB501960:958:H3FCMBGXW:1:11101:18158:1040 1:N:0:TATAATTNAA
+- TTTGACAAACTTGCG
+- +
+- AAAAAEEEEEEEEEE
+
+- Ngn2-DNA-3_S3_R1_001.fastq.gz
+- @NB501960:958:H3FCMBGXW:1:11101:25544:1042 1:N:0:GAAGCTGNAG
+- CGCCCTGGTTATAAT
+- +
+- AAAAAEAEEEEAEEA
+
+- old 80K data: 146 basepairs long
+- FW: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/data/association/IGVF_neuro_S1_R1_001.fastq.gz
+- @NB501960:812:HH53WAFX5:1:11101:26148:1108 1:N:0:NCGTAGACCA
+GGCTTCTGATAAGCCGCCAATTCATAGTGTGGGTTTGGAGAGCTGGAGACGGGGTGAGAAAGCTGAGGCCTTTGCAAAGTCTATTTACACAGTGGCCAGAGTCCCTTTCACCCTCTCCGGCAAACAGGCCCTGGAGCACAGGCATT
++
+- BC: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/data/association/IGVF_neuro_S1_R2_001.fastq.gz
+- check length of reads with unix command 
+```bash
+file_list="Ngn2-DNA-1_S1_R1_001.fastq.gz Ngn2-DNA-1_S1_R2_001.fastq.gz Ngn2-DNA-1_S1_R3_001.fastq.gz Ngn2-DNA-2_S2_R1_001.fastq.gz Ngn2-DNA-2_S2_R2_001.fastq.gz Ngn2-DNA-2_S2_R3_001.fastq.gz Ngn2-DNA-3_S3_R1_001.fastq.gz Ngn2-DNA-3_S3_R2_001.fastq.gz Ngn2-DNA-3_S3_R3_001.fastq.gz"
+for file in $file_list; do
+  echo "$file"
+  awk 'NR%4 == 2 {if (length($0) > 15) print length($0)}' <(zcat $file)
+done
+```
+- Ngn2-DNA-1_S1_R1_001.fastq.gz: 15 length
+- Ngn2-DNA-1_S1_R2_001.fastq.gz: 16 length
+- non of the resequences DNA files contains a read above 100
+- check RNA:
+```bash
+file_rna_list="Ngn2-RNA-1_S4_R1_001.fastq.gz Ngn2-RNA-1_S4_R2_001.fastq.gz Ngn2-RNA-1_S4_R3_001.fastq.gz Ngn2-RNA-2_S5_R1_001.fastq.gz Ngn2-RNA-2_S5_R2_001.fastq.gz Ngn2-RNA-2_S5_R3_001.fastq.gz Ngn2-RNA-3_S6_R1_001.fastq.gz Ngn2-RNA-3_S6_R2_001.fastq.gz Ngn2-RNA-3_S6_R3_001.fastq.gz"
+for file in $file_rna_list; do
+  echo "$file"
+  awk 'NR%4 == 2 {if (length($0) > 100) print length($0)}' <(zcat $file)
+done
+```
+
+### Modify current design file
+```bash
+#!/bin/bash
+
+# Set the input and output file names
+input_file="/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/unifying_headers_kilian_042024/design_no_duplicates_old_naming.fa"
+output_file="/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/unifying_headers_kilian_042024/GC_Kircher_shortened_headers_match_table.tsv"
+
+# grep all headers and print them as tsv with the fist part as label
+grep "^>" $input_file | sed 's/^>//g' | awk -F ":" '{print $1":"$2 "\t" $1}' > $output_file
+```
+```bash
+snakemake --use-conda  --configfile standard_config.yaml --snakefile /data/gpfs-1/users/kisa11_c/work/coding/MPRAsnakeflow/workflow/Snakefile --conda-prefix /data/gpfs-1/users/kisa11_c/work/coding/MPRA/MPRAsnakeflow_projects/conda --keep-going --cluster-config /data/gpfs-1/users/kisa11_c/work/coding/MPRAsnakeflow/config/sbatch.yml --cluster-status status.py --cluster "sbatch --parsable --nodes=1 --ntasks-per-node={cluster.threads} --mem {cluster.mem} -t {cluster.time} -p {cluster.queue} -o {cluster.output} -e {cluster.error}"  --jobs 40 --cluster-cancel scancel -n --quiet
+```
+
+### Sanity checking MPRAOligoDesign
+- location of the data to be checked: `MPRA/IGVF_Y1_design/design/final_design/results/oligo_design/cardiac_neuro_cava_random`
+- Both examples are in the design file
+- e.g. cardiac_neuro_cava_random:ALT_MTHFR|ENSG00000177000.13|EH38E1319148_rev_tile1-1_MTHFR|ENSG00000177000.13|EH38E1319148|1-11841412-C-T (is in design and could be matched) => is in the design and the variant region map and the variant file
+- e.g. cardiac_neuro_cava_random:ALT_DOCK7|ENSG00000116641.18|EH38E1354059_rev_tile1-1_DOCK7|ENSG00000116641.18|EH38E1354059|1-62589630-A-C (is in not fitting) => is in the design file but not in the variant region map or variant file
+  - is still in `design_variants.variant_region_map.tsv.gz` but not in filtered `design_variants_filtered.variant_region_map.tsv.gz` 
+
+
+### Investigate the ultraconserved variants:
+- found 69 variants in the 80K design which are within the ultraconserved regions
+- sanity check: found all of these in the variant region map
+- look for significant variants: 1 is significant but no paper over the variant found
+
+### 

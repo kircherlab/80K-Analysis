@@ -1,3 +1,6 @@
+analysis_info:
+  groups_of_interest: ["cardiac_neuro_cava_random", "MK", "C_positive_neuron_NP", "C_positive_neuron_MK", "C_negative_neuron_MK", "C_negative_neuron_NP", "C_positive_neuron_CD"]
+
 files:
   output:
     plotting: /data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/80K_MPRA/plots/ 
@@ -18,25 +21,39 @@ files:
     toptable_bcMPRAlm_no_downsampling: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_MPRAlm/no_downsampling/toptable_standard_with_all_variant_controls_mendelian_no_downsampling_NGN2.tsv
     # toptable_MPRAlm: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_MPRAlm/test_controls_concat//toptable_standard_with_variant_controls_no_downsampling_mpralm_NGN2.tsv
     toptable_MPRAlm: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/MPRAlm/all_controls/toptable_standard_with_all_variant_controls_mendelian_mpralm_NGN2.tsv
+    toy_bcMPRAlm: /home/kisa/coding/80K_MPRA/server_results/bc_MPRAlm/toptable_GC_Selvarajan_standardNGN2.tsv
     toptable_MPRAlm_no_downsampling: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/MPRAlm/no_downsampling/toptable_standard_with_all_variant_controls_mendelian_no_downsampling_mpralm_NGN2.tsv
     enformer_prediction_tsv: /data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/05_variant_region_list/results/enformer_predictions/sequences_for_enformer_predictions.tsv
     merged_variant_table: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/merging_variants/merged_prioritized_variants.tsv
+    mprasnakeflow_resequencing_count_minthreshold: /data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/experiment/resequencing_results/results/experiments/standard_bwa/assigned_counts/assignmentFixDuplicates/standardConfig/NGN2_allreps_minThreshold_merged.tsv.gz
+    mprasnakeflow_count_minthreshold: /home/kisa/coding/80K_MPRA/design_data/NGN2_allreps_minThreshold_merged.tsv.gz
+    enformer_mprasnakeflow_counts: /home/kisa/coding/80K_MPRA/enformer_data/enformer_counts_merged/merged_enformer_variant_all_max_count_info.tsv
+    # enformer_prioritized_variants: /home/kisa/coding/80K_MPRA/enformer_data/enformer_matched_with_variants_enformer_class/merged_enformer_class.tsv # created using merging script
+    # common_and_enformer_variants: /home/kisa/coding/80K_MPRA/enformer_data/enformer_matched_with_variants_enformer_class/all_variants_enformer_class.tsv
+    common_and_enformer_variants: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/merging_variants/merged_variants_table.tsv # created combine_enformer_information.ipynb
+    merged_common_variants: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/merging_variants/merged_common_variants.tsv
+    ultraconserved_variants: /home/kisa/coding/80K_MPRA/design_data/design_info/ultraconserved_primates_variants.vcf
+    ultraconserved_regions: /home/kisa/coding/80K_MPRA/info/ultraconserved_regions/ultraconserved_regions_kudernaetal.csv
   final_design:
     sequence_to_barcode_assignment: '/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/standard_bwa/assignment/assignmentFixDuplicates.tsv.gz' 
     design_with_duplicates: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/final_design/results/final_design/design.fa.gz
-    design_fasta: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/resources/association_data/design_no_duplicates_sequence_and_header.fa
-    # design_fasta: /home/kisa/coding/80K_MPRA/80K-Analysis/05_variant_region_list/resources/design_no_duplicates_sequence_and_header.fa
+    # design_fasta: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/resources/association_data/design_no_duplicates_sequence_and_header.fa
+    design_fasta: /home/kisa/coding/80K_MPRA/design_data/design_no_duplicates_sequence_and_header.fa
+    first_design_fasta: /home/kisa/coding/80K_MPRA/design_data/design_info/design.fa.gz
     # test_seqs_region_file: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/final_design/input/regions_5K.bed
     test_seqs_region_file: /home/kisa/coding/80K_MPRA/80K-Analysis/05_variant_region_list/resources/regions/regions_5K.bed
     vcf_file_5k: /data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/design/final_design/input/variants_5K.vcf
-    vcf_file: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/final_design/results/final_design/variants.vcf.gz
+    # vcf_file: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/final_design/results/final_design/variants.vcf.gz
+    vcf_file: /home/kisa/coding/80K_MPRA/design_data/design_info/variants.vcf.gz
     vcf_file_tested: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/final_design/results/final_design/cardiac_neuro_cava_random_variants.vcf.gz
     variant_table_duplicates: /data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/design/final_design/results/final_design/cardiac_neuro_cava_random/variant_region_map.tsv.gz
     # variant_table: /home/kisa/coding/80K_MPRA/80K-Analysis/05_variant_region_list/resources/variant_region_map/variant_map_deduplicated.tsv
-    variant_table: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/final_design/results/final_design/variant_region_map.tsv.gz
+    # variant_table: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/final_design/results/final_design/variant_region_map.tsv.gz
+    variant_table: "/home/kisa/coding/80K_MPRA/design_data/design_info/variant_region_map.tsv.gz"
     variant_table_deduplicated: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/final_design/results/final_design/cardiac_neuro_cava_random/variant_region_map_deduplicated.tsv.gz 
     variant_region_map: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/unifying_headers_kilian_042024/variant_map_with_unified_headers_mendelian_focus.tsv
-    final_design_variant_region_map: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/final_design/results/final_design/variant_region_map.tsv.gz
+    # final_design_variant_region_map: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/final_design/results/final_design/variant_region_map.tsv.gz
+    final_design_variant_region_map: /home/kisa/coding/80K_MPRA/design_data/design_info/variant_region_map.tsv.gz
     # old variant_region_map: /home/kisa/coding/80K_MPRA/80K-Analysis/05_variant_region_list/resources/variant_region_map/variant_region_map.tsv.gz
     variant_region_map_controls: /data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/05_variant_region_list/resources/controls_variant_region_map.tsv.gz
     region_bed: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/final_design/results/final_design/regions.bed.gz
