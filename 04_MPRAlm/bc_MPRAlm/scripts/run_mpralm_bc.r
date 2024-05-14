@@ -44,8 +44,8 @@ output_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projec
 
 png(file = file.path(output_dir, paste0("voom_", name, ".png")))
 
-input_dna = paste0(input_dir, 'preprocess/no_downsampling/', name, "_bc_10_mpralm_bc_dna_input_NGN2.tsv")
-input_rna = paste0(input_dir, 'preprocess/no_downsampling/', name, "_bc_10_mpralm_bc_rna_input_NGN2.tsv")
+input_dna = paste0(input_dir, name, "_bc_10_mpralm_bc_dna_input_NGN2.tsv")
+input_rna = paste0(input_dir, name, "_bc_10_mpralm_bc_rna_input_NGN2.tsv")
 # weights_file = paste0(input_dir, "MPRAlm/test_controls_concat/weights_", name, "_NGN2.feather") # args[3]
 # output_name = paste0("toptable_", name, "NGN2.feather")
 # # local: 
