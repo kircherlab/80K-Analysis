@@ -35,9 +35,12 @@ library(arrow)
 name = "standard_with_all_controls"
 name = "standard_with_all_variant_controls"
 name = "standard_with_all_variant_controls_mendelian_no_downsampling"
+name = "different_filtering_variant_controls_mendelian"
 
 input_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/"
 output_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_MPRAlm/no_downsampling/"
+input_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/resequencing/"
+output_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_MPRAlm/resequencing/"
 
 png(file = file.path(output_dir, paste0("voom_", name, ".png")))
 
