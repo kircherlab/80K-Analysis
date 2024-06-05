@@ -1017,4 +1017,24 @@ snakemake --use-conda  --configfile standard_config.yaml --snakefile /data/gpfs-
 - sanity check: found all of these in the variant region map
 - look for significant variants: 1 is significant but no paper over the variant found
 
-### 
+### Using FIMO for TF motif search
+- fimo --o top_bottom_2_fimo /data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/MPRA_ultra/projects/motif_analysis/resources/H12CORE_less_redundant.meme top_bottom_2_variants.fa 
+- directory: `/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/projects/80K_MPRA/variant_tf_search/top_bottom_2_fimo` 
+
+### Combine design and enformer informations for easy downstream set comparisons
+- for presentation to monthly IGVF: enformer information to vcf 
+- Computed precision and recall for enformer high calls and enformer low calls
+- Computed chisquare but fisher exact should be performed
+- more thoughtful: vcf information + gene lists from Oligo design + AC of enformer files => metadata file 
+- identified problem with enformer class (random is not real random, resampling needed) 
+
+### Story of the presentation at the ESHG 2024 whats new session
+- Variation is important but can lead to diseases
+- Variation needs to be investigated, IGVF is interested in cardiometabolic, neuro and cava (actionable genes)
+- variation within open chromatin regions around these gene starts
+- too many variants with <=1% AF => prioritization
+- Enformer predictions of variants lead to lower numbers
+- And we can compare if the enformer predictions did something
+- Enformer did something (less than we hoped)
+- Learned that we have less power to detect repressing effects compared to the power we have detecting activating effects
+- Interestingly high proportions of activating effects in the groups which are not prioritized (unexprected, because TFs are easier destroyed than gained)

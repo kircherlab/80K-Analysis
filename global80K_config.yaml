@@ -18,6 +18,8 @@ files:
     # toptable_bcMPRAlm: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_MPRAlm/all_controls/toptable_standard_with_all_controlsNGN2.tsv
     # toptable_bcMPRAlm: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_MPRAlm/all_controls/toptable_standard_with_all_variant_controlsNGN2.tsv
     toptable_bcMPRAlm: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_MPRAlm/all_controls/toptable_standard_with_all_variant_controls_mendelian_NGN2.tsv
+    # toptable_bcMPRAlm_resequencing: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_MPRAlm/resequencing/toptable_new_filtering_variant_controls_mendelian_NGN2.tsv
+    toptable_bcMPRAlm_resequencing: /home/kisa/coding/80K_MPRA/bc_MPRAlm_results/results/toptable_new_filtering_variant_controls_mendelian_NGN2.tsv
     toptable_bcMPRAlm_no_downsampling: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_MPRAlm/no_downsampling/toptable_standard_with_all_variant_controls_mendelian_no_downsampling_NGN2.tsv
     # toptable_MPRAlm: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_MPRAlm/test_controls_concat//toptable_standard_with_variant_controls_no_downsampling_mpralm_NGN2.tsv
     toptable_MPRAlm: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/MPRAlm/all_controls/toptable_standard_with_all_variant_controls_mendelian_mpralm_NGN2.tsv
@@ -25,15 +27,28 @@ files:
     toptable_MPRAlm_no_downsampling: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/MPRAlm/no_downsampling/toptable_standard_with_all_variant_controls_mendelian_no_downsampling_mpralm_NGN2.tsv
     enformer_prediction_tsv: /data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/05_variant_region_list/results/enformer_predictions/sequences_for_enformer_predictions.tsv
     merged_variant_table: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/merging_variants/merged_prioritized_variants.tsv
-    mprasnakeflow_resequencing_count_minthreshold: /data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/experiment/resequencing_results/results/experiments/standard_bwa/assigned_counts/assignmentFixDuplicates/standardConfig/NGN2_allreps_minThreshold_merged.tsv.gz
+    mprasnakeflow_resequencing_count_minthreshold: /data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/experiment/resequencing_results/new_bam_filtering/results/experiments/standard_bwa/assigned_counts/assignmentFixDuplicates/standardConfig/NGN2_allreps_minThreshold_merged.tsv.gz
     mprasnakeflow_count_minthreshold: /home/kisa/coding/80K_MPRA/design_data/NGN2_allreps_minThreshold_merged.tsv.gz
     enformer_mprasnakeflow_counts: /home/kisa/coding/80K_MPRA/enformer_data/enformer_counts_merged/merged_enformer_variant_all_max_count_info.tsv
     # enformer_prioritized_variants: /home/kisa/coding/80K_MPRA/enformer_data/enformer_matched_with_variants_enformer_class/merged_enformer_class.tsv # created using merging script
     # common_and_enformer_variants: /home/kisa/coding/80K_MPRA/enformer_data/enformer_matched_with_variants_enformer_class/all_variants_enformer_class.tsv
-    common_and_enformer_variants: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/merging_variants/merged_variants_table.tsv # created combine_enformer_information.ipynb
+    # common_and_enformer_variants: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/merging_variants/merged_variants_table.tsv # created combine_enformer_information.ipynb
+    common_and_enformer_variants: /home/kisa/coding/80K_MPRA/enformer_data/enformer_matched_with_variants/merged_variants_table.tsv # created combine_enformer_information.ipynb
     merged_common_variants: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/merging_variants/merged_common_variants.tsv
     ultraconserved_variants: /home/kisa/coding/80K_MPRA/design_data/design_info/ultraconserved_primates_variants.vcf
     ultraconserved_regions: /home/kisa/coding/80K_MPRA/info/ultraconserved_regions/ultraconserved_regions_kudernaetal.csv
+    enformer_sequence_predictions: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/enformer_predictions/sequences_for_enformer_predictions_only_sequences_with_padding_680.tsv
+    enformer_sequence_neuro_median_predictions: /home/kisa/coding/80K_MPRA/enformer_data/baseline_activity/brain_specific_enformer_dnase_median_dnase_max.tsv.gz
+    enformer_sequence_dnase_max_predictions: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/enformer_predictions/sequences_enformer_DNase_max.tsv.gz
+    enformer_variant_neuro_specific_dnase_predictions: /home/kisa/coding/80K_MPRA/enformer_data/enformer_variant_predictions/variant_prediction_DNase_max_median_neuro_specific.tsv.gz
+    enformer_variant_all_dnase_predictions: /home/kisa/coding/80K_MPRA/enformer_data/enformer_variant_predictions/variant_prediction_DNase_max_median.tsv.gz
+    enformer_random_variants: /home/kisa/coding/80K_MPRA/enformer_data/only_random_enformer/random_variants.tsv
+    enformer_random_variants_old_version: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/enformer_predictions/random_variants.tsv
+    combined_variant_meta_info: /data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/projects/80K_combined_variant_prediction_results/bcMPRAlm_variants_predictions.tsv.gz
+    combined_variant_meta_info_local: /home/kisa/coding/80K_MPRA/combined_info_results/bcMPRAlm_variants_predictions.tsv.gz
+    bootstrabed_bcMPRAlm_results: /data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/projects/80K_combined_variant_prediction_results/bcMPRAlm_variant_ratio.bootstrap_1000_0.8.tsv.gz
+    # combined_variant_meta_info: /home/kisa/coding/80K_MPRA/combined_info_results/bcMPRAlm_variants_predictions.tsv.gz
+    # enformer_random_variants: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/enformer_predictions/random_variants.tsv
   final_design:
     sequence_to_barcode_assignment: '/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/standard_bwa/assignment/assignmentFixDuplicates.tsv.gz' 
     design_with_duplicates: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/final_design/results/final_design/design.fa.gz
