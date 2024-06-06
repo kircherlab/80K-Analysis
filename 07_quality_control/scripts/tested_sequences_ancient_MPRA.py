@@ -7,10 +7,14 @@ Filter oligo counts for all replicates of MPRAsnakeflow in oder to get x, y and 
 :Contact: kilian.salomon@bih-charite.de
 :Date: *25.04.2024
 :Type: tool
-:Input: BAM
-:Output: BAM
-
+:Input: MPRAsnakeflow output (all sequences with min barcode > threshold)
+:Output: Table of x sequences with top positive effect, y negative effect and z randomly sampled according to the mean log2 ratio between replicates
 """
+
+# import 
+import pandas as pd
+import numpy as np
+
 
 # qulity measures
 min_barcodes = 50
@@ -20,16 +24,17 @@ min_rna_count = 10
 top_x = 100
 bottom_y = 100
 random_z = 200
-seed = 123
+random_seed = 123
 
-# input
+# input (result from MPRAsnakeflow which is the result of all the assigned sequences with assigned barcodes >= threshold set during workflow execution)
 input_path = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/standard_bwa/assigned_counts/assignmentFixDuplicates/standardConfig/NGN2_allreps_minThreshold_merged.tsv.gz"
 
 # output
 output_path = "/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/07_quality_control/results/ancient_mpra/filtered_tested_sequences.tsv"
-
+output_path = "/home/kisa/coding/80K_MPRA/80K-Analysis/07_quality_control/results/ancient_mpra/filtered_tested_sequences.tsv"
 
 def combine_replicates(df_allreps, total_dna_counts, total_rna_counts):
+    """Taken from the MPRAsnakeflow script"""
     df_allreps = df_allreps.groupby(by=["condition", "name"]).aggregate(
         {
             "replicate": "count",
@@ -73,7 +78,13 @@ def combine_replicates(df_allreps, total_dna_counts, total_rna_counts):
 
 
 def add_log2_name(row):
-    return row['name'] + "__mean_log2_ratio" + str(round(row['mean_log2'], 4))
+    """
+    get the mean_log2 value from row and add to the new header name
+    """
+    mean_log2 = "NA"
+    if pd.notnull(row['mean_log2']):
+        mean_log2 = str(round(row['mean_log2'], 4))
+    return f"{row['name']}_80Kmean_log2_ratio_{mean_log2}"
 
 
 merged_tsv_path = input_path
@@ -85,32 +96,32 @@ total_rna_counts = merged_tsv[["rna_counts"]].sum().iloc[0]
 
 # only tested sequences
 tested_merged_tsv = merged_tsv.loc[merged_tsv['name'].str.startswith('cardiac_neuro_cava_random')]
-print('Number of sequences form the group: cardiac_neuro_cava_random: ', tested_merged_tsv.['name'].nunique())
+tested_merged_no_alt = tested_merged_tsv.loc[~tested_merged_tsv['name'].str.contains('ALT_')]
+print('Number of sequences form the group: cardiac_neuro_cava_random: ', tested_merged_no_alt['name'].nunique())
 
 # quality filter 
 
 
 # barcode threshold
-filtered_tested_merged_tsv = tested_merged_tsv.loc[tested_merged_tsv['n_obs_bc'] > min_barcodes]
-print('barcodes: ', filtered_tested_merged_tsv['name'].nunique())
+filtered_tested_merged_no_alt = tested_merged_no_alt.loc[tested_merged_no_alt['n_obs_bc'] > min_barcodes]
+print('barcodes: ', filtered_tested_merged_no_alt['name'].nunique())
 
 # min dna and rna count
-filtered_tested_merged_tsv = filtered_tested_merged_tsv[filtered_tested_merged_tsv['dna_counts'] > min_dna_count]
-filtered_tested_merged_tsv = filtered_tested_merged_tsv[filtered_tested_merged_tsv['rna_counts'] > min_rna_count]
-print('dna rna counts: ', filtered_tested_merged_tsv['name'].nunique())
+filtered_tested_merged_no_alt = filtered_tested_merged_no_alt.loc[filtered_tested_merged_no_alt['dna_counts'] > min_dna_count]
+filtered_tested_merged_no_alt = filtered_tested_merged_no_alt.loc[filtered_tested_merged_no_alt['rna_counts'] > min_rna_count]
+print('dna rna counts: ', filtered_tested_merged_no_alt['name'].nunique())
 
 # occuring in all 3 replicates: count each name and keep only those with count 3
-filtered_tested_merged_tsv['count'] = filtered_tested_merged_tsv.groupby('name')['name'].transform('count')
-filtered_tested_merged_tsv = filtered_tested_merged_tsv.loc[filtered_tested_merged_tsv['count'] == 3]
-print('replicates: ', filtered_tested_merged_tsv['name'].nunique())
+filtered_tested_merged_no_alt['count'] = filtered_tested_merged_no_alt.groupby('name')['name'].transform('count')
+filtered_tested_merged_no_alt = filtered_tested_merged_no_alt.loc[filtered_tested_merged_no_alt['count'] == 3]
+print('replicates: ', filtered_tested_merged_no_alt['name'].nunique())
 
 # print shape 
-print('After filtering: ', filtered_tested_merged_tsv['name'].nunique())
-
+print(f'After filtering for at least 3 replicates, {min_barcodes} barcodes, DNA (min {min_dna_count}) and RNA counts (min {min_rna_count}): ', filtered_tested_merged_no_alt['name'].nunique())
 
 
 # merge the sequences over the replicates
-combined_filtered_df = combine_replicates(filtered_tested_merged_tsv, total_dna_counts, total_rna_counts)
+combined_filtered_df = combine_replicates(filtered_tested_merged_no_alt, total_dna_counts, total_rna_counts)
 
 # add the mean_log2 to the header
 combined_filtered_df['name_mean_log2'] = combined_filtered_df.apply(add_log2_name, axis = 1)
@@ -124,10 +135,11 @@ sorted_combined_filtered_df = combined_filtered_final_df.sort_values('mean_log2'
 # make 3 sets of variants, then merge
 
 top = sorted_combined_filtered_df.head(top_x)
-random_inbetween = sorted_combined_filtered_df.head(-bottom_y).tail(-top_x).sample(n=random_z, random_state=123)
+random_inbetween = sorted_combined_filtered_df.head(-bottom_y).tail(-top_x).sample(n=random_z, random_state=random_seed)
 bottom = sorted_combined_filtered_df.tail(bottom_y)
 
 tested_sequences_filtered_df = pd.concat([top, random_inbetween, bottom])
 
 # write to output file
 tested_sequences_filtered_df.to_csv(output_path, sep="\t", index=False)
+
