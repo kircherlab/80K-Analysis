@@ -33,6 +33,7 @@ import os
 name = "standard_with_all_variant_controls" # was renamed during combination step
 name = "standard_with_all_variant_controls_mendelian" # was renamed during combination step
 name = "different_filtering_variant_controls_mendelian"
+name = "new_filtering_variant_controls_mendelian"
 input_dir="/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_preparation"
 output_dir="/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/no_downsampling"
 output_dir="/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/resequencing"
