@@ -1,8 +1,43 @@
 import gzip # zipped files
+import numpy as np # isna
 import re # regex for header matching
 import pandas as pd
 from Bio import SeqIO
 
+
+def get_region_info(header):
+    """
+    gets region id (screen enhancer identifier) from the header of tested sequences
+    cardiac_neuro_cava_random:TRIO|ENSG00000038382.23|EH38E2358394|5-14408059-A-G => EH38E2358394
+    """
+    if 'cardiac_neuro_cava_random' not in header:
+        raise ValueError('Only defined for tested headers:', header)
+        return 'no_match'
+    pattern = r"EH38E[\d]+" # EH38E2358394
+    region_match = re.search(pattern, header)
+    if region_match:
+        return region_match.group()
+    else:
+        print('Header does not contain region info:', header)
+        return 'no_match'
+
+
+def get_gene_name(header, with_controls=True):
+    """Returns the gene name: cardiac_neuro_cava_random:SKI|ENSG00000157933.11|EH38E2778533_fwd_tile1-1 => SKI"""
+    if 'cardiac_neuro_cava_random' not in header:
+        if not with_controls:
+            print(header)
+            raise ValueError("Function only defined for tested headers")
+        return "Not given - control sequence"
+
+
+    if 'ALT_' in header:
+        return header.split(":ALT_")[1].split('|')[0]
+
+    if 'REF_' in header:
+        return header.split(":REF_")[1].split('|')[0]
+
+    return header.split(':')[1].split('|')[0]
 
 
 def write_fasta(sequence_df, output_path, header=['header', 'sequence']):
@@ -75,12 +110,54 @@ def has_variant_info_in_header(header):
 
 def get_chrom_pos_ref_alt_pattern(header):
     """Extracts the chrom pos ref alt information from the end of the header"""
+    if header is None:
+        return "NA"
     if has_variant_info_in_header(header):
         pattern = r'([A-Z]|[0-9]+)-[0-9]+-[A-Z]-[A-Z]'
         matches = re.search(pattern, header)
         if matches:
             return matches.group()
     return "NA"
+
+
+def is_reference(allele):
+    """
+    Since allele is list: returns if 'ref' in allele list
+    - Different cases:
+      - NaN (float)
+      - list of either 'ref' or 'alt'
+    """
+    current_allele = allele
+
+    # check case if allele is NA (float) or None
+    if allele is None or allele == 'NA':
+        return False
+    if isinstance(allele, float):
+            return False
+    if type(allele) is list:
+        current_allele = allele[0]
+
+    if 'ref' in current_allele:
+        return True
+    return False
+
+
+def is_alternative(allele):
+    """
+    Since allele is list: returns if 'alt' in allele list
+    """
+    current_allele = allele
+
+    # check case if allele is NA (float) or None
+    if allele is None or allele == 'NA':
+        return False
+    if isinstance(allele, float):
+            return False
+    if type(allele) is list:
+        current_allele = allele[0]
+    if 'alt' in current_allele:
+        return True
+    return False
 
 
 ### Functions for interacting with enformer information
@@ -103,7 +180,7 @@ def get_variant_type_list(enformer_variant_info):
     for elem in enformer_variant_info:
         variant_type_list.append(elem[1])
     return list(set(variant_type_list))
-    
+
 def get_gene_set_list(enformer_variant_info):
     """
     return the geme set list
