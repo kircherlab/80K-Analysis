@@ -1,9 +1,14 @@
 #!/usr/bin/env Rscript
 
+# if (!require("BiocManager", quietly = TRUE))
+#     install.packages("BiocManager")
+
+# BiocManager::install("mpra")
+# install.packages("arrow")
+
 library(mpra)
 library(dplyr)
 library(arrow)
-# install.packages("arrow")
 
 
 # old input
@@ -38,11 +43,17 @@ name = "standard_with_all_variant_controls"
 name = "standard_with_all_variant_controls_mendelian_no_downsampling"
 name = "different_filtering_variant_controls_mendelian"
 name = "new_filtering_variant_controls_mendelian"
+name = "final_resequencing_variant_controls_mendelian"
+name = "corrected_umi_length_removed_brackets_final_resequencing_renamed_variants"
 
 input_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/"
 output_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_MPRAlm/no_downsampling/"
 input_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/resequencing/"
 output_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_MPRAlm/resequencing/"
+input_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/80K_MPRA/MPRAlm/bc_preprocess/final_resequencing/"
+output_dir = "/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/80K_MPRA/MPRAlm/bc_MPRAlm/final_resequencing/"
+input_dir = "/data/cephfs-2/unmirrored/groups/kircher/users/kisa11_c/projects/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/resequencing/"
+output_dir = "/data/cephfs-2/unmirrored/groups/kircher/users/kisa11_c/projects/MPRA/IGVF_Y1_design/projects/80K_MPRA/MPRAlm/bc_MPRAlm/final_resequencing/"
 
 png(file = file.path(output_dir, paste0("voom_", name, ".png")))
 
@@ -50,12 +61,12 @@ input_dna = paste0(input_dir, name, "_bc_10_mpralm_bc_dna_input_NGN2.tsv")
 input_rna = paste0(input_dir, name, "_bc_10_mpralm_bc_rna_input_NGN2.tsv")
 # weights_file = paste0(input_dir, "MPRAlm/test_controls_concat/weights_", name, "_NGN2.feather") # args[3]
 # output_name = paste0("toptable_", name, "NGN2.feather")
-# # local: 
+# # local:
 # name = "standard"
 # input_dir = "/home/kisa/coding/80K_MPRA/80K-Analysis/04_MPRAlm/results/preprocess/"
 # output_dir = "/home/kisa/coding/80K_MPRA/80K-Analysis/04_MPRAlm/results/bc_MPRAlm/locally_computed/"
 
-# # local windows: 
+# # local windows:
 # name = "standard"
 # input_dir = "C:\\Users\\user\\OneDrive - Charité - Universitätsmedizin Berlin\\Documents\\coding\\80K_analysis\\bc_mpralm\\results\\preprocess\\"
 
@@ -87,7 +98,7 @@ design <- data.frame(intcpt = 1, alt = grepl("alt", colnames(mpra_bc_set)))
 print('Finished with MPRASet')
 # to do element level, use only intercept: design <- data.frame(intcpt = 1)
 
-# the replicate where each barcode belongs to is a blocking factor, indicated by the block_vector. 
+# the replicate where each barcode belongs to is a blocking factor, indicated by the block_vector.
 block_vector <- rep(1:s, each=bcs*2)
 
 compute_logratio2 <- function(object, aggregate = c("mean", "sum", "none")) {
@@ -116,7 +127,7 @@ dev.off()
 print('done')
 
 # For element levels, use treat instead of toptable:
-# define user-defined-threshold by plotting the logFC of the negative controls. Find the logFC of the 95th percentile of the negative controls, and set this as the user defined thrshold.
+# define user-defined-threshold by plotting the logFC of the negative controls. Find the logFC of the 95th percentile of the negative controls, and set this as the user defined threshold.
 # With the following code, all elements above this threshold will be seen as active.
 
 # tr <- treat(fit, lfc=<user-defined-threshold>)

@@ -1,30 +1,40 @@
 #!/bin/bash
 
+assignemnt_name=assignmentFixDuplicates
+assignemnt_name=bbmapStandardMapq35NoLength
 config=standard
 output_name=standard_with_all_variant_controls
 output_name=standard_with_all_variant_controls_mendelian
 output_name=new_filtering_variant_controls_mendelian
+output_name=final_resequencing_variant_controls_mendelian
+output_name=corrected_umi_length_removed_brackets_final_resequencing_renamed_variants
+output_name=bbmap_standard_mapq35_noLength
 
 output_dir="/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_preparation"
+output_dir="/data/cephfs-2/unmirrored/groups/kircher/MPRA/IGVF_Y1_design/projects/80K_MPRA/MPRAlm/bc_preparation"
 mpra_results_dir="/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/experiment/standard_results/results"
 mpra_results_dir="/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/resequencing_results/old_bam_filtering/results"
 mpra_results_dir="/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/resequencing_results/new_bam_filtering/results"
-# output files: 
+mpra_results_dir="/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/experiment/final_resequencing/results"
+mpra_results_dir="/data/cephfs-2/unmirrored/groups/kircher/users/kisa11_c/projects/MPRA/IGVF_Y1_design/experiment/80K_collision_skip_with_adapter/results"
+mpra_results_dir="/data/cephfs-1/scratch/groups/kircher/MPRA/IGVF_Y1_design/experiment/bbmap_80K_test/investigate_correlation/results/experiments/"
+
+# output files:
 counts_per_bc_gz_name="${output_dir}/${output_name}_NGN2_counts_per_bc_sorted.tsv.gz"
 counts_per_bc_name="${output_dir}/${output_name}_NGN2_counts_per_bc_sorted.tsv"
 
-# variants ref and alt 
+# variants ref and alt
 sequences_to_oligos="${output_dir}/${output_name}_NGN2_seqs_to_oligos_sorted.tsv.gz"
 joined_counts_and_seqs="${output_dir}/${output_name}_NGN2_counts_sequences.tsv.gz"
 joined_counts_and_seqs_unzipped="${output_dir}/${output_name}_NGN2_counts_sequences.tsv"
 single_seqs="${output_dir}/${output_name}_NGN2_single_seqs.tsv"
 temp="${output_dir}/${output_name}_NGN2_tmp.tsv"
 final_output="${output_dir}/${output_name}_NGN2_filtered_counts_sequences.tsv.gz"
-# # output files: 
+# # output files:
 # counts_per_bc_gz_name=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/projects/bc_tradeoff/${output_name}_NGN2_counts_per_bc_sorted.tsv.gz
 # counts_per_bc_name=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/projects/bc_tradeoff/${output_name}_NGN2_counts_per_bc_sorted.tsv
 
-# # variants ref and alt 
+# # variants ref and alt
 # sequences_to_oligos=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/projects/bc_tradeoff/${output_name}_NGN2_seqs_to_oligos_sorted.tsv.gz
 # joined_counts_and_seqs=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/projects/bc_tradeoff/${output_name}_NGN2_counts_sequences.tsv.gz
 # joined_counts_and_seqs_unzipped=/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/projects/bc_tradeoff/${output_name}_NGN2_counts_sequences.tsv
@@ -37,10 +47,10 @@ final_output="${output_dir}/${output_name}_NGN2_filtered_counts_sequences.tsv.gz
 
 # # standard config
 # variants=/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/80K_MPRA/design/variant_region_map_deduplicated.tsv.gz
-# assignment=/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/${config}_bwa/assignment/assignmentFixDuplicates.tsv.gz
-# count1=/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/${config}_bwa/assigned_counts/assignmentFixDuplicates/NGN2_1.merged.config.standardConfig.tsv.gz
-# count2=/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/${config}_bwa/assigned_counts/assignmentFixDuplicates/NGN2_2.merged.config.standardConfig.tsv.gz
-# count3=/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/${config}_bwa/assigned_counts/assignmentFixDuplicates/NGN2_3.merged.config.standardConfig.tsv.gz
+# assignment=/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/${config}_bwa/assignment/${assignemnt_name}.tsv.gz
+# count1=/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/${config}_bwa/assigned_counts/${assignemnt_name}/NGN2_1.merged.config.standardConfig.tsv.gz
+# count2=/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/${config}_bwa/assigned_counts/${assignemnt_name}/NGN2_2.merged.config.standardConfig.tsv.gz
+# count3=/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/${config}_bwa/assigned_counts/${assignemnt_name}/NGN2_3.merged.config.standardConfig.tsv.gz
 
 # standard with variant controls
 variants=/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/05_variant_region_list/resources/controls_variant_region_map.tsv.gz
@@ -48,22 +58,26 @@ variants=/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/05_variant_region_
 variants=/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/unifying_headers_kilian_042024/variant_map_with_unified_headers.tsv.gz # need to be in gz format
 # with all control groups mendelian focus
 variants=/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/unifying_headers_kilian_042024/variant_map_with_unified_headers_mendelian_focus.tsv.gz # need to be in gz format
-assignment="${mpra_results_dir}/experiments/${config}_bwa/assignment/assignmentFixDuplicates.tsv.gz"
-count1="${mpra_results_dir}/experiments/${config}_bwa/assigned_counts/assignmentFixDuplicates/NGN2_1.merged.config.standardConfig.tsv.gz"
-count2="${mpra_results_dir}/experiments/${config}_bwa/assigned_counts/assignmentFixDuplicates/NGN2_2.merged.config.standardConfig.tsv.gz"
-count3="${mpra_results_dir}/experiments/${config}_bwa/assigned_counts/assignmentFixDuplicates/NGN2_3.merged.config.standardConfig.tsv.gz"
+assignment="${mpra_results_dir}/experiments/${config}_bwa/assignment/${assignemnt_name}.tsv.gz"
+assignment="/data/cephfs-1/scratch/groups/kircher/MPRA/IGVF_Y1_design/experiment/bbmap_80K_test/bbmap_assigned_barcodes/assignment_barcodes.standard.mapq35_noLength.sorted.tsv.gz"
+count1="${mpra_results_dir}/experiments/${config}_bwa/assigned_counts/${assignemnt_name}/NGN2_1.merged.config.standardConfig.tsv.gz"
+count2="${mpra_results_dir}/experiments/${config}_bwa/assigned_counts/${assignemnt_name}/NGN2_2.merged.config.standardConfig.tsv.gz"
+count3="${mpra_results_dir}/experiments/${config}_bwa/assigned_counts/${assignemnt_name}/NGN2_3.merged.config.standardConfig.tsv.gz"
+count1="/data/cephfs-1/scratch/groups/kircher/MPRA/IGVF_Y1_design/experiment/bbmap_80K_test/investigate_correlation/results/experiments/bbmapStandardMapq35NoLength/assigned_counts/fromFile/NGN2_1.merged.config.standardConfig.tsv.gz"
+count2="/data/cephfs-1/scratch/groups/kircher/MPRA/IGVF_Y1_design/experiment/bbmap_80K_test/investigate_correlation/results/experiments/bbmapStandardMapq35NoLength/assigned_counts/fromFile/NGN2_2.merged.config.standardConfig.tsv.gz"
+count3="/data/cephfs-1/scratch/groups/kircher/MPRA/IGVF_Y1_design/experiment/bbmap_80K_test/investigate_correlation/results/experiments/bbmapStandardMapq35NoLength/assigned_counts/fromFile/NGN2_3.merged.config.standardConfig.tsv.gz"
 
 
 # # low config
 # variants=/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/80K_MPRA/design/variant_region_map_deduplicated.tsv.gz
-# assignment=/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/${config}_bwa/assignment/assignmentFixDuplicates.tsv.gz
+# assignment=/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/${config}_bwa/assignment/${assignemnt_name}.tsv.gz
 
-# count1=/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/${config}_bwa/assigned_counts/assignmentFixDuplicates/NGN2_3.merged.config.lowConfig.tsv.gz 
-# count2=/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/${config}_bwa/assigned_counts/assignmentFixDuplicates/NGN2_2.merged.config.lowConfig.tsv.gz 
-# count3=/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/${config}_bwa/assigned_counts/assignmentFixDuplicates/NGN2_1.merged.config.lowConfig.tsv.gz
+# count1=/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/${config}_bwa/assigned_counts/${assignemnt_name}/NGN2_3.merged.config.lowConfig.tsv.gz
+# count2=/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/${config}_bwa/assigned_counts/${assignemnt_name}/NGN2_2.merged.config.lowConfig.tsv.gz
+# count3=/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/${config}_bwa/assigned_counts/${assignemnt_name}/NGN2_1.merged.config.lowConfig.tsv.gz
 
 # assign counts to barcodes and oligo ids
-join <(zcat $assignment) <(zcat $count1) -t $'\t' | join - <(zcat $count2) -t $'\t' | join - <(zcat $count3) -t $'\t' | cut -f1,2,5-11 | sort -k 2 > $counts_per_bc_name 
+join <(zcat $assignment) <(zcat $count1) -t $'\t' | join - <(zcat $count2) -t $'\t' | join - <(zcat $count3) -t $'\t' | cut -f1,2,5-11 | sort -k 2 > $counts_per_bc_name
 gzip $counts_per_bc_name
 
 # assign oligo ids to seqs and add "ref", "alt" ($1 ID, $2 ref, $3 alt)
@@ -94,7 +108,7 @@ mv temp $final_output
 # counts_per_bc_gz_name=/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/NGN2_counts_per_bc_sorted.tsv.gz
 # counts_per_bc_name=/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/NGN2_counts_per_bc_sorted.tsv
 
-# # variants ref and alt 
+# # variants ref and alt
 # sequences_to_oligos=/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/NGN2_seqs_to_oligos_sorted.tsv.gz
 # joined_counts_and_seqs=/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/NGN2_counts_sequences.tsv.gz
 # joined_counts_and_seqs_unzipped=/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/projects/bc_tradeoff/NGN2_counts_sequences.tsv
@@ -104,7 +118,7 @@ mv temp $final_output
 
 # # input files:
 # variants=/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/design/final_design/results/final_design/cardiac_neuro_cava_random/variant_region_map.tsv.gz
-# assignment=/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/experiment/results/experiments/run1counts_run2Assignment_NoDupAss/assignment/assignmentFixDuplicates.tsv.gz
-# count1=/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/experiment/results/experiments/run1counts_run2Assignment_NoDupAss/assigned_counts/assignmentFixDuplicates/NGN2_1.merged.config.standardConfig.tsv.gz
-# count2=/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/experiment/results/experiments/run1counts_run2Assignment_NoDupAss/assigned_counts/assignmentFixDuplicates/NGN2_2.merged.config.standardConfig.tsv.gz
-# count3=/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/experiment/results/experiments/run1counts_run2Assignment_NoDupAss/assigned_counts/assignmentFixDuplicates/NGN2_3.merged.config.standardConfig.tsv.gz
+# assignment=/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/experiment/results/experiments/run1counts_run2Assignment_NoDupAss/assignment/${assignemnt_name}.tsv.gz
+# count1=/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/experiment/results/experiments/run1counts_run2Assignment_NoDupAss/assigned_counts/${assignemnt_name}/NGN2_1.merged.config.standardConfig.tsv.gz
+# count2=/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/experiment/results/experiments/run1counts_run2Assignment_NoDupAss/assigned_counts/${assignemnt_name}/NGN2_2.merged.config.standardConfig.tsv.gz
+# count3=/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/experiment/results/experiments/run1counts_run2Assignment_NoDupAss/assigned_counts/${assignemnt_name}/NGN2_3.merged.config.standardConfig.tsv.gz

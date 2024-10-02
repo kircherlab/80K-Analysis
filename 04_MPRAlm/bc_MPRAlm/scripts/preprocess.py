@@ -1,5 +1,5 @@
 ## File to put data into correct format for a barcode level MPRAlm, also creates the input for the aggregated (normal) MPRAlm
-## to make sure the same sequences are used in both. 
+## to make sure the same sequences are used in both.
 import polars as pl
 import polars.selectors as cs
 import os
@@ -34,9 +34,12 @@ name = "standard_with_all_variant_controls" # was renamed during combination ste
 name = "standard_with_all_variant_controls_mendelian" # was renamed during combination step
 name = "different_filtering_variant_controls_mendelian"
 name = "new_filtering_variant_controls_mendelian"
-input_dir="/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_preparation"
-output_dir="/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/no_downsampling"
-output_dir="/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/resequencing"
+name = "final_resequencing_variant_controls_mendelian"
+
+input_dir="/data/cephfs-2/unmirrored/groups/kircher/users/kisa11_c/projects/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_preparation"
+output_dir="/data/cephfs-2/unmirrored/groups/kircher/users/kisa11_c/projects/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/no_downsampling"
+output_dir="/data/cephfs-2/unmirrored/groups/kircher/users/kisa11_c/projects/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/preprocess/resequencing"
+output_dir="/data/cephfs-2/unmirrored/groups/kircher/users/kisa11_c/projects/MPRA/IGVF_Y1_design/projects/80K_MPRA/MPRAlm/bc_preprocess/final_resequencing"
 input = os.path.join(input_dir, "%s_NGN2_filtered_counts_sequences.tsv.gz"%(name))
 output_rna = os.path.join(output_dir, "%s_bc_10_mpralm_bc_rna_input_NGN2.tsv"%(name))
 output_dna = os.path.join(output_dir, "%s_bc_10_mpralm_bc_dna_input_NGN2.tsv"%(name))
