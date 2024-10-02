@@ -7,8 +7,13 @@
 *.tsv
 *.json
 *.png
+*.svg
 *.vcf
 *.yaml
+*.tsv
+*.feather
+*.csv
+*.bed
 
 # exclude tmp directory
 tmp/
