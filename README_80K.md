@@ -1,6 +1,6 @@
 ## Notes about analyzing 80K
 - Max did the fist step of the analysis without a labeling file
-- I did the second step: 
+- I did the second step:
   - used the following command for the computing the labeling file and added it then to the config (located here)
 ```bash
 #!/bin/bash
@@ -27,7 +27,7 @@ snakemake --use-conda  --configfile low_config.yaml --snakefile /data/gpfs-1/use
 - Bowtie call `bowtie -x <index-base> -m <allow-multiple-alignments> --best (only the best alignement) --strata (only in the best strata)`
   - -x is not there; lets use -n alignment option
 - (TODO:) Question: Am I interested in all alignments or only in the best alignment? -> best but (spoiler) the output was not usable from bowtie because barcodes were not streamlined
-```bash 
+```bash
 snakemake --use-conda  --configfile bowtie_config.yaml --snakefile /data/gpfs-1/users/kisa11_c/work/coding/MPRAsnakeflow/workflow/Snakefile --conda-prefix ../../MPRAsnakeflow_projects/conda --keep-going --cluster-config /data/gpfs-1/users/kisa11_c/work/coding/MPRAsnakeflow/config/sbatch.yml --cluster-status status.py --cluster "sbatch --parsable --nodes=1 --ntasks-per-node={cluster.threads} --mem {cluster.mem} -t {cluster.time} -p {cluster.queue} -o {cluster.output} -e {cluster.error}"  --jobs 40 --cluster-cancel scancel -n --quiet
 ```
 - run again standard config to have a flawless set of data (checked out MPRAsnakeflow at standardMPRAsnakeflow, removed temp in rules (assignment_mapping, assignment_merge))
@@ -54,24 +54,24 @@ snakemake --use-conda  --configfile standard_config.yaml --snakefile /data/gpfs-
     - shell: python /data/gpfs-1/users/kisa11_c/work/coding/MPRAsnakeflow/workflow/rules/../scripts/count/samplerer_assignment.py         --input results/assignment/assignIGVFDesignNoTempBowtie/assignment_barcodes.standardConfig.sorted.tsv.gz                                    --output results/experiments/run1counts_run2Assignment_NoDupAss_bowtie/assignment/assignmentFixDuplicates.tsv.gz &> results/logs/assigned_counts/filterAssignment.run1counts_run2Assignment_NoDupAss_bowtie.assignmentFixDuplicates.log
     - (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
     - cluster_jobid: 2988001
-    - log said: empty input data 
+    - log said: empty input data
     - `results/assignment/assignIGVFDesignNoTempBowtie/assignment_barcodes.standardConfig.sorted.tsv.gz` is empty
     - previous file: from rule has rows 556349 (`0	other	NA` but also other `1	C_SLEA:SLEA_hg18:chr2:210861483-210861650|103:V_HNF4_Q6:AAGGTCCAG;155:V_HNF4_Q6:AAGGTCCAG	16;268M;XA:i:0;MD:Z:266A0A0;255`)
 	- compare it to the standard results: current state not working ()
 	- run it locally in order to understand the error (on MPRA_files bottom)
 		- results/assignment/assignIGVFDesignNoTempBowtie/barcodes_incl_other.sorted.tsv.gz (number of rows: 114104369)
   - `/data/gpfs-1/groups/ag_kircher/work/MPRA/IGVF_Y1_design/experiment/results/assignment/assignIGVFDesignNoTempBowtie/bam/`
-    - `merge_split13.mapped.bam` (0-29) all 1.9GB 
+    - `merge_split13.mapped.bam` (0-29) all 1.9GB
     - NOTE: perform snakemake workflow using the output of one rule: `snakemake ... -R <rule_name>`
     - call for summary of mappings on the reference sequences `samtools idxstats merge_split0.mapped.bam`
     - call view bam: `samtools view merge_split0.mapped.bam | less`
     - combine the bam files of the splits `cd results/assignment/assignIGVFDesignNoTempBowtie/bam/ && samtools merge -@ 38 -o merged.bam merge_split0.mapped.bam merge_split12.mapped.bam merge_split16.mapped.bam merge_split2.mapped.bam merge_split23.mapped.bam merge_split27.mapped.bam merge_split4.mapped.bam merge_split8.mapped.bam merge_split1.mapped.bam merge_split13.mapped.bam merge_split17.mapped.bam merge_split20.mapped.bam merge_split24.mapped.bam merge_split28.mapped.bam merge_split5.mapped.bam merge_split9.mapped.bam merge_split10.mapped.bam merge_split14.mapped.bam merge_split18.mapped.bam merge_split21.mapped.bam merge_split25.mapped.bam merge_split29.mapped.bam merge_split6.mapped.bam merge_split11.mapped.bam merge_split15.mapped.bam merge_split19.mapped.bam merge_split22.mapped.bam merge_split26.mapped.bam merge_split3.mapped.bam merge_split7.mapped.bam`
     - create idx: `cd results/assignment/assignIGVFDesignNoTempBowtie/bam/ && samtools index -b -@ 38 merged.bam`
     - use samtools idxstats and investigate how many reads are found `cd results/assignment/assignIGVFDesignNoTempBowtie/bam/ && samtools idxstats merged.bam > idxstats_bowtie.tsv`
-    - number of idxstat_bowtie.tsv: 80216 (`cat idxstats_bowtie.tsv | wc -l`) 
+    - number of idxstat_bowtie.tsv: 80216 (`cat idxstats_bowtie.tsv | wc -l`)
     - number of idxstat_bowtie.tsv: $3 (number of hits >10: 77527) (`awk '$3>10 {print $0}' idxstats_bowtie.tsv | wc -l`)
     - number of idxstat_bowtie.tsv: $3 (number of hits >0: 78613) (`awk '$3>0 {print $0}' idxstats_bowtie.tsv | wc -l`)
-    - compare to bwa results in standard_results/: 
+    - compare to bwa results in standard_results/:
       - get all files to file: `find ./  -printf "%f\n" | grep "mapped.bam" > list_of_bams.tsv`
       - `samtools merge -@ 38 -o merged_bwa.bam -b list_of_bams.tsv` => 11G bam file
       - `ls -lah`
@@ -89,13 +89,13 @@ snakemake --use-conda  --configfile standard_config.yaml --snakefile /data/gpfs-
 - first_bowtie_config: normal config in prior snakemake results (with bowtie as mapper)
 - bowtie_config: new experiment and assignment with bowtie
 - Start snakemake with standardMPRAsnakeflow directory:
-```bash 
+```bash
 snakemake --use-conda  --configfile low_config.yaml --snakefile /data/gpfs-1/users/kisa11_c/work/coding/standardMPRAsnakeflow/workflow/Snake
 file --conda-prefix ./conda --keep-going --cluster-config /data/gpfs-1/users/kisa11_c/work/coding/MPRAsnakeflow/config/sbatch.yml --cluster-status status.py --cluster "sbatch --parsable --
 nodes=1 --ntasks-per-node={cluster.threads} --mem {cluster.mem} -t {cluster.time} -p {cluster.queue} -o {cluster.output} -e {cluster.error}"  --jobs 40 --cluster-cancel scancel -n
 ```
-- next problem: counts_umi_raw_counts test it locally Error in rule counts_umi_create_BAM: (solved by creating result directory)                                  
-```bash 
+- next problem: counts_umi_raw_counts test it locally Error in rule counts_umi_create_BAM: (solved by creating result directory)
+```bash
 jobid: 172
 input: /fast/groups/ag_kircher/MPRA/IGVF_Y1_design/data/counts/Ngn2-DNA-1_S1_R1_001.fastq.gz, /fast/groups/ag_kircher/M$
 RA/IGVF_Y1_design/data/counts/Ngn2-DNA-1_S1_R3_001.fastq.gz, /fast/groups/ag_kircher/MPRA/IGVF_Y1_design/data/counts/Ngn2-D$
@@ -125,7 +125,7 @@ doubleIndexBAM.py, /data/gpfs-1/users/kisa11_c/work/coding/standardMPRAsnakeflow
 - error in the end because concatenation of the files is not working (only one file is created)
 - investigate the results:
   - use missing_sequenes_per_label.ipynb: create again header dataframe: `cat results/assignment/{assignment}/reference/reference.fa | grep ">" | awk '{print substr($0,2)}' > results/assignment/{assignment}/reference/all_headers.tsv` (`cat reference.fa | grep ">" | awk '{print substr($0,2)}' > all_headers.tsv`)
-  - problem bowtie does not include the bc information in the sam file => there is a flag for bowtie2 
+  - problem bowtie does not include the bc information in the sam file => there is a flag for bowtie2
 
 ### Finding: BWA new has less not found sequences then the initial run (spoiler: this was because I took the bam as comparison and didn't look at the subsequent filtering step)
 - try to regenerate the 5084 sequences from the only run
@@ -138,7 +138,7 @@ doubleIndexBAM.py, /data/gpfs-1/users/kisa11_c/work/coding/standardMPRAsnakeflow
 
 #### Try to redo the missing sequence finding (find_missing_sequences.py)
 - bwa: `/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/results/assignment/assignIGVFDesignNoTemp/assignment_barcodes.standardConfig.sorted.tsv.gz` 5084 sequences missing
-  - `zcat /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/results/assignment/assignIGVFDesignNoTemp/barcodes_incl_other.sorted.tsv.gz | wc -l` => 
+  - `zcat /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/results/assignment/assignIGVFDesignNoTemp/barcodes_incl_other.sorted.tsv.gz | wc -l` =>
 - bowtie: `/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/results/assignment/assignIGVFDesignNoTempBowtie/assignment_barcodes.standardConfig.sorted.tsv.gz` 2325 sequences missing
   - barcodes_incl_other.sorted.tsv.gz: 114104369 rows
 - Problem seem to be the way from bam to assignment_barcodes (intermediate barcodes_incl_other): currently: `samtools view -F 1792 {input}` -F <FLAG> (exclude if a bit is correct for the element at hand) 1792 (not primary alignment, read fails platform/quality check/read is PCR or optical duplicate) `https://broadinstitute.github.io/picard/explain-flags.html`
@@ -151,12 +151,12 @@ doubleIndexBAM.py, /data/gpfs-1/users/kisa11_c/work/coding/standardMPRAsnakeflow
 - bam: bowtie: `/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/results/assignment/assignIGVFDesignNoTempBowtie/bam/mapped_bowtie.bam`
 - bam: bowtie2: `/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/results/assignment/assignIGVFDesignNoTempBowtie/bam/merged_bowtie2.bam`
 
-- bam: 11G bwa-mem2: `/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/bwa2/assignment/standardAssignIGVFDesignNoTemp/bam/aligned_merged_reads_bwa-mem2.bam` 
+- bam: 11G bwa-mem2: `/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/bwa2/assignment/standardAssignIGVFDesignNoTemp/bam/aligned_merged_reads_bwa-mem2.bam`
   - index: `samtools index -b -@ 8 /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/bwa2/assignment/standardAssignIGVFDesignNoTemp/bam/aligned_merged_reads_bwa-mem2.bam`
   - idxstats: `samtools idxstats /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/bwa2/assignment/standardAssignIGVFDesignNoTemp/bam/aligned_merged_reads_bwa-mem2.bam > /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/bwa2/assignment/standardAssignIGVFDesignNoTemp/bam/idxstats_bwa-mem2.tsv`
   - unmapped: `awk '$3==0 {print $0}' /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/bwa2/assignment/standardAssignIGVFDesignNoTemp/bam/idxstats_bwa-mem2.tsv | wc -l` # (925)
   - mapped: `awk '$3>0 {print $0}' /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/bwa2/assignment/standardAssignIGVFDesignNoTemp/bam/idxstats_bwa-mem2.tsv | wc -l` # 79291
-  - => Result of bwa-mem2 is same as bwa 
+  - => Result of bwa-mem2 is same as bwa
 
 ### normal bwa mem + samtools view -F 1792
 - filtering samtools 1792: `samtools view -F 1792 -b /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/assignment/standardAssignIGVFDesignNoTemp/bam/bwa_merged.bam > /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/assignment/standardAssignIGVFDesignNoTemp/bam/bwa_merged_view_1792_output.bam`
@@ -168,9 +168,9 @@ doubleIndexBAM.py, /data/gpfs-1/users/kisa11_c/work/coding/standardMPRAsnakeflow
 - only filtering bwa result with samtools view 1792: `/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/assignment/standardAssignIGVFDesignNoTemp/bam/barcodes_incl_other.bwa_view_1792.tsv`
   - ~16GB (114104369 lines)
 - Filtering with hard limits: (see rule `assignment_getBCs`) `/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/experiment/standard_results/results/assignment/standardAssignIGVFDesignNoTemp/barcodes_incl_other.sorted.tsv.gz`
-  - ~600MB (2665005 lines) 
+  - ~600MB (2665005 lines)
 #### Find good examples of missing sequences with exact matches
-- at the moment there is no cardiac_neuro_cava_random sequence in the barcode_bwa (which is only filtered by 1792) => this filter might be the problem? How can we test that? 
+- at the moment there is no cardiac_neuro_cava_random sequence in the barcode_bwa (which is only filtered by 1792) => this filter might be the problem? How can we test that?
   - Check the bam file if it uncludes the exact matching reads (do they have a valid alignment? to which sequence? Are there sequences which are duplicated?)
   - Check if `/home/kisa/coding/80K_MPRA/80K-Analysis/05_variant_region_list/resources/design_no_duplicates_sequence_and_header.fa` has duplicated sequences
     - rows starting with ">" == rows not starting with ">" => header and sequence are alternating (Yes all sequences are unique)
@@ -180,15 +180,15 @@ doubleIndexBAM.py, /data/gpfs-1/users/kisa11_c/work/coding/standardMPRAsnakeflow
   - Output of the script: (command line)
     - found 1579132 reads with missing sequences
     - found 2639 different oligo_names with missing sequences: max: 2639
-- currently: preparing a python script doing the same as the rule 
-  - run rule call (can be found in `redo_assignment_getBC.py`) => No output was prepared 
+- currently: preparing a python script doing the same as the rule
+  - run rule call (can be found in `redo_assignment_getBC.py`) => No output was prepared
   - run the samtools command in the command line => nothing found so all failed (was expected)
   - Write script which tests the condition and writes which fail at which quality measure (for merged_bam.bam from BWA)
     - quality: `/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/results/identified_missing_sequences/missing_sequence_min_quality.bam`
       - 4227071 reads (weird looking long alignments)
-    - alignment start: `/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/results/identified_missing_sequences/missing_sequence_alignment_start.bam` 
+    - alignment start: `/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/results/identified_missing_sequences/missing_sequence_alignment_start.bam`
       - 394 reads
-    - alignment end: `/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/results/identified_missing_sequences/missing_sequences_alignment_end.bam`, 
+    - alignment end: `/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/results/identified_missing_sequences/missing_sequences_alignment_end.bam`,
       - 206245 reads
     - length min: `/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/results/identified_missing_sequences/missing_sequences_sequence_length_min.bam`
       - 2403378
@@ -199,7 +199,7 @@ doubleIndexBAM.py, /data/gpfs-1/users/kisa11_c/work/coding/standardMPRAsnakeflow
 - Plan: Postprocess the bam file (found duplicates)
   - check if unmapped: continue
   - check identity (if ~95% of sequence should be matched) with cigar and md
-    - if mapping quality ($5) >= 1 
+    - if mapping quality ($5) >= 1
       - optional: expected length of the read (configuration) ~> 265
     - if mapping quality ($5) < 0:
       - if mapping on forward ($2 == 0)
@@ -220,17 +220,17 @@ doubleIndexBAM.py, /data/gpfs-1/users/kisa11_c/work/coding/standardMPRAsnakeflow
     - high_identity_count:  3791023
     - count:  3803677
     - proportion of high quality:  0.9966732190982568
-  - weird examples: 
+  - weird examples:
     - NB501960:812:HH53WAFX5:1:11309:25329:20408      0       cardiac_neuro_cava_random:REF_AHDC1|ENSG00000126705.15|EH38E1331564_rev_tile1-1 16      3       270M    *       0       0       TCTCTGGGCCTTGGTTTCCTTCCTCCTGCATAGCGAAGGAGGTTGGATTAGTGGCTCCCTAAGGCACCTTCTAGCTCTGACAGGCTCCAAGCCTGTGTTGACTGATGTGTCCTAGGAGATAGGCGCACACAGAGAACCAAGTCAGCTCCGAGAATCCTGTGAAGGTATCGCCACCCCACCCCCAGATGGCTGGAGTGCCTCCCTTCCTGAGACACACCCTTCATGGATACTGGTGGAGGTTGTGGTGGATGGAGGGGGCTTATCACCCAA  AAAAAEE/E/E<EEEEAEEE/AEEEEEEEEE/E/EEEAEEE/EEEEEAE/AEEE/E<EEE/E<E//AEEEA/AEAAA<E/EEE<EE/E///</EEEEE/EAAEE/AE<E//6<AE/AEEEAEEE:B"CHGGHHGEHHHHD<GGHFD<////<</A//////<A<AA<EA/AE/AA<</EAEAA/<E/EEE<EEEE/EA/A/A</EEEE/EE/E/AA/EEEAE6EE/EEAEEAA//EEEA/EEEEE/AEEEEEE/EEEEEE/AEEAAAAAA  NM:i:6  MD:Z:148G4T6C8C16A36G46 AS:i:240        XS:i:235        XA:Z:cardiac_neuro_cava_random:ALT_AHDC1|ENSG00000126705.15|EH38E1331564_rev_tile1-1_AHDC1|ENSG00000126705.15|EH38E1331564|1-27573227-A-G,+16,270M,7;cardiac_neuro_cava_random:ALT_AHDC1|ENSG00000126705.15|EH38E1331564_rev_tile1-1_AHDC1|ENSG00000126705.15|EH38E1331564|1-27573148-C-T,+16,270M,7;   XI:Z:ACGGGAGTCAGTATG,YI:Z://AAAAEEAEEE/EE
     - NB501960:812:HH53WAFX5:1:11105:15385:4842       0       cardiac_neuro_cava_random:NRXN3|ENSG00000021645.20|EH38E1730612_fwd_tile1-1     16      0       270M    *       0       0       CATGTGTGTGCGTGTGTAAGAGCAATAGATGGAGCAGCCAATGCAGGGAGAAGATCTGAAATTTGGAGCCTATTTAAGAGTGAAAGAACAGCTGCCTTTTAAATGGTTGCTAATTCTGACAATTAATGCTGTTCTGTGAGTGTGTGATTTTCTGTGATAGCAGTTAGGAGGGATGATGGTGTGTAATAGCTCATTTCCTAAGCTTTATGGTAATGTAGCATAGTCAAGACCATAGAACTGAAAGAGAACTGGGTCCCACATGCTCTGCAG  AAAAAEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEAEEEEAEEAEEEEEEEEEEEAEEEEEEEEEEEAEEEEEEEEEEEAEEEAEEEEEE<EEEEEGHHGGGGHHGHHHHGHHHGHHHEEEEAEEAEAAEAEAEA<EAAAA6AAA<6AAAEA<EAEEEEEEEEEEAEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEAAAAA  NM:i:0  MD:Z:270        AS:i:270        XS:i:268        XA:Z:GC_Vista:fb;mb__vistaElementControl|chr14:78308172-78308421,+18,270M,2;    XI:Z:CTGAACTATAATCAG,YI:Z:AAAAAEEEEEEEEEE
     - NB501960:812:HH53WAFX5:3:11405:4093:19168  16  cardiac_neuro_cava_random:REF_DRD4|ENSG00000069696.7|EH38E2937745_fwd_tile1-1  16  0  270M  *  0  0  TCTGGGAAGGGGGCCCCACAGGCAGCACCTACCGCAGGAGCTCAGTGTGAGCCACTGTCGGCCTGTGGGTGTGTGTCGTGTGTCGCAGCCAGCTCAGTTGCTGTCAGGATTCCACAGGCTGGGCAGCGTAAACCGCAGGTCTTCCTTTTCTTGGTTTTGGAAACTAGACATCTGAGATACCAGCAGGCCTGGTTCCTGGGGAGGCCCCCTTCCTGACTTACAGACGGCCGCCTCCCCGCTGTGACCTCACCTGGCCTTCCCTCATCTAAG  array('B', [32, ..., 32])  [('NM', 1), ('MD', '110A159'), ('AS', 265), ('XS', 265), ('XI', 'CTGAGAGTGACGTTG,YI:Z:AAAAAEEEEEEEEEE')]
-    - I looked into examples of 
+    - I looked into examples of
 #### Generate the table of all variants and regions
 - at 05_variant_region_list: variant_region_list.ipynb
   - writing variants, regions and references to files (smaller subsets for generating one table with meta data)
   - Numbers are 8900 regions, 18582 references and 46456 variants (more variants than expected, less regions than expected, no expectation)
 
-- for checking if subsequent steps work with the new `assignment_barcodes_incl_other.sorted.tsv.gz` file: 
+- for checking if subsequent steps work with the new `assignment_barcodes_incl_other.sorted.tsv.gz` file:
 ```bash
 snakemake --use-conda  --configfile standard_config.yaml --snakefile /data/gpfs-1/users/kisa11_c/work/coding/standardMPRAsnakeflow/workflow/Snakefile --conda-prefix ../../MPRAsnakeflow_projects/conda --keep-going --cluster-config /data/gpfs-1/users/kisa11_c/work/coding/standardMPRAsnakeflow/config/sbatch.yml --cluster-status status.py --cluster "sbatch --parsable --nodes=1 --ntasks-per-node={cluster.threads} --mem {cluster.mem} -t {cluster.time} -p {cluster.queue} -o {cluster.output} -e {cluster.error}"  --jobs 40 --cluster-cancel scancel -n --quiet
 ```
@@ -252,31 +252,31 @@ snakemake --use-conda  --configfile low_config.yaml --snakefile /data/gpfs-1/use
 ```
 - 107 jobs
 - `barcodes_incl_other.sorted.tsv.gz` with new assignment script: `93159939` (not matched barcodes are missing) => remove the BCs again and redo the workflow
-- fixed script and added the barcode with "other" and "NA" if it cannot be assigned 
+- fixed script and added the barcode with "other" and "NA" if it cannot be assigned
 - How many reads do not have an XI tag? # started job with job id 4010688 slurm log in ~/slurm*4010688* => found error in debug script => restart: 4016253
 
 ### Work on variant region map (match manually with all the sequences)
-- result can be found in `/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/04_MPRAlm/notebooks/investigate_80K_data.ipynb` 
+- result can be found in `/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/04_MPRAlm/notebooks/investigate_80K_data.ipynb`
   - variant_region_map_var_merged["sequence"].isna().sum() # 46374  (left_on="Variant") between header of design fasta and Variant column is no overlap
   - variant_region_map_region_merged["sequence"].isna().sum() # 46374  (left_on="Region") between header of design fasta and Region column is no overlap
   - variant_region_map_ref_merged["sequence"].isna().sum() # 778  (left_on="REF_ID") between header of design fasta and REF_ID column is overlap (not for 778 sequences)
   - variant_region_alt_merged["sequence"].isna().sum() # 1374  (left_on="ALT_ID") between header of design fasta and ALT_ID column is overlap (not for 1374 sequences)
-- Investigate how it was done for 80K: MPRAOligodesign workflow / github repository 
+- Investigate how it was done for 80K: MPRAOligodesign workflow / github repository
   - rule producing: variant_region_map: https://github.com/kircherlab/MPRAOligoDesign/blob/master/workflow/rules/oligo_design.smk
   - script producing: variant_region_map: https://github.com/kircherlab/MPRAOligoDesign/blob/master/workflow/scripts/oligo_design/getSequencesInclVariants.py
   - Input of script:
-    - regions: bed file 
+    - regions: bed file
     - variants: vcf file
     - reference/design: fasta file
     - outputs for: variants, variants-removed, regions, regions removed, design, design variant map
     - variant-edge-exclusion: What was given here?
-  - What does this script do? 
+  - What does this script do?
   0. find config for MPRAOligoDesign
     - 5K_config: `/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/final_design/design_5K.conf.yml`
   1. find vcf and bed file for 80K data
     - vcf: `/data/gpfs-1/groups/ag_kircher/MPRA/IGVF_Y1_design/design/final_design/input/variants_5K.vcf`
     - bed: `/data/gpfs-1/groups/ag_kircher/MPRA/IGVF_Y1_design/design/final_design/input/regions_5K.bed`
- 
+
 - Table for mapping headers: sanity checking with Mohan: `/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/scripts/check_sanity_oligomap.ipynb`
 - Changed the IDs in the variant_region_map to the headers of the new design file
   - script `/data/gpfs-1/users/kisa11_c/work/coding/80K_analysis/01_missing_sequences/scripts/modify_variant_table.py`
@@ -306,8 +306,8 @@ snakemake --use-conda  --configfile standard_config.yaml --snakefile /data/gpfs-
       - Question at hand: does this contain all information I need for variants and how many are included? (join with variant_region_map)
         - I have xx variants see presentation
 - Running preprocessing: standard: `41284` variants with > 2 barcodes
-- sanity check because shitty understanding of custom script: 
-  - job id: `4538047` for lowConfig (bc_preparation.sh): 42598 
+- sanity check because shitty understanding of custom script:
+  - job id: `4538047` for lowConfig (bc_preparation.sh): 42598
   - job id: `4538055` for standard (bc_preparation.sh): 42129
   - Preprocessing: standard: `4538254` => in table: `41284`
   - Preprocessing: lowConfig: `4538258` => in table: `42137`
@@ -329,7 +329,7 @@ ggsave("test_plot_corrlation_dna.png", correlation_plots, width = 15, height = 1
 correlation_plots_rna <- cowplot::plot_grid(plotlist = plots_correlations_rna, ncol = 1)
 ggsave("test_plot_corrlation_rna.png", correlation_plots_rna, width = 15, height = 10 * length(plots_correlations_rna), dpi=96, type="cairo")
 ```
-  - Checking for reasons why less dots are in the DNA barcode plot than in the RNA plot (data which is plotted in the script (`res_plot`) is 100000 rows long and has for each value (`DNA_normalized_log2.x`, `DNA_normalized_log2.y`) and (`RNA_normalized_log2.x`, `RNA_normalized_log2.y`) entries 
+  - Checking for reasons why less dots are in the DNA barcode plot than in the RNA plot (data which is plotted in the script (`res_plot`) is 100000 rows long and has for each value (`DNA_normalized_log2.x`, `DNA_normalized_log2.y`) and (`RNA_normalized_log2.x`, `RNA_normalized_log2.y`) entries
     - Possibility: more duplicates in DNA_normalized_log2 x and y values than in RNA
       - `sum(duplicated(res_plot[c("DNA_normalized_log2.x", "DNA_normalized_log2.y")]))` => 99622
       - `sum(duplicated(res_plot[c("RNA_normalized_log2.x", "RNA_normalized_log2.y")]))` => 98417
@@ -339,10 +339,10 @@ ggsave("test_plot_corrlation_rna.png", correlation_plots_rna, width = 15, height
           - `nrow(unique(res_plot[c("DNA_normalized_log2.x", "DNA_normalized_log2.y")]))` => 378 (for all data: 876)
           - `nrow(unique(res_plot[c("RNA_normalized_log2.x", "RNA_normalized_log2.y")]))` => 1583 (for all data: 5040)
   - in RNA_plot per barcode found error (?) (it fixes the error)
-  ```R  
+  ```R
   min <- min(data$`RNA_normalized.x_log2`) # should be min(data$`RNA_normalized_log2.x`)
   max <- max(data$`RNA_normalized.y_log2`) # should be max(data$`RNA_normalized_log2.y`)
-  ``` 
+  ```
   - check the unique values of log DNA and RNA normalized log2 values for this data
 ```R
 length(unique(plots_correlations_dna_list[[1]]$data$dna_normalized_log2.x)) # => 12922
@@ -354,7 +354,7 @@ length(unique(plots_correlations_dna_list[[1]]$data$rna_normalized_log2.x)) # =>
 ```
 Warnmeldungen:
 1: Removed 1533 rows containing missing values or values outside the scale range
-(`geom_point()`). 
+(`geom_point()`).
 2: Removed 697 rows containing missing values or values outside the scale range
 (`geom_point()`).
 ```
@@ -372,7 +372,7 @@ Warnmeldungen:
 - `merged_enformer_all_max_value.tsv`
 - following code leads to `/home/kisa/coding/80K_MPRA/server_results/enformer_results/enformer_class/merged_enformer_class.tsv`
 - first remove unused columns of the enformer file: results in: `{gene_type}.{variant_type}_680_columns.tsv`
-- merge max_value enformer: 
+- merge max_value enformer:
 ```bash
 first=1
 for f in /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/cardiac/enformer/cardiac.ultra-rare_max_values.tsv /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/cardiac/enformer/cardiac.singleton_max_values.tsv /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/cava/enformer/cava.ultra-rare_max_values.tsv /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/cava/enformer/cava.singleton_max_values.tsv /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/neuro/enformer/neuro.ultra-rare_max_values.tsv /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/neuro/enformer/neuro.singleton_max_values.tsv /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/random/enformer/random.ultra-rare_max_values.tsv /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/random/enformer/random.singleton_max_values.tsv
@@ -402,7 +402,7 @@ do
 done > /home/kisa/coding/80K_MPRA/server_results/enformer_results/enformer_class/merged_enformer_class.tsv
 ```
 
-- combine all variants 
+- combine all variants
 
 ```bash
 first=1
@@ -433,17 +433,17 @@ done > /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_d
 - solution: create region file first with blat (see "Regions of controls" below)
 
 ### Compute plots for 80K data
-- run MPRAsnakeflow + Report 
+- run MPRAsnakeflow + Report
 - get everything together in excel file ([in sharepoint](https://charitede-my.sharepoint.com/:x:/r/personal/kilian_salomon_bih-charite_de/_layouts/15/Doc.aspx?sourcedoc=%7BD586D4C6-D692-4638-A51C-943F1BAECE8B%7D&file=sanity_check_NGN2.xlsx&action=default&mobileredirect=true))
 
 ### Investigating Controls
 - Found directory with files for controls: `/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/resources/controls`
-  - README points you to the files in the folder 
+  - README points you to the files in the folder
     - Seem to be the original files
-    - e.g. fasta folder: 
+    - e.g. fasta folder:
       - andrew_cardio_positive-controls.fasta => all spaces (" ") are replaced by ":" in the current version
       - went through all files and matched a subset to the original header => only andrew_cardio_positive-controls.fasta: spaces replaced by ":"
-    - e.g. meta folder: 
+    - e.g. meta folder:
       - bed: `in-house.bed` => no ID column (Not matchable?)
 - SLEA controls: n=200 100 positive an 100 negative (tested in HepG2)
 - control groups with variants: `grep "variant" '/home/kisa/coding/80K_MPRA/80K-Analysis/05_variant_region_list/metadata_example_1903.tsv' | grep "control" | cut -f 14 | sort | uniq | wc -l` => 8
@@ -491,21 +491,21 @@ done > /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_d
 - _headerDuplicate: 2 from Mendelian_variants and 1 Mohlke (what is the reason?)
 - looking for the reason of variant_ids: rs1218584|KCNN3|STARR-seq-AF~rs76749863|KCNN3|STARR-seq-AF_fwd_tile1-1
   - I find alt with multiple rsIDs (what does this mean?) GC_Atrial_fib:ALT_rs1218584|KCNN3|STARR-seq-AF~rs76749863|KCNN3|STARR-seq-AF_fwd_tile1-1_rs76749863
-- GC_Mendelian_variants: 
+- GC_Mendelian_variants:
   - e.g.:
-    - REF1: GC_Mendelian_variants:REF_chr10:23219434A*G|PTF1A, REF2: GC_Mendelian_variants:REF_chr10:23219376A*C|PTF1A 
+    - REF1: GC_Mendelian_variants:REF_chr10:23219434A*G|PTF1A, REF2: GC_Mendelian_variants:REF_chr10:23219376A*C|PTF1A
     - ALT: GC_Mendelian_variants:ALT_chr10:23219434A*G|PTF1A_chr10:23219376A*C|PTF1A
   - in current design file: changed A>C to A*C
   - problems with: GC_Mendelian_variants:REF_chr7:156791472C*T|SHH: seems like only ALTs are there (no REFs)
 - GC_Selvarajan: has one variant which does not match a reference
   - `GC_Selvarajan:ALT_rs2297787|STARR-seq-HepG2_fwd_tile1-1_rs2297787`
-- Is this a reference? Which variant is associated? 
+- Is this a reference? Which variant is associated?
   - reference: `>C_negative_neuron_MK:rdhs_475428_chr3_148289221_148289490_reference__0.420408294159496`
   - alt: `>C_negative_neuron_MK:tile_22397_chr2_103176684_103176953_A_T_257__0.418330976255658`
 - `GC_Mohlke:REF_NC000001.11|230158967|C|A|MohlkeHepControls,NC000001.11|230159168|C|T|MohlkeHepControls,NC000001.11|230159329|CTTAAAGTGTTCAGCACTCCCCT|CT|MohlkeHepControls_fwd_tile3-3` is a duplicated header in the variant region map (REF_ID) => cannot be matched
 
 - check matchable headers with modified headers
-  - ref: 
+  - ref:
     - "GC_Mohlke:REF_NC000001.11|230158967|C|A|MohlkeHepControls,NC000001.11|230159168|C|T|MohlkeHepControls,NC000001.11|230159329|CTTAAAGTGTTCAGCACTCCCCT|CT|MohlkeHepControls_fwd_tile1-3" - tiling what does this mean?
     - GC_Mendelian_variants:ALT_chr7:156791472C>T|SHH_chr7:156791413A>C|SHH (no GC_Mendelian_variants:ALT_chr7:156791472C>T)
     - GC_Mohlke:ALT_NC000010.11|100315721|G|A|MohlkeNonHepControl_fwd_tile1-1_NC000010_11_100315721_G_A
@@ -520,7 +520,7 @@ done > /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_d
         - GC_Mohlke                 20
         - GC_Liang                   8
     - matchable
-      - ref 
+      - ref
         - label
           - GC_Selvarajan            198
           - GC_Kircher               198
@@ -529,7 +529,7 @@ done > /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_d
           - GC_Atrial_fib             23
           - GC_Mohlke                 18
           - GC_Liang                   8
-      - alt 
+      - alt
         - label
           - GC_Selvarajan            198
           - GC_Kircher               198
@@ -590,12 +590,12 @@ done > /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/MPRA_d
 
 #### Using control match table to get them into barcode MPRAlm
 - first attempt: no output in final table (filtering too harsh?)
-- inverstigating step by step: 
+- inverstigating step by step:
   - counts_per_bc_sorted (basically join) => worked
-  - found out that controls variant map does not include a region column but script assumed one => fixed 
-- we have 181 alternative sequences in GC_Selvarajan sequences => 
+  - found out that controls variant map does not include a region column but script assumed one => fixed
+- we have 181 alternative sequences in GC_Selvarajan sequences =>
 - merge mpralm_dna and mpralm_rna tables for test variants and controls:
-  - variant table: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_preparation/controls/GC_Selvarajan_standard_NGN2_filtered_counts_sequences.tsv.gz 
+  - variant table: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_preparation/controls/GC_Selvarajan_standard_NGN2_filtered_counts_sequences.tsv.gz
 ```bash
 first=1
 for f in /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/standard_NGN2_filtered_counts_sequences.tsv.gz /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_preparation/controls/GC_Selvarajan_standard_NGN2_filtered_counts_sequences.tsv.gz
@@ -613,13 +613,13 @@ done > /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_t
 - add chrom, pos, ref alt to the table for controls and tested oligos
   - bed file for tested sequences `(/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/design/final_design/input/regions_5K.bed)` (not for controls!) (after replacing ~ with , in the names matching was possible)
   - where is the bed for the controls?
-  - do same for elements and find control bed file 
-  - ``found`` bed files for 
+  - do same for elements and find control bed file
+  - ``found`` bed files for
     - GC_Atrial_fib
     - GC_Liang
     - GC_Selvarajan
     - GC_Mohlke
-    - GC_Kircher       
+    - GC_Kircher
     - GC_Cort_Chengyu
     - GC_GABA_Chengyu
     - GC_Glut_Chengyu
@@ -629,7 +629,7 @@ done > /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_t
     - GC_Vista
     - GC_DNase_positive
     - GC_DNase_negative_brain
-    - GC_DNase_negative_blood      
+    - GC_DNase_negative_blood
     - MK
 - bed files ``missing`` for:
   - C_negative_heart_MK
@@ -644,7 +644,7 @@ done > /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_t
   - GC_DNase_positive_shuffeled
   - GC_DNase_negative_brain_shuffeled
   - GC_DNase_negative_blood_shuffeled
-- All variant related barcode sequences: generated from (after filtering: 16264 barcodes) (path: `/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/standard_with_controls_NGN2_filtered_counts_sequences.tsv.gz`) 
+- All variant related barcode sequences: generated from (after filtering: 16264 barcodes) (path: `/data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/standard_with_controls_NGN2_filtered_counts_sequences.tsv.gz`)
   - filtered out because single sequences 5; => 194 different variant ids (different variants (considering ref and alt as different: 387 sequences))
     - combine: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/standard_with_controls_NGN2_filtered_counts_sequences.tsv.gz and /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/standard_NGN2_filtered_counts_sequences.tsv.gz
 ```bash
@@ -744,8 +744,8 @@ gzip /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tra
   - sanity check:
     - are all sequences of blat inbetween the regions of region_5k.bed (old file):
       - No: 11538 sequences are not inbetween because they are not as large as the 270bps (their length is <= 271)
-    - I checked in UCSC: 
-      - `cardiac_neuro_cava_random:PRDM16|ENSG00000142611.17|EH38E2779779_fwd_tile1-1` one example region where the ucsc does not show any information about a cCRE from encode: 
+    - I checked in UCSC:
+      - `cardiac_neuro_cava_random:PRDM16|ENSG00000142611.17|EH38E2779779_fwd_tile1-1` one example region where the ucsc does not show any information about a cCRE from encode:
         - blat regions: NC_000001.11 (chr1) 3210194 3210464
         - region_5k regions: chr1 3210229 3210430
         - [UCSC with blat regions](https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&lastVirtModeType=default&lastVirtModeExtraState=&virtModeType=default&virtMode=0&nonVirtPosition=&position=chr1%3A3210194%2D3210464&hgsid=2082689898_VAczbUehrymUlkaWiiYiCorrQZsL)
@@ -765,10 +765,10 @@ gzip /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tra
     - `C_negative_neuron_MK`: chr_ start _ end (both within the range [start,end])
     - `C_positive_neuron_CD`: ::chr: start - end (start, end]
       - `>C_positive_neuron_CD:p1_rs55985730_T_G_alt_50_T::chr7:128776855-128777125-mean_ratio2.34`
-    - excluded cases: 
+    - excluded cases:
       - `C_positive_neuron_CD`:
         - `>C_positive_neuron_CD:c1_NA_NA_NA_NA::72hr_top_94-mean_ratio2.31`
-#### Found gene names per gene set: 
+#### Found gene names per gene set:
 - Github repo [MPRA_design](https://github.com/kircherlab/MPRA_design/tree/main) resources: `MPRA_design/resources/gene_lists`
 
 - Todo: metadata table
@@ -797,8 +797,8 @@ gzip /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tra
   - GC_DNase_negative_brain has only 270bp regions
   - GC_DNase_negative_blood has only 270bp regions
 
-#### Significant results 
-- neuro: 
+#### Significant results
+- neuro:
   - high positive result: e.g. 'KCNT2|ENSG00000162687.19|EH38E2855757|1-196494459-G-A'
     - in R could only find one high logfc alt, Na at ref (2 vs NA) and a bit higher alt vs ref: 1.7 vs 1.41
 
@@ -818,11 +818,11 @@ gzip /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tra
     - Input for bc_MPRAlm_preparation: count files from mprasnakeflow (unfiltered!!) (after producing these the workflow filters for the specified thresholds in the config file)
     - `bc_merged="results/experiments/{project}/assigned_counts/{assignment}/{config}/{condition}_allreps_merged_barcode_assigned_counts.tsv.gz",` is the filtered and merged file
     - current filter function was only checking for at least 2 barcodes (42322 is number of sequences with at least 2 barcodes (with part of control))
-    - if filtered for 10 barcodes only 34683 variants can be found 
+    - if filtered for 10 barcodes only 34683 variants can be found
     - if filtered for 5 barcodes only 38858 variants can be found
 
 
-### 18.04.2024: 
+### 18.04.2024:
 
 #### download re-sequencing
 - infor from GNU ftp wget manual (https://ftp.gnu.org/old-gnu/Manuals/wget-1.8.1/html_mono/wget.html)
@@ -836,7 +836,7 @@ gzip /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tra
 #### investigate why only 41 Mendelian variant controls in the final design
 - current analysis: check how many will pass the quality standard of 75% of the barcodes need to be matched to one sequence
 - check from assignment file how many sequences would have at least 10 barcodes => 197
-- Why do we only find 41 variants: 
+- Why do we only find 41 variants:
 ```bash
 awk -F'\t' '{
     split($NF, arr, "/");
@@ -853,7 +853,7 @@ zcat /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tra
 zcat /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_preparation/standard_with_all_variant_controls_NGN2_counts_per_bc_sorted.tsv.gz | grep "Mendelian" | cut -f2 | sort | uniq | grep "REF" | wc -l
 # 47 / 49 design
 ```
-- counts_sequences 
+- counts_sequences
 ```bash
 zcat /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/bc_preparation/standard_with_all_variant_controls_NGN2_counts_sequences.tsv.gz | grep "Mendelian" | cut -f 1 | sort | uniq | wc -l
 # 49
@@ -879,7 +879,7 @@ zcat /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tra
   - GC_Hon                           6
   - GC_Kircher                       5
 
-- found non snv in final region.bed 
+- found non snv in final region.bed
   - 'C_positive_heart_CAD:rs34091558'
     - 'rs34091558'
   - 'GC_Mendelian_variants:chr1:209816133C>CA|IRF6'
@@ -899,11 +899,11 @@ zcat /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tra
   - Example: `cardiac_neuro_cava_random:ARV1|ENSG00000173409.14|EH38E2873164|1-231021494-T-C`
 - Procedure I will only take the first region and hope the best
 - Found 136 regions in the vcf file which are not in the region.bed they remain because of a bug in the MPRAOligoDesign
-- region cannot be found for some sequences: 
+- region cannot be found for some sequences:
   - For all sequences: (example: GC_Mendelian_variants:chr1:21564170G>A|ALPL)
     - Empty region_list:  0
     - Region not findable:  65
-    - Skipped, because multiple regions 789 
+    - Skipped, because multiple regions 789
   - Only for tested:
     - Region not findable:  0
     - Skipped, because multiple regions 641)
@@ -917,8 +917,8 @@ zcat /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/projects/bc_tra
 - Overall number of sequences in the deduplicated design: 73940
 - Answer Chengyu
 Hi Chengyu, Hi Nadav,
-Thank you for the additional sequencing data, after some issues with our firewall, I was now able to download it. I will keep you posted with the results after running MPRAsnakeflow on the combined data. 
-Btw, apparently, I have made some incorrect assumptions about your control set (aka C_positive_neuron_CD). I had thought that you had given us 100 positive and negative sequences during my presentation at the call two weeks ago. That was wrong, I confused it with the SLEA control group where we have 100 positive and 100 negative sequences. Turns out that these were supposed to be only positive controls. 
+Thank you for the additional sequencing data, after some issues with our firewall, I was now able to download it. I will keep you posted with the results after running MPRAsnakeflow on the combined data.
+Btw, apparently, I have made some incorrect assumptions about your control set (aka C_positive_neuron_CD). I had thought that you had given us 100 positive and negative sequences during my presentation at the call two weeks ago. That was wrong, I confused it with the SLEA control group where we have 100 positive and 100 negative sequences. Turns out that these were supposed to be only positive controls.
 I have looked at the correlation between the values in the headers and our mean ratios of the 3 replicates. Unfortunately, the correlation between these two experiments does not look so good. However, if I increase the number of required barcodes per insert (e.g. to 70), then the correlation increases (see plots attached for a min. of 15, 30 and a min. of 70 barcodes per insert). However, I am wondering whether I am using the correct values for the previous read-out of these elements. I assumed that the numerical value in the header is the value from your experiment. For example:
 >C_positive_neuron_CD:p1_rs6813360_A_C_ref_50_A::chr4:155359187-155359457-mean_ratio2.42
 Is this correct?
@@ -969,7 +969,7 @@ Kilian
 GGCTTCTGATAAGCCGCCAATTCATAGTGTGGGTTTGGAGAGCTGGAGACGGGGTGAGAAAGCTGAGGCCTTTGCAAAGTCTATTTACACAGTGGCCAGAGTCCCTTTCACCCTCTCCGGCAAACAGGCCCTGGAGCACAGGCATT
 +
 - BC: /data/gpfs-1/users/kisa11_c/work/coding/MPRA/IGVF_Y1_design/data/association/IGVF_neuro_S1_R2_001.fastq.gz
-- check length of reads with unix command 
+- check length of reads with unix command
 ```bash
 file_list="Ngn2-DNA-1_S1_R1_001.fastq.gz Ngn2-DNA-1_S1_R2_001.fastq.gz Ngn2-DNA-1_S1_R3_001.fastq.gz Ngn2-DNA-2_S2_R1_001.fastq.gz Ngn2-DNA-2_S2_R2_001.fastq.gz Ngn2-DNA-2_S2_R3_001.fastq.gz Ngn2-DNA-3_S3_R1_001.fastq.gz Ngn2-DNA-3_S3_R2_001.fastq.gz Ngn2-DNA-3_S3_R3_001.fastq.gz"
 for file in $file_list; do
@@ -1009,7 +1009,7 @@ snakemake --use-conda  --configfile standard_config.yaml --snakefile /data/gpfs-
 - Both examples are in the design file
 - e.g. cardiac_neuro_cava_random:ALT_MTHFR|ENSG00000177000.13|EH38E1319148_rev_tile1-1_MTHFR|ENSG00000177000.13|EH38E1319148|1-11841412-C-T (is in design and could be matched) => is in the design and the variant region map and the variant file
 - e.g. cardiac_neuro_cava_random:ALT_DOCK7|ENSG00000116641.18|EH38E1354059_rev_tile1-1_DOCK7|ENSG00000116641.18|EH38E1354059|1-62589630-A-C (is in not fitting) => is in the design file but not in the variant region map or variant file
-  - is still in `design_variants.variant_region_map.tsv.gz` but not in filtered `design_variants_filtered.variant_region_map.tsv.gz` 
+  - is still in `design_variants.variant_region_map.tsv.gz` but not in filtered `design_variants_filtered.variant_region_map.tsv.gz`
 
 
 ### Investigate the ultraconserved variants:
@@ -1018,15 +1018,17 @@ snakemake --use-conda  --configfile standard_config.yaml --snakefile /data/gpfs-
 - look for significant variants: 1 is significant but no paper over the variant found
 
 ### Using FIMO for TF motif search
-- fimo --o top_bottom_2_fimo /data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/MPRA_ultra/projects/motif_analysis/resources/H12CORE_less_redundant.meme top_bottom_2_variants.fa 
-- directory: `/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/projects/80K_MPRA/variant_tf_search/top_bottom_2_fimo` 
+- fimo --o top_bottom_2_fimo /data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/MPRA_ultra/projects/motif_analysis/resources/H12CORE_less_redundant.meme top_bottom_2_variants.fa
+- `corrected:` fimo --o top_bottom_2_fimo /data/cephfs-2/unmirrored/groups/kircher/MPRA/MPRA_ultra/projects/motif_analysis/resources/H12CORE_less_redundant.meme top_bottom_2_variants.fa
+- directory: `/data/cephfs-2/unmirrored/groups/ag-kircher/MPRA/IGVF_Y1_design/projects/80K_MPRA/variant_tf_search/top_bottom_2_fimo`
+- `corrected`: `/data/cephfs-2/unmirrored/groups/kircher/MPRA/IGVF_Y1_design/projects/80K_MPRA/variant_tf_search/top_bottom_2_fimo`
 
 ### Combine design and enformer informations for easy downstream set comparisons
-- for presentation to monthly IGVF: enformer information to vcf 
+- for presentation to monthly IGVF: enformer information to vcf
 - Computed precision and recall for enformer high calls and enformer low calls
 - Computed chisquare but fisher exact should be performed
-- more thoughtful: vcf information + gene lists from Oligo design + AC of enformer files => metadata file 
-- identified problem with enformer class (random is not real random, resampling needed) 
+- more thoughtful: vcf information + gene lists from Oligo design + AC of enformer files => metadata file
+- identified problem with enformer class (random is not real random, resampling needed)
 
 ### Story of the presentation at the ESHG 2024 whats new session
 - Variation is important but can lead to diseases
@@ -1038,3 +1040,57 @@ snakemake --use-conda  --configfile standard_config.yaml --snakefile /data/gpfs-
 - Enformer did something (less than we hoped)
 - Learned that we have less power to detect repressing effects compared to the power we have detecting activating effects
 - Interestingly high proportions of activating effects in the groups which are not prioritized (unexprected, because TFs are easier destroyed than gained)
+
+### I try to do the distance dependent analysis
+- How is the distance from the gene affecting the effect?
+- Used biomark and gencode (both lead to similar distances if one uses the distance of chromStart to variant)
+- Max: use the most right and most left TSS of the gene (many different TSS are possible and not known which is relevant (probably many relevant))
+- Mohan used gencode start and end but according to the code different TSS are used
+  - `workflow/rules/regions.smk` => `rule regions_in_tss_window` (problem i cannot find the genes.tss_window.bed)
+
+#### understanding workflow in MPRA_design pipeline
+- rule genes_extract_phenotype: uses `gencode.tss-window.bed.gz` => *.genes.tss_window.bed
+
+
+#### 23-24.07.2024: element analysis with Pias bcMPRAlm R - package:
+##### Questions to Pia:
+- why does the mpra_treat need the test label?
+
+##### bc MPRAlm element result:
+- /home/kisa/coding/80K_MPRA/80K-Analysis/06_variant_element_analysis/scripts/bc_mpralm_elements_with_alt_all_controls.tsv (all sequences + 10 barcodes)
+- next: filter beforehands: only elements (remove ALT)
+  - python preprocessing:
+    - define a clear negative control (plot different groups)
+    - MK scrambles good control? -> make specific label for these
+
+##### controls: variants vs elements (metadata file)
+- Numbers of groups in the variant_region_map.tsv (result from Mohan and Max)
+
+  | Number  |  Group |
+  |---------|--------|
+  |      49 |  C_positive_heart_CAD |
+  |      23 |  GC_Atrial_fib |
+  |     198 |  GC_Kircher    |
+  |       8 |  GC_Liang      |
+  |     174 |  GC_Mendelian_variants |
+  |      20 |  GC_Mohlke     |
+  |     198 |  GC_Selvarajan |
+  |   46374 |  cardiac_neuro_cava_random |
+
+##### Collisions in design file
+- 70 collisions in `/data/cephfs-2/unmirrored/groups/kircher/MPRA/IGVF_Y1_design/experiment/correct_umi_final_resequencing/design_check_collisions.err`
+- >MK:tile_47626|chr14-103542805+103543075|reference
+GGAAGCCCAGGCTCCTCCAAGGCTGAGCTGGGGCCCCTCAGCGTCTCTCCTGGGGACAAAGAGGCAGCTGCCAGCAGGGCGGGGCAGGGAGGGCGGCCTTTGTGTGCGCCAGGCCCCTCCTGGTGACCTCACCACCGGCCGGAGAAGGGCCCTTTCTTCCCAAAGGCAGCCGTTGGGAATCCGCCTGGGGACAAAGCCGCTGCCAGGCAGGGGACCAGCGAGTGGCTGGCTCCCCTCGTAGCATAAATTAGGGGGGGCCGAGGTGGGGGA
+>MK:tile_47627|chr14-103542806+103543076|reference
+GAAGCCCAGGCTCCTCCAAGGCTGAGCTGGGGCCCCTCAGCGTCTCTCCTGGGGACAAAGAGGCAGCTGCCAGCAGGGCGGGGCAGGGAGGGCGGCCTTTGTGTGCGCCAGGCCCCTCCTGGTGACCTCACCACCGGCCGGAGAAGGGCCCTTTCTTCCCAAAGGCAGCCGTTGGGAATCCGCCTGGGGACAAAGCCGCTGCCAGGCAGGGGACCAGCGAGTGGCTGGCTCCCCTCGTAGCATAAATTAGGGGGGGCCGAGGTGGGGGAG
+
+### with correct umi:
+- current number of variants: 67769
+- after filtering for ref and alt and number of barcodes: 29781 (earlier: 36941) (need to check the variant map and headers continue with the old data)
+
+### Update about current state of the data:
+- during work for exeter ppl: finding variant overlap and annotating with variant effect and reference readout from BCalm (variant id from variant map not unique)
+- => MPRAsnakeflow with bbmap mapq35 rerun and results incorporated
+- numbers of variants and regions of the design (common and rare variants focus)
+- 797 significant variant effects
+- imporving FIMO analysis to explain effects of significant variants
