@@ -14,7 +14,10 @@ library(mpra)
 library(dplyr)
 library(devtools)
 library(tidyr)
-
+# bcalm environment: conda-forge::r-dplyr conda-forge::r-devtools conda-forge::r-tidyr conda-forge::r-ggplot2
+# mamba create -n BCalm conda-forge::r-dplyr conda-forge::r-devtools conda-forge::r-tidyr conda-forge::r-ggplot2 -y
+# BiocGenerics, limma, SummarizedExperiment
+# bioconda::bioconductor-biocgenerics bioconda::bioconductor-limma bioconda::bioconductor-summarizedexperiment
 load_all('/home/kisa/coding/80K_MPRA/bc_mpralm')
 
 input = '/data/cephfs-1/home/users/kisa11_c/unmirrored/projects/MPRA/IGVF_Y1_design/experiment/final_resequencing/results/experiments/standard_bwa/assigned_counts/assignmentFixDuplicates/standardConfig/NGN2_allreps_merged_barcode_assigned_counts.tsv.gz' # snakemake
@@ -121,6 +124,7 @@ test_mpra_treat_negative_neuron_combined_controls_only_two_groups <- mpra_treat(
 View(test_mpra_treat)
 View(test_mpra_treat_mk_scrambled_only_two_groups)
 View(test_mpra_treat_negative_neuron_NP_only_two_groups)
+View(test_mpra_treat_negative_neuron_combined_controls_only_two_groups)
 # with our without row names
 # most important: log; pvalue...
 # write.table(test_mpra_treat, file = "/home/kisa/coding/80K_MPRA/element_analysis_output/bc_mpralm_elements_with_alt_all_controls.tsv", sep = "\t", row.names = FALSE, col.names = TRUE, quote = FALSE)
