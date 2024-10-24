@@ -59,7 +59,7 @@ def read_zipped_fasta(fasta_file):
     return fasta_sequences
 
 
-def fasta_to_dataframe(fasta_file):
+def fasta_to_dataframe(fasta_file, columns=[]):
     """
     Convert a fasta file to a pandas dataframe.
     """
@@ -74,6 +74,8 @@ def fasta_to_dataframe(fasta_file):
         header.append(fasta.id)
         sequence.append(str(fasta.seq))
     df = pd.DataFrame({'header': header, 'sequence': sequence})
+    if columns != [] and len(columns) == 2:
+        df.columns = columns
     return df
 
 
