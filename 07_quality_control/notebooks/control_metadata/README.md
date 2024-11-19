@@ -1,0 +1,4 @@
+stored the results on the cluster
+scp /home/kisa/coding/80K_MPRA/80K-Analysis/07_quality_control/notebooks/control_metadata/metadata_neuro_control_groups.ipynb kisa11_c@172.16.35.182:/data/cephfs-2/unmirrored/groups/kircher/MPRA/IGVF_Y1_design/design/mpra_metadata_format/neuro_controls
+scp /home/kisa/coding/80K_MPRA/80K-Analysis/07_quality_control/notebooks/control_metadata/metadata_dnase_controls.ipynb  kisa11_c@172.16.35.182:/data/cephfs-2/unmirrored/groups/kircher/MPRA/IGVF_Y1_design/design/mpra_metadata_format/dnase_controls/
+scp /home/kisa/coding/80K_MPRA/80K-Analysis/07_quality_control/notebooks/control_metadata/metadata_SLEA_control.ipynb kisa11_c@172.16.35.182:/data/cephfs-2/unmirrored/groups/kircher/MPRA/IGVF_Y1_design/design/mpra_metadata_format/SLEA/
