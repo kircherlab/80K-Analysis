@@ -1,3 +1,8 @@
+# """
+# Author: Kilian Salomon (Kilian.Salomon@bih-charite.de)
+# *: 03.2024
+# """
+
 import gzip # zipped files
 import numpy as np # isna
 import re # regex for header matching

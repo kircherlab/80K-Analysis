@@ -13,34 +13,77 @@ files:
   output:
     plotting: /data/cephfs-1/home/users/kisa11_c/unmirrored/projects/MPRA/IGVF_Y1_design/projects/80K_MPRA/plots/
   creating:
-    acmg_genelist: /home/kisa/coding/80K_MPRA/cava_analysis_output/American_college_of_Medical_Genetics_and_Genomics/NIHMS1895945-ACMG_secondary_findings.csv
-    bbmap_standard_mapq35_NoLength_mprasnakeflow_mastertable_not_filtered: /home/kisa/coding/80K_MPRA/server_results/bc_MPRAlm/bbmap_standard_mapq35NoLength/NGN2_variantTable.tsv.gz
-    cava_analysis:
-      top_10_up: /home/kisa/coding/80K_MPRA/cava_analysis_output/top_10_upregulating_variants.tsv
-      top_10_down: /home/kisa/coding/80K_MPRA/cava_analysis_output/top_10_downregulating_variants.tsv
-      output_path: /home/kisa/coding/80K_MPRA/cava_analysis_output/
-      cava_gene_list_with_source: /home/kisa/coding/80K_MPRA/design_data/design_info/CAVA_GenesInProgress_modified.csv # CAVA gene set with source data
-    cadd_results: /home/kisa/coding/80K_MPRA/CADD_results_variants/all_variants_with_readouts_from_bbmap_standard_mapq35_GRCh38-v1.7.tsv.gz
-    datafreeze_table: /home/kisa/coding/80K_MPRA/datafreeze/80K_MPRA_datafreeze_tested_19Aug2024_allele_list.tsv
-    datafreeze_bed: /home/kisa/coding/80K_MPRA/datafreeze/80K_MPRA_datafreeze_tested_01Aug2024.bed
-    element_motif_analysis_output_directory: /home/kisa/coding/80K_MPRA/fimo_data/element_tf_search
-    element_activity_prediction_data_tested_dir: /home/kisa/coding/80K_MPRA/element_analysis_output/element_activity_prediction/
-    fimo_neuro_variant_output_dir: /home/kisa/coding/80K_MPRA/fimo_data/variant_tf_search/neuro_fimo_significant/
-    fimo_neuro_element_output_dir: /home/kisa/coding/80K_MPRA/fimo_data/element_tf_search/neuro_fimo_significant/
+    # general
     design_gene_list: /home/kisa/coding/80K_MPRA/design_data/design_info/all_genes_designed.csv # /home/kisa/coding/80K_MPRA/MPRA_design/resources/gene_lists/all_genes.txt
 
-    gnomad_db_dir: /data/cephfs-1/home/users/kisa11_c/unmirrored/projects/MPRA/IGVF_Y1_design/projects/gnomadDB/v3.1.2/
-    gnomad_data_all_variants: /data/cephfs-1/home/users/kisa11_c/unmirrored/projects/MPRA/IGVF_Y1_design/projects/gnomadDB/all_80K_variants_for_gnomadDB_with_AF_AC.tsv
-    gnomad_data_all_variants_local: /home/kisa/coding/80K_MPRA/datafreeze/gnomad_variant_info/all_80K_variants_for_gnomadDB_with_gnomad_info.tsv
+    # datafreeze
+    datafreeze_table: /home/kisa/coding/80K_MPRA/datafreeze/80K_MPRA_datafreeze_tested_19Aug2024_allele_list.tsv
+    datafreeze_bed: /home/kisa/coding/80K_MPRA/datafreeze/80K_MPRA_datafreeze_tested_01Aug2024.bed
+
+    # element:
+    element_motif_analysis_output_directory: /home/kisa/coding/80K_MPRA/fimo_data/element_tf_search
+    element_activity_prediction_data_tested_dir: /home/kisa/coding/80K_MPRA/element_analysis_output/element_activity_prediction/
+    fimo_neuro_element_output_dir: /home/kisa/coding/80K_MPRA/fimo_data/element_tf_search/neuro_fimo_significant/
+    unique_in_realife_regions_bed: /home/kisa/coding/80K_MPRA/design_data/design_info/unique_ir_regions.bed # unique regions of tested elements
+    ###### #! ATTENTION: element assigned barcode file and filtered are the same
+    element_assigned_barcode_file: /home/kisa/coding/80K_MPRA/element_analysis_output/element_assigned_barcodes.tsv.gz
+    element_analysis_label_file: /home/kisa/coding/80K_MPRA/element_analysis_output/element_assigned_barcodes_label.tsv
+    filtered_element_assigned_barcode_file: /home/kisa/coding/80K_MPRA/element_analysis_output/element_assigned_barcodes.tsv.gz
+    filtered_element_analysis_label_file: /home/kisa/coding/80K_MPRA/element_analysis_output/element_assigned_barcodes_label.tsv
+    ###### #! ATTENTION above
+    element_assigned_barcode_file_scrambled_vs_tested: /home/kisa/coding/80K_MPRA/element_analysis_output/scrambled_vs_tested_element_assigned_barcodes.tsv.gz
+    element_assigned_barcode_file_negative_neuron_np_vs_tested: /home/kisa/coding/80K_MPRA/element_analysis_output/negative_neuron_NP_vs_tested_element_assigned_barcodes_no_alt.tsv.gz
+    element_assigned_barcode_file_negative_neuron_ctrls_vs_tested: /home/kisa/coding/80K_MPRA/element_analysis_output/negative_neuron_CTRLs_vs_tested_element_assigned_barcodes_no_alt.tsv.gz
+    element_assigned_barcode_file_negative_neuron_ctrls_vs_tested_label_file: /home/kisa/coding/80K_MPRA/element_analysis_output/negative_neuron_CTRLs_vs_tested_element_assigned_barcodes_no_alt_label_file.tsv
+    element_assigned_barcode_file_positive_neuron_np_vs_tested: /home/kisa/coding/80K_MPRA/element_analysis_output/positive_neuron_NP_vs_tested_element_assigned_barcodes_no_alt.tsv.gz
+    element_analysis_mk_scrambled_vs_tested: /home/kisa/coding/80K_MPRA/element_analysis_output/bc_mpralm_elements_with_subset_controls_MK_scrambled_both_sided_tested.tsv
+    element_analysis_mk_scrambled_vs_tested_no_alt: /home/kisa/coding/80K_MPRA/element_analysis_output/bc_mpralm_MK_scrambled_vs_tested_elements_both_sided_no_alt.tsv
+    element_analysis_np_negative_neuron_vs_tested_unique: /home/kisa/coding/80K_MPRA/element_analysis_output/bc_mpralm_negative_neuron_NP_vs_tested_elements_right_side_no_alt_unique.tsv
+    element_analysis_negative_neuron_combined_vs_tested: /home/kisa/coding/80K_MPRA/element_analysis_output/bc_mpralm_negative_neuron_combined_vs_tested_elements_right_side_no_alt.tsv
+    all_element_BCalm_np_negative_neuron_vs_tested_unique: /home/kisa/coding/80K_MPRA/element_analysis_output/bc_mpralm_negative_neuron_NP_vs_all_tested_elements_right_side_unique.tsv
+    # MPRAnn & DeepSTARR:
+    mprann_without_alt: /home/kisa/coding/80K_MPRA/sequence_cnn_models/resources/80K_regions_labels.tsv
+    mprann_all_with_alt: /home/kisa/coding/80K_MPRA/sequence_cnn_models/resources/80K_mprann_all_regions_labels.tsv
+    mprann_all_with_alt_mprasnakeflow_ratio: /home/kisa/coding/80K_MPRA/sequence_cnn_models/resources/80K_mprann_all_regions_mprasnakeflow_ratios_labels.tsv
+    mprann_all_with_alt_fasta: /home/kisa/coding/80K_MPRA/sequence_cnn_models/resources/80K_mprann_all_regions.fa
+    mprann_activity_filtered_with_alt: /home/kisa/coding/80K_MPRA/sequence_cnn_models/resources/80K_mprann_activity_filtered_regions_labels.tsv
+    mprann_activity_filtered_with_alt_fasta: /home/kisa/coding/80K_MPRA/sequence_cnn_models/resources/80K_mprann_activity_filtered_regions.fa
+
+    mprann_result_directory: /data/cephfs-2/unmirrored/groups/kircher/MPRA/IGVF_Y1_design/projects/MPRAnn/
+    correlation_no_alt_elements: /data/cephfs-2/unmirrored/groups/kircher/MPRA/IGVF_Y1_design/projects/MPRAnn/results/correlation/regression.REF_BCalm_logFC.tsv.gz
+    predictions_no_alt_elements: /data/cephfs-2/unmirrored/groups/kircher/MPRA/IGVF_Y1_design/projects/MPRAnn/results/predictions/finalConcat.labels.cleaned.tsv.gz
+    deepstarr_all_with_alt_fasta: '/home/kisa/coding/80K_MPRA/sequence_cnn_models/resources/80K_deepStarr_all_regions_sequence.tsv'
+    deepstarr_all_with_alt_fasta_mprasnakeflow_ratios: '/home/kisa/coding/80K_MPRA/sequence_cnn_models/resources/80K_deepStarr_all_regions_sequence_mprasnakeflow_log2_ratios.tsv'
+    # variant, tf analysis
+    bbmap_standard_mapq35_NoLength_mprasnakeflow_mastertable_not_filtered: /home/kisa/coding/80K_MPRA/server_results/bc_MPRAlm/bbmap_standard_mapq35NoLength/NGN2_variantTable.tsv.gz
+    cadd_results: /home/kisa/coding/80K_MPRA/CADD_results_variants/all_variants_with_readouts_from_bbmap_standard_mapq35_GRCh38-v1.7.tsv.gz
+    fimo_neuro_variant_output_dir: /home/kisa/coding/80K_MPRA/fimo_data/variant_tf_search/neuro_fimo_significant/
     variant_motif_analysis_output_directory: /home/kisa/coding/80K_MPRA/fimo_data/variant_tf_search
     local_h12core_tf_motif_set: /home/kisa/coding/80K_MPRA/fimo_data/H12CORE_meme_format.meme
     local_h12core_tf_less_redundant_motif_set: /home/kisa/coding/80K_MPRA/fimo_data/H12CORE_less_redundant.meme
     h12core_annotations: /home/kisa/coding/80K_MPRA/fimo_data/H12CORE_annotation.jsonl
     automate_fimo: /home/kisa/coding/80K_MPRA/fimo_data/automate/
+    variant_table_bcalm: /home/kisa/coding/80K_MPRA/element_analysis_output/variant_unique_bc_mpralm_negative_neuron_NP_vs_tested_right_sided_no_alt.tsv
 
+    # cava design analysis
+    acmg_genelist: /home/kisa/coding/80K_MPRA/cava_analysis_output/American_college_of_Medical_Genetics_and_Genomics/NIHMS1895945-ACMG_secondary_findings.csv
+    cava_analysis:
+      top_10_up: /home/kisa/coding/80K_MPRA/cava_analysis_output/top_10_upregulating_variants.tsv
+      top_10_down: /home/kisa/coding/80K_MPRA/cava_analysis_output/top_10_downregulating_variants.tsv
+      output_path: /home/kisa/coding/80K_MPRA/cava_analysis_output/
+      cava_gene_list_with_source: /home/kisa/coding/80K_MPRA/design_data/design_info/CAVA_GenesInProgress_modified.csv # CAVA gene set with source data
+
+    # gnomad
+    gnomad_db_dir: /data/cephfs-1/home/users/kisa11_c/unmirrored/projects/MPRA/IGVF_Y1_design/projects/gnomadDB/v3.1.2/
+    gnomad_data_all_variants: /data/cephfs-1/home/users/kisa11_c/unmirrored/projects/MPRA/IGVF_Y1_design/projects/gnomadDB/all_80K_variants_for_gnomadDB_with_AF_AC.tsv
+    gnomad_data_all_variants_local: /home/kisa/coding/80K_MPRA/datafreeze/gnomad_variant_info/all_80K_variants_for_gnomadDB_with_gnomad_info.tsv
+
+    # e2g
     e2g_overlap:
       e2g_thresholded_male_neuro_stem_cell: /data/cephfs-2/unmirrored/groups/kircher/MPRA/ProximalPromoter/projects/proximal_prom_analysis/predictions/Predictors/ENCODE-E2G/thresholded_bedpe/encode_e2g_predictions_neuronal_stem_cell_ENCDO000AAW_ENCFF204GFI_DNaseOnly_thresholded_predictions.bedpe.gz
       e2g_output_directory: /home/kisa/coding/80K_MPRA/e2g_analysis_output
+
+    # neuro information (papers or collaborators):
     cCREs_encode_ecto_neural_progenitor: /home/kisa/coding/80K_MPRA/cCRE_ENCODE_neural_progenitor/ENCFF041KUY_ecto_neural_progenitor.bed.gz
     from_other_paper:
       MPRA_dev_cortex_deng_et_al_2024: # https://www.science.org/doi/10.1126/science.adh0559#supplementary-materials
@@ -59,31 +102,26 @@ files:
     # Open in WTC11 NGN2 (iPSC derived neurons)
     wtc11_ngn2_atac_narrowPeak: /home/kisa/coding/80K_MPRA/WTC11_ATAC_Ahituv/DIV14_WTC11-NGN2_ExN_ATAC-seq.idr0.05.bfilt.narrowPeak
 
+    # SCREEN open chromatin data
+    screen_regions_dir: /home/kisa/coding/80K_MPRA/screen_regions
+    enhancer_like_sequences: /home/kisa/coding/80K_MPRA/screen_regions/GRCh38-ELS.bed
+    promoter_like_sequences: /home/kisa/coding/80K_MPRA/screen_regions/GRCh38-PLS.bed
+    ctcf_bound_sequences: /home/kisa/coding/80K_MPRA/screen_regions/GRCh38-CTCF.bed
+    open_chromatin_regions_pls_els: /home/kisa/coding/80K_MPRA/screen_regions/open_chromatin_regions_pls_els.bed
+    open_chromatin_regions_no_ctcf: /home/kisa/coding/80K_MPRA/screen_regions/open_chromatin_regions_no_ctcf.bed
+
+    # Result from element to info overlap:
     unique_tested_elements_region_bed: /home/kisa/coding/80K_MPRA/design_data/design_info/unique_tested_element_regions.bed # unique screen element regions
     wtc11_ngn2_atac_tested_elements_overlap_verbose_annotation: /home/kisa/coding/80K_MPRA/WTC11_ATAC_Ahituv/ngn2_open_NP_and_tested_overlapping_regions.bed # 416 unique regions
     wtc11_ngn2_atac_tested_elements_overlap: /home/kisa/coding/80K_MPRA/WTC11_ATAC_Ahituv/tested_elements_NGN2_wtc11_NP_overlapping_regions.bed # 416 unique regions
     h1_neuro_dnase_tested_elements_overlap_verbose_annotation: /home/kisa/coding/80K_MPRA/DNase_H1_neural_progenitor_screen/in_reallife_tested_regions_and_h1_neural_dnase_open_screen_overlapping_regions_verbose.bed # 1763 unique regions
     h1_neuro_dnase_tested_elements_overlap: /home/kisa/coding/80K_MPRA/DNase_H1_neural_progenitor_screen/in_reallife_tested_regions_and_h1_neural_dnase_open_screen_overlapping_regions.bed # 1763 unique regions
-    unique_in_realife_regions_bed: /home/kisa/coding/80K_MPRA/design_data/design_info/unique_ir_regions.bed # unique regions of tested elements
     in_realife_wtc11_ngn2_atac_tested_elements_overlap_verbose_annotation: /home/kisa/coding/80K_MPRA/WTC11_ATAC_Ahituv/in_reallife_tested_regions_and_ngn2_open_NP_overlapping_regions.bed # 368 unique regions
     in_reality_wtc11_ngn2_atac_tested_elements_overlap: /home/kisa/coding/80K_MPRA/WTC11_ATAC_Ahituv/in_reallife_ngn2_open_NP_tested_overlapping_regions.bed # 368 regions
-    element_assigned_barcode_file: /home/kisa/coding/80K_MPRA/element_analysis_output/element_assigned_barcodes.tsv.gz
-    element_analysis_label_file: /home/kisa/coding/80K_MPRA/element_analysis_output/element_assigned_barcodes_label.tsv
-    filtered_element_assigned_barcode_file: /home/kisa/coding/80K_MPRA/element_analysis_output/element_assigned_barcodes.tsv.gz
-    filtered_element_analysis_label_file: /home/kisa/coding/80K_MPRA/element_analysis_output/element_assigned_barcodes_label.tsv
-    element_assigned_barcode_file_scrambled_vs_tested: /home/kisa/coding/80K_MPRA/element_analysis_output/scrambled_vs_tested_element_assigned_barcodes.tsv.gz
-    element_assigned_barcode_file_negative_neuron_np_vs_tested: /home/kisa/coding/80K_MPRA/element_analysis_output/negative_neuron_NP_vs_tested_element_assigned_barcodes_no_alt.tsv.gz
-    element_assigned_barcode_file_negative_neuron_ctrls_vs_tested: /home/kisa/coding/80K_MPRA/element_analysis_output/negative_neuron_CTRLs_vs_tested_element_assigned_barcodes_no_alt.tsv.gz
-    element_assigned_barcode_file_negative_neuron_ctrls_vs_tested_label_file: /home/kisa/coding/80K_MPRA/element_analysis_output/negative_neuron_CTRLs_vs_tested_element_assigned_barcodes_no_alt_label_file.tsv
-    element_assigned_barcode_file_positive_neuron_np_vs_tested: /home/kisa/coding/80K_MPRA/element_analysis_output/positive_neuron_NP_vs_tested_element_assigned_barcodes_no_alt.tsv.gz
-    element_analysis_mk_scrambled_vs_tested: /home/kisa/coding/80K_MPRA/element_analysis_output/bc_mpralm_elements_with_subset_controls_MK_scrambled_both_sided_tested.tsv
-    element_analysis_mk_scrambled_vs_tested_no_alt: /home/kisa/coding/80K_MPRA/element_analysis_output/bc_mpralm_MK_scrambled_vs_tested_elements_both_sided_no_alt.tsv
-    element_analysis_np_negative_neuron_vs_tested_unique: /home/kisa/coding/80K_MPRA/element_analysis_output/bc_mpralm_negative_neuron_NP_vs_tested_elements_right_side_no_alt_unique.tsv
-    variant_table_bcalm: /home/kisa/coding/80K_MPRA/element_analysis_output/variant_unique_bc_mpralm_negative_neuron_NP_vs_tested_right_sided_no_alt.tsv
-    element_analysis_np_negative_neuron_combined_vs_tested: /home/kisa/coding/80K_MPRA/element_analysis_output/bc_mpralm_negative_neuron_combined_vs_tested_elements_right_side_no_alt.tsv
+
     name_header_match: /home/kisa/coding/80K_MPRA/80K-Analysis/05_variant_region_list/resources/id_matching_table.tsv
     # metadata_table: /home/kisa/coding/80K_MPRA/80K-Analysis/05_variant_region_list/resources/IGVF_metadata_table.tsv
-    metadata_table: /data/cephfs-1/home/users/kisa11_c/unmirrored/projects/80K_analysis/05_variant_region_list/metadata_example_2504.tsv
+    metadata_table_old: /data/cephfs-1/home/users/kisa11_c/unmirrored/projects/80K_analysis/05_variant_region_list/metadata_example_2504.tsv
     metadata_table_2210: /home/kisa/coding/80K_MPRA/metadata_info/metadata_tested_region.tsv
     metadata_table_local: /home/kisa/coding/80K_MPRA/metadata_info/metadata_example_2504.tsv
     metadata_table_local_tested_juli: /home/kisa/coding/80K_MPRA/metadata_info/metadata_example_1607.tsv
@@ -117,7 +155,7 @@ files:
     additionally_variant_info_comma: /data/cephfs-1/home/users/kisa11_c/unmirrored/projects/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/merging_variants/additionally_adding_variants_because_of_comma.tsv
     toy_bcMPRAlm: /home/kisa/coding/80K_MPRA/server_results/bc_MPRAlm/toptable_GC_Selvarajan_standardNGN2.tsv
     toptable_MPRAlm_no_downsampling: /data/cephfs-1/home/users/kisa11_c/unmirrored/projects/MPRA/IGVF_Y1_design/projects/bc_tradeoff/results/MPRAlm/no_downsampling/toptable_standard_with_all_variant_controls_mendelian_no_downsampling_mpralm_NGN2.tsv
-    enformer_prediction_tsv: /data/cephfs-1/home/users/kisa11_c/unmirrored/projects/80K_analysis/05_variant_region_list/results/enformer_predictions/sequences_for_enformer_predictions.tsv
+    enformer_element_predictions: /data/cephfs-2/unmirrored/groups/kircher/MPRA/IGVF_Y1_design/projects/enformer_predictions/element_enformer/sequences_for_enformer_predictions_only_sequences_with_padding_680.tsv.gz
     merged_variant_table: /data/cephfs-1/home/users/kisa11_c/unmirrored/projects/MPRA/IGVF_Y1_design/design/MPRA_design/results_5k/merging_variants/merged_prioritized_variants.tsv
     mprasnakeflow_resequencing_count_minthreshold: /data/cephfs-2/unmirrored/groups/kircher/MPRA/IGVF_Y1_design/experiment/resequencing_results/new_bam_filtering/results/experiments/standard_bwa/assigned_counts/assignmentFixDuplicates/standardConfig/NGN2_allreps_minThreshold_merged.tsv.gz
     mprasnakeflow_count_minthreshold: /home/kisa/coding/80K_MPRA/design_data/NGN2_allreps_minThreshold_merged.tsv.gz
@@ -130,6 +168,7 @@ files:
     mprasnakeflow_resequencing_bbmap35_assigned_barcodes: /home/kisa/coding/80K_MPRA/server_results/MPRAsnakeflow/bbmap_std_mapq35NoLength_unqiue_variant_id/NGN2_allreps_merged_barcode_assigned_counts.tsv.gz # /data/cephfs-1/scratch/groups/kircher/MPRA/IGVF_Y1_design/experiment/09102024_80K_development_MPRAsnakeflow/unique_variant_current_development_bbmap_std_mapq35_80K_mpra_final_resequencing/experiments/bbmapStandardMapq35/assigned_counts/assignmentFixDuplicates/standardConfig/NGN2_allreps_merged_barcode_assigned_counts.tsv.gz
     mprasnakeflow_resequencing_bbmap35_variant_table: /home/kisa/coding/80K_MPRA/server_results/MPRAsnakeflow/bbmap_std_mapq35NoLength_unqiue_variant_id/NGN2_variantTable.tsv.gz # /data/cephfs-1/scratch/groups/kircher/MPRA/IGVF_Y1_design/experiment/09102024_80K_development_MPRAsnakeflow/unique_variant_current_development_bbmap_std_mapq35_80K_mpra_final_resequencing/experiments/bbmapStandardMapq35/variants/assignmentFixDuplicates/standardConfig/NGN2_variantTable.tsv.gz
     mprasnakeflow_resequencing_bbmap10_assigned_barcodes_unique_variants: /home/kisa/coding/80K_MPRA/server_results/MPRAsnakeflow/bbmap_standard_mapq10NoLength_unique_variant_id/NGN2_allreps_merged_barcode_assigned_counts.tsv.gz # /data/cephfs-1/scratch/groups/kircher/MPRA/IGVF_Y1_design/experiment/GCB_poster_analysis/bbmap_results_standard_mapq_10_20_30/experiments/bbmapStandardMapq10/assigned_counts/assignmentFixDuplicates/standardConfig/NGN2_allreps_merged_barcode_assigned_counts.tsv.gz
+    mprasnakeflow_resequencing_bbmap10_combined_counts: /home/kisa/coding/80K_MPRA/server_results/MPRAsnakeflow/bbmap_standard_mapq10NoLength_unique_variant_id/NGN2_allreps_merged.combined.tsv.gz # /data/cephfs-1/scratch/groups/kircher/MPRA/IGVF_Y1_design/experiment/GCB_poster_analysis/bbmap_results_standard_mapq_10_20_30/experiments/bbmapStandardMapq10/assigned_counts/assignmentFixDuplicates/standardConfig/NGN2_allreps_merged.combined.tsv.gz
     mprasnakeflow_resequencing_bbmap10_variant_table_unique_variants: /home/kisa/coding/80K_MPRA/server_results/MPRAsnakeflow/bbmap_standard_mapq10NoLength_unique_variant_id/NGN2_variantTable.tsv.gz # /data/cephfs-1/scratch/groups/kircher/MPRA/IGVF_Y1_design/experiment/GCB_poster_analysis/bbmap_results_standard_mapq_10_20_30/experiments/bbmapStandardMapq10/variants/assignmentFixDuplicates/standardConfig/NGN2_variantTable.tsv.gz
     mprasnakeflow_resequencing_bbmap10_assignement_unique_variants: /home/kisa/coding/80K_MPRA/server_results/MPRAsnakeflow/bbmap_standard_mapq10NoLength_unique_variant_id/assignment_barcodes.standardConfig.tsv.gz # /data/cephfs-1/scratch/groups/kircher/MPRA/IGVF_Y1_design/experiment/GCB_poster_analysis/bbmap_results_standard_mapq_10_20_30/assignment/bbmapStandardMapq10/assignment_barcodes.standardConfig.tsv.gz
     # enformer_prioritized_variants: /home/kisa/coding/80K_MPRA/enformer_data/enformer_matched_with_variants_enformer_class/merged_enformer_class.tsv # created using merging script
@@ -171,8 +210,10 @@ files:
     sequence_to_barcode_assignment: /data/cephfs-1/home/users/kisa11_c/unmirrored/projects/MPRA/IGVF_Y1_design/experiment/standard_results/results/experiments/standard_bwa/assignment/assignmentFixDuplicates.tsv.gz
     design_with_duplicates: /data/cephfs-1/home/users/kisa11_c/unmirrored/projects/MPRA/IGVF_Y1_design/design/final_design/results/final_design/design.fa.gz
     # design_fasta: /data/cephfs-1/home/users/kisa11_c/unmirrored/projects/MPRA/IGVF_Y1_design/resources/association_data/design_no_duplicates_sequence_and_header.fa
-    forth_design_fasta_ref_to_element: /home/kisa/coding/80K_MPRA/design_data/design_info/renamed_design_no_duplicates_sequence_and_header_with_adapter_no_brackets_no_collisions_REF_to_elements.fa # changed name of REF which had no entry in variant region map to element names
+    forth_design_fasta_ref_to_element: /home/kisa/coding/80K_MPRA/design_data/design_info/renamed_design_no_duplicates_sequence_and_header_with_adapter_no_brackets_no_collisions_REF_to_elements.fa # changed name of REF which had no entry in variant region map to element names /data/cephfs-2/unmirrored/groups/kircher/MPRA/IGVF_Y1_design/resources/association_data/
+    forth_design_fasta_ref_to_element_label: /home/kisa/coding/80K_MPRA/design_data/design_info/renamed_design_no_duplicates_sequence_and_header_with_adapter_no_brackets_no_collisions_REF_to_elements_label.tsv
     third_design_fasta_no_collisions: /home/kisa/coding/80K_MPRA/design_data/design_info/renamed_design_no_duplicates_sequence_and_header_with_adapter_no_brackets_no_collisions.fa # /data/cephfs-2/unmirrored/groups/kircher/MPRA/IGVF_Y1_design/resources/association_data/renamed_design_no_duplicates_sequence_and_header_with_adapter_no_brackets_no_collisions.fa
+    third_design_fasta_no_collisions_label: /home/kisa/coding/80K_MPRA/design_data/design_info/renamed_design_no_duplicates_sequence_and_header_with_adapter_no_brackets_no_collisions_label.tsv
     second_design_fasta: /home/kisa/coding/80K_MPRA/design_data/design_no_duplicates_sequence_and_header.fa
     first_design_fasta: /home/kisa/coding/80K_MPRA/design_data/design_info/design.fa.gz
     # test_seqs_region_file: /data/cephfs-1/home/users/kisa11_c/unmirrored/projects/MPRA/IGVF_Y1_design/design/final_design/input/regions_5K.bed

@@ -1094,3 +1094,6 @@ GAAGCCCAGGCTCCTCCAAGGCTGAGCTGGGGCCCCTCAGCGTCTCTCCTGGGGACAAAGAGGCAGCTGCCAGCAGGGCG
 - numbers of variants and regions of the design (common and rare variants focus)
 - 797 significant variant effects
 - imporving FIMO analysis to explain effects of significant variants
+
+### Sorted the config file differently and need to clean it soon
+- many files which are not used anymore (maybe an archive.yaml)
