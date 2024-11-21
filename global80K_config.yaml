@@ -101,6 +101,7 @@ files:
         identified_variants: /home/kisa/coding/80K_MPRA/cCREs_overlap/single_cell_genomics_regulatory_network/found_variants_sc_reg_network_human_brains.tsv
     # Open in WTC11 NGN2 (iPSC derived neurons)
     wtc11_ngn2_atac_narrowPeak: /home/kisa/coding/80K_MPRA/WTC11_ATAC_Ahituv/DIV14_WTC11-NGN2_ExN_ATAC-seq.idr0.05.bfilt.narrowPeak
+    wtc11_ngn2_atac_bed_no_name: /home/kisa/coding/80K_MPRA/WTC11_ATAC_Ahituv/wtc11_ngn2_atac_peak.bed
 
     # SCREEN open chromatin data
     screen_regions_dir: /home/kisa/coding/80K_MPRA/screen_regions
@@ -197,7 +198,7 @@ files:
     non_low_Dnase_h1_neuro_bed: /home/kisa/coding/80K_MPRA/info/screen_bed/non_low_Dnase_H1_neuro.bed
     h1_neuro_bed: /home/kisa/coding/80K_MPRA/info/screen_bed/ENCFF287XRW_ENCFF872FDO_ENCFF110SOE.7group.bed
     metadata_file_schema: /home/kisa/coding/80K_MPRA/igvf_checkfiles_metadata/src/schemas/table_schemas/designed_sequences.json
-
+    reference_genome_cluster: /data/cephfs-1/work/projects/cubit/current/static_data/reference/hg38/
   final_design:
     changed_tested_headers: /home/kisa/coding/80K_MPRA/metadata_info/design_file/changed_tested_headers.tsv
     # deduplicate the design file with the focus on restoring all the variants
