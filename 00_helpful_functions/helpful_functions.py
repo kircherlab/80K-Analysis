@@ -9,7 +9,6 @@ import re # regex for header matching
 import pandas as pd
 from Bio import SeqIO
 
-
 def get_region_info(header):
     """
     gets region id (screen enhancer identifier) from the header of tested sequences
@@ -202,3 +201,14 @@ def get_gene_set_list(enformer_variant_info):
 def is_element_of(column_list, pattern):
     """Check for the pattern in the column_list"""
     return pattern in column_list
+
+
+def split_ids(row, id_col, separator=';'):
+    """Function to split the name and create new rows while conserving all columns"""
+    ids = row[id_col].split(separator)
+    new_rows = []
+    for id in ids:
+        new_row = row.copy()
+        new_row[id_col] = id
+        new_rows.append(new_row)
+    return pd.DataFrame(new_rows)
