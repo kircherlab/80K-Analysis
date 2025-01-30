@@ -83,11 +83,16 @@ def fasta_to_dataframe(fasta_file, columns=[]):
     return df
 
 
-def get_label(header):
+def get_label(header, check_for_multi_header=False, seperator=";"):
     """
     Returns the label of a header. Expected format: <label>:<rest_of_header>
     Can be used by applying on header column of a dataframe.
     """
+    if check_for_multi_header: # seperate name by seperator
+        if seperator not in header:
+            return header.split(":")[0]
+        return [get_label(name) for name in header.split(seperator)]
+
     return header.split(":")[0]
 
 
@@ -95,7 +100,11 @@ def is_tested(header):
     """
     Returns for a header if it is a tested sequence.
     """
-    return get_label(header) == 'cardiac_neuro_cava_random'
+    label = get_label(header, check_for_multi_header=True, seperator=";")
+    if isinstance(label, list):
+        return 'cardiac_neuro_cava_random' in label
+
+    return label == 'cardiac_neuro_cava_random'
 
 
 def is_control(header):
