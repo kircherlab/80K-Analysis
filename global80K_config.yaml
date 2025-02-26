@@ -19,7 +19,7 @@ files:
     # datafreeze
     datafreeze_table: /home/kisa/coding/80K_MPRA/datafreeze/80K_MPRA_datafreeze_tested_19Aug2024_allele_list.tsv
     datafreeze_bed: /home/kisa/coding/80K_MPRA/datafreeze/80K_MPRA_datafreeze_tested_01Aug2024.bed
-
+    metadata_table_2025: /home/kisa/coding/80K_MPRA/80K-Analysis/07_quality_control/notebooks/control_metadata/MPRA_80215.metadata.tsv.gz
     # element:
     element_motif_analysis_output_directory: /home/kisa/coding/80K_MPRA/fimo_data/element_tf_search
     element_activity_prediction_data_tested_dir: /home/kisa/coding/80K_MPRA/element_analysis_output/element_activity_prediction/
@@ -41,6 +41,7 @@ files:
     element_analysis_np_negative_neuron_vs_tested_unique: /home/kisa/coding/80K_MPRA/element_analysis_output/bc_mpralm_negative_neuron_NP_vs_tested_elements_right_side_no_alt_unique.tsv
     element_analysis_negative_neuron_combined_vs_tested: /home/kisa/coding/80K_MPRA/element_analysis_output/bc_mpralm_negative_neuron_combined_vs_tested_elements_right_side_no_alt.tsv
     all_element_BCalm_np_negative_neuron_vs_tested_unique: /home/kisa/coding/80K_MPRA/element_analysis_output/bc_mpralm_negative_neuron_NP_vs_all_tested_elements_right_side_unique.tsv
+
     # MPRAnn & DeepSTARR:
     mprann_without_alt: /home/kisa/coding/80K_MPRA/sequence_cnn_models/resources/80K_regions_labels.tsv
     mprann_all_with_alt: /home/kisa/coding/80K_MPRA/sequence_cnn_models/resources/80K_mprann_all_regions_labels.tsv
@@ -54,6 +55,10 @@ files:
     predictions_no_alt_elements: /data/cephfs-2/unmirrored/groups/kircher/MPRA/IGVF_Y1_design/projects/MPRAnn/results/predictions/finalConcat.labels.cleaned.tsv.gz
     deepstarr_all_with_alt_fasta: '/home/kisa/coding/80K_MPRA/sequence_cnn_models/resources/80K_deepStarr_all_regions_sequence.tsv'
     deepstarr_all_with_alt_fasta_mprasnakeflow_ratios: '/home/kisa/coding/80K_MPRA/sequence_cnn_models/resources/80K_deepStarr_all_regions_sequence_mprasnakeflow_log2_ratios.tsv'
+
+    # Legnet WTC11:
+    element_predictions_80k_legnet: /home/kisa/coding/80K_MPRA/modeling/Legnet_WTC11_on_design/results/80k_prediction/averaged/80k_averaged_predictions.tsv
+
     # variant, tf analysis
     bbmap_standard_mapq35_NoLength_mprasnakeflow_mastertable_not_filtered: /home/kisa/coding/80K_MPRA/server_results/bc_MPRAlm/bbmap_standard_mapq35NoLength/NGN2_variantTable.tsv.gz
     cadd_results: /home/kisa/coding/80K_MPRA/CADD_results_variants/all_variants_with_readouts_from_bbmap_standard_mapq35_GRCh38-v1.7.tsv.gz
@@ -64,6 +69,9 @@ files:
     h12core_annotations: /home/kisa/coding/80K_MPRA/fimo_data/H12CORE_annotation.jsonl
     automate_fimo: /home/kisa/coding/80K_MPRA/fimo_data/automate/
     variant_table_bcalm: /home/kisa/coding/80K_MPRA/element_analysis_output/variant_unique_bc_mpralm_negative_neuron_NP_vs_tested_right_sided_no_alt.tsv
+    variants_bcalm_2025: /home/kisa/coding/80K_MPRA/bc_MPRAlm_results/results/variant_bcalm_80K_bbmap_std_mapq30_no_hashtag.tsv
+    variants_bcalm_2025_bwa_finest: /home/kisa/coding/80K_MPRA/bc_MPRAlm_results/results/variant_bcalm_80k_bwa_finest_outlier_removal_no_hashtag_exists_variant_map_unique_id.tsv
+    variants_metadata_bcalm_2025: /home/kisa/coding/80K_MPRA/element_variant_analysis_output/variants_metadata_with_bcalm_2025_02.tsv.gz
 
     # cava design analysis
     acmg_genelist: /home/kisa/coding/80K_MPRA/cava_analysis_output/American_college_of_Medical_Genetics_and_Genomics/NIHMS1895945-ACMG_secondary_findings.csv
@@ -128,6 +136,8 @@ files:
     metadata_table_local_tested_juli: /home/kisa/coding/80K_MPRA/metadata_info/metadata_example_1607.tsv
     metadata_table_local_tested_sep: /home/kisa/coding/80K_MPRA/metadata_info/metadata_example_2609.tsv
     metadata_table_local_controls_august: /home/kisa/coding/80K_MPRA/metadata_info/metadata_controls_genomic_coordinates_1208.tsv
+    metadata_final_202502: /home/kisa/coding/80K_MPRA/80K-Analysis/07_quality_control/notebooks/control_metadata/MPRA_80215.metadata.tsv.gz # /data/cephfs-2/unmirrored/groups/kircher/MPRA/IGVF_Y1_design/design/mpra_metadata_format/MPRA_80215.metadata.tsv.gz
+    element_metadata_with_bcalm_2025_02: /home/kisa/coding/80K_MPRA/element_analysis_output/202502_element_analysis/element_metadata_with_bcalm_2025_02.tsv.gz
     region_metadata_table_local_tested_juli: /home/kisa/coding/80K_MPRA/metadata_info/metadata_tested_region_2307.tsv
     region_metadata_table_local_tested_oktober: /home/kisa/coding/80K_MPRA/metadata_info/metadata_tested_region_2010.tsv
     blat_tested_element_alignment: /data/cephfs-1/home/users/kisa11_c/unmirrored/projects/80K_analysis/05_variant_region_list/resources/blat/cardiac_neuro_cava_random_regions_design_style_header.tsv
