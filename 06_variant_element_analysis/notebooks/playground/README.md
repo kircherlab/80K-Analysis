@@ -1,0 +1,1 @@
+scp kisa11_c@172.16.35.182:/data/cephfs-2/unmirrored/groups/kircher/MPRA/IGVF_2025_design_WTC11/notebooks/check_element_predictions.ipynb /home/kisa/coding/80K_MPRA/80K-Analysis/06_variant_element_analysis/notebooks/playground
