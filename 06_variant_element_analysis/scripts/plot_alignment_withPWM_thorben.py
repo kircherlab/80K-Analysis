@@ -6,7 +6,6 @@ Example commands:   python VariantEffects/plot_alignment_withPWM.py
 Outputs:            fasta sequence file with sequences cooresponding to variants with top x % of all variant effects. CSV with haplo seqs and variant effect
 
 """
-
 #set seed and load dependencies
 import click
 import logomaker
@@ -15,6 +14,7 @@ import matplotlib.pyplot as plt
 import os
 import pandas as pd
 
+# before 2025
 col_alt_id = 'tmp_variant_fimo_hit_ALT_ID'
 col_ref_id = 'tmp_variant_fimo_hit_REF_ID'
 col_variant_pos = 'tmp_variant_fimo_hit_variant_pos'
@@ -23,10 +23,34 @@ col_start = 'tmp_fimo_results_start'
 col_stop = 'tmp_fimo_results_stop'
 col_strand = 'tmp_fimo_results_strand'
 col_fimo_q_value = 'tmp_fimo_results_q-value'
-col_fimo_matched_sequence = 'tmp_fimo_results_matched_sequence'
 col_ref_sequence = 'ref_sequence'
 col_alt_sequence = 'alt_sequence'
 col_mpralm_logFC = 'tmp_variant_BECALM_logFC'
+
+# Feb 2025
+col_alt_id = 'ALT_name'
+col_ref_id = 'REF_name'
+col_variant_pos = 'variant_pos_element'
+col_motif_id = 'motif_id'
+col_start = 'mod_fimo_start'
+col_stop = 'mod_fimo_stop'
+col_strand = 'strand'
+col_fimo_q_value = 'tmp_fimo_results_q-value'
+col_ref_sequence = 'ref_sequence'
+col_alt_sequence = 'alt_sequence'
+col_mpralm_logFC = 'bcalm_variant_effect_log_ratio_activity'
+
+# May 2025
+col_alt_id = 'ALT_name'
+col_ref_id = 'REF_name'
+col_variant_pos = 'variant_pos_int'
+col_motif_id = 'motif_id'
+col_start = 'zero_based_motif_start'
+col_stop = 'zero_based_motif_stop'
+col_strand = 'strand'
+col_ref_sequence = 'ref_sequence'
+col_alt_sequence = 'alt_sequence'
+col_mpralm_logFC = 'bcalm_variant_effect_log_ratio_activity'
 
 # TODO: Add strand to ID:
 # TODO: move plot to the right to fit the motif better
@@ -150,7 +174,6 @@ def cli(alig_motif_file, PWM_file, chunk_size, col_mpralm_logFC, hocomoco, posit
             #print(index)
             index=index*3
             reverse=False
-            title="bla"
             strand=row[col_strand]
             start=int(row[col_start])-1
             stop=int(row[col_stop])-1
@@ -261,8 +284,6 @@ def plot_logo(data_base_entry, axs, axsrow, title, start, stop, total, variantPo
     df_PWM_r["C"]=cwm_rev[1]
     df_PWM_r["G"]=cwm_rev[2]
     df_PWM_r["T"]=cwm_rev[3]
-
-                                    #print (df_PWM)
 
     if strand=="+":
                                     # create forward Logo object

@@ -27,22 +27,36 @@ input = '/home/kisa/coding/80K_MPRA/element_analysis_output/negative_neuron_NP_v
 input = '/home/kisa/coding/80K_MPRA/element_analysis_output/negative_neuron_CTRLs_vs_tested_element_assigned_barcodes_no_alt.tsv.gz' # modified snakemake output (see: /home/kisa/coding/80K_MPRA/80K-Analysis/07_quality_control/notebooks/state_of_data.ipynb)
 input = "/home/kisa/coding/80K_MPRA/server_results/MPRAsnakeflow/bbmap_standard_mapq10NoLength_unique_variant_id/NGN2_allreps_merged_barcode_assigned_counts.tsv.gz"
 # input = "/home/kisa/coding/80K_MPRA/server_results/MPRAsnakeflow/bbmap_standard_mapq10NoLength_unique_variant_id/testing_ngn2_MRPAsnakeflow_counts_302067.tsv.gz"
+input <- "/home/kisa/coding/80K_MPRA/server_results/80k_counts_after_metadatafile/NGN2_allreps_merged_barcode_assigned_counts.tsv.gz"
+input = "/home/kisa/coding/80K_MPRA/server_results/80k_counts_after_metadatafile/NGN2_allreps_merged_barcode_assigned_counts_hashtag_expanded.tsv.gz"
+input <- "/home/kisa/coding/80K_MPRA/server_results/80k_counts_after_metadatafile/bwa_finest_NGN2_allreps_merged_barcode_assigned_counts_hashtag_expanded.tsv.gz"
+# bbmapmapq30 with outlier detection
+input <- "/home/kisa/coding/80K_MPRA/server_results/80k_counts_after_metadatafile/NGN2_allreps_merged_barcode_assigned_counts_hashtag_expanded.tsv.gz"
+# wtc11 standard design strand sensitive + outlier detection
+input <- "/home/kisa/coding/80K_MPRA/server_results/80k_counts_after_metadatafile/strand_sensitive_WTC11_allreps_merged_barcode_assigned_counts_outlier_removed.tsv.gz"
+
+# NGN2: normalized counts using mpralib
+input <- "/home/kisa/coding/80K_MPRA/80K-Analysis/06_variant_element_analysis/scripts/test_mpralib_output/80k_NGN2_normalized_counts.tsv"
+
 
 bc_threshold <- 50
 bc_threshold <- 10
-dna_count_threshold <- 1
-rna_count_threshold <- 1
+# dna_count_threshold <- 1
+# rna_count_threshold <- 1
+
+# TODO: before filtering: use MRPAtreat to shift the sequences
+
 nr_reps <- 3 # if element for variant see below
-df <- read.table(file=gzfile(input), sep='\t', header=TRUE)
+df <- read.table(file=gzfile(input), sep='\t', header=TRUE, comment.char = "")
 print("Number of unique names loaded: ")
 print(length(unique(df$name)))
-# Filter all rows where DNA and RNA are both >= 1 in all replicates
-df <- df %>% filter(if_all(matches("dna", ignore.case=TRUE), ~ . >= dna_count_threshold))
-print("Number of unique names loaded after dna filtering: ")
-print(length(unique(df$name)))
-df <- df %>% filter(if_all(matches("rna", ignore.case=TRUE), ~ . >= rna_count_threshold))
-print("Number of unique names loaded after rna filtering: ")
-print(length(unique(df$name)))
+# # Filter all rows where DNA and RNA are both >= 1 in all replicates
+# df <- df %>% filter(if_all(matches("dna", ignore.case=TRUE), ~ . >= dna_count_threshold))
+# print("Number of unique names loaded after dna filtering: ")
+# print(length(unique(df$name)))
+# df <- df %>% filter(if_all(matches("rna", ignore.case=TRUE), ~ . >= rna_count_threshold))
+# print("Number of unique names loaded after rna filtering: ")
+# print(length(unique(df$name)))
 # Filter for oligos with at least min_bc barcodes per oligo
 df_filt <- df %>% group_by(name) %>% filter(n() >= bc_threshold) %>% ungroup()
 nrow(df_filt)
@@ -71,8 +85,21 @@ labelfile = '/home/kisa/coding/80K_MPRA/design_data/removed_brackets_design_no_d
 labelfile = '/home/kisa/coding/80K_MPRA/element_analysis_output/element_assigned_barcodes_label.tsv'
 labelfile = '/home/kisa/coding/80K_MPRA/element_analysis_output/negative_neuron_CTRLs_vs_tested_element_assigned_barcodes_no_alt_label_file.tsv'
 labelfile = "/home/kisa/coding/80K_MPRA/design_data/design_info/renamed_design_no_duplicates_sequence_and_header_with_adapter_no_brackets_no_collisions_label.tsv"
+# labelfile = "/home/kisa/coding/80K_MPRA/design_data/design_info/renamed_design_no_duplicates_sequence_and_header_with_adapter_no_brackets_no_collisions_REF_to_elements_label.tsv"
+labelfile = "/home/kisa/coding/80K_MPRA/design_data/design_info/2025_outlier_filtered_label_bwa_finest_.tsv"
+# bbmap mapq30 selfmade strand sensitive
+labelfile = "/home/kisa/coding/80K_MPRA/design_data/design_info/2025_outlier_filtered_label.tsv"
+labelfile = "/home/kisa/coding/80K_MPRA/design_data/design_info/2025_outlier_filtered_label_with_scrambled.tsv" # has C_scrambled_sequences_NP_MK as scrambled group
+labelfile = "/home/kisa/coding/80K_MPRA/design_data/design_info/WTC11_2025_outlier_filtered_label_with_scrambled.tsv" # has C_scrambled_sequences_NP_MK as scrambled group
+labelfile = "/home/kisa/coding/80K_MPRA/80K-Analysis/06_variant_element_analysis/scripts/test_mpralib_output/80k_metadata_scramble_control_label.tsv" # created from: /home/kisa/coding/80K_MPRA/80K-Analysis/06_variant_element_analysis/notebooks/qc_of_80k_mpra.ipynb
+labelfile = "/home/kisa/coding/80K_MPRA/element_analysis_output/202502_element_analysis/processing_mpralib/80k_metadata_scramble_control_label.tsv" # created from: /home/kisa/coding/80K_MPRA/80K-Analysis/06_variant_element_analysis/notebooks/qc_of_80k_mpra.ipynb
 
-labels <- read.table(labelfile, header=TRUE, sep='\t', col.names=c('name', 'label'))
+# NOTE I assume no header given:
+labels <- read.table(labelfile, header=FALSE, sep='\t', col.names=c('name', 'label'), comment.char = "")
+# If you have a header use this instead:
+# labels <- read.table(labelfile, header=TRUE, sep='\t', col.names=c('name', 'label'), comment.char = "")
+
+
 labels_vec <- as.vector(labels$label)
 names(labels_vec) <- labels$name
 # Use only these labels of the sequences that remained after filtering
@@ -80,20 +107,41 @@ labels_vec <- labels_vec[rownames(dna)]
 
 length(unique(labels$label))
 unique(labels$label)
-
+matrix_test = as.matrix(labels_vec)
+data_frame = as.data.frame(labels_vec)
+labels_vec_clean <- na.omit(labels_vec)
+data_frame = as.data.frame(labels_vec_clean)
 # For now I just remove all alt alleles
-# TODO: remove ALT
+# TODO: remove ALT (useful?)
+
 # number of barcodes is number of columns, divided by (nr of samples * number of alleles)
 bcs <- ncol(dna) / nr_reps
-
+print("Start with MPRASet...")
 mpra <- MPRASet(DNA = dna, RNA = rna, eid = row.names(dna), barcode = NULL, label=labels_vec)
 
 # the replicate where each barcode belongs to is a blocking factor, indicated by the block_vector.
 block_vector <- rep(1:nr_reps, each=bcs)
+
+print("Start with BCalm...")
 start <- Sys.time()
-mpralm_fit <- fit_elements(object = mpra, normalize=TRUE, block = block_vector)
+# NOTE: no normalization
+mpralm_fit <- fit_elements(object = mpra, normalize = FALSE, block = block_vector, plot = FALSE)
 cat("running time: ", Sys.time() - start, "\n")
 
+# # check for na values:
+# coefficients <- mpralm_fit$coefficients
+# summary(coefficients) # Get a quick summary
+# anyNA(coefficients) # Check if there are any NAs
+# which(is.na(coefficients), arr.ind = TRUE) # Get positions of NAs
+# anyNA(mpralm_fit$p.value)
+# anyNA(mpralm_fit$stdev.unscaled)
+# anyNA(mpralm_fit$df.residual)
+# anyNA(mpralm_fit$logFC)
+# anyNA(mpralm_fit$t)
+# anyNA(mpralm_fit$cov.coefficients)
+anyNA(mpralm_fit$label)
+# head(mpralm_fit$design)
+# mpralm_fit$coefficients[which(is.na(mpralm_fit$label)), , drop = FALSE]
 # filter mpralm_fit by only having tested sequences and C_negative_neuron_NP
 # Right? (or are we interested in the performance of the controls?)
 
@@ -120,16 +168,53 @@ cat("running time: ", Sys.time() - start, "\n")
 
 # test_element <- mpralm_fit
 # test_element$neu_negative_np_normalized_logratio <- TRUE
+# neg_label = "C_negative_neuron_NP"
+# neg_mean <- mean(mpralm_fit$coefficients[mpralm_fit$label == neg_label])
+# mpralm_fit$label
+# labels = mpralm_fit$label
+# coefficients_neg <- as.matrix(mpralm_fit$coefficients[mpralm_fit$label == neg_label] - neg_mean)
+# lfc_right <- quantile(coefficients_neg, percentile)
 
-testing_element <- mpra_treat(mpralm_fit, 0.95, neg_label = "C_negative_neuron_NP", test_label = NULL, side = "right") # 68297 expected 69257 - 92
-View(testing_element)
-testing_element_both_sided <- mpra_treat(mpralm_fit, 0.95, neg_label = "C_negative_neuron_NP", test_label = NULL, side = "both") # 69165 expected 69257
+# testing_element <- mpra_treat(mpralm_fit, 0.975, neg_label = "C_negative_neuron_NP")
+# testing_element <- mpra_treat(mpralm_fit, 0.95, neg_label = "C_scrambled_sequences_NP_MK")
+test_label = "cardiac_neuro_cava_random"
+negative_control = "negative_neuron_ctrl"
+scramble_control = "scramble_ctrl"
+# mpralib results
+testing_element_negative_control <- mpra_treat(mpralm_fit, 0.95, neg_label = negative_control)
+View(testing_element_scrambled)
 
-write.table(testing_element, file = "/home/kisa/coding/80K_MPRA/element_analysis_output/testing_element_treat_result.tsv", sep = "\t", row.names = FALSE, col.names = TRUE, quote = FALSE)
-toptab_allele_bc <- topTable(mpralm_fit, coef = 2, number = Inf)
-toptab_allele_bc$name <- row.names(toptab_allele_bc)
-write.table(toptab_allele_bc, file = "/home/kisa/coding/80K_MPRA/element_analysis_output/testing_element_toptable_results.tsv", sep = "\t", row.names = FALSE, col.names = TRUE, quote = FALSE)
-test_element_plot <- plot_groups(mpralm_fit, percentile = 0.95, neg_label = "C_negative_neuron_NP", test_label = "cardiac_neuro_cava_random")
+different_to_negative_control_output_path = "/home/kisa/coding/80K_MPRA/element_analysis_output/202501_80k_element_treat_vs_negative_neuron_NP_result.tsv"
+different_to_negative_control_output_path = "/home/kisa/coding/80K_MPRA/element_analysis_output/202501_bwa_finest_80k_element_treat_vs_negative_neuron_NP_result.tsv"
+different_to_negative_control_output_path = "/home/kisa/coding/80K_MPRA/element_analysis_output/202501_bwa_finest_no_outlier_filter_80k_element_treat_vs_negative_neuron_NP_result.tsv"
+different_to_negative_control_output_path = "/home/kisa/coding/80K_MPRA/element_analysis_output/202501_80k_element_bbmap_outlier_removed_treat_vs_negative_neuron_NP_result.tsv"
+different_to_negative_control_output_path = "/home/kisa/coding/80K_MPRA/element_analysis_output/202501_80k_element_bbmap_outlier_removed_treat_vs_scrambled_NP_MK_result_095.tsv"
+different_to_negative_control_output_path = "/home/kisa/coding/80K_MPRA/element_analysis_output/WTC11_202503_80k_element_bbmap_outlier_removed_treat_vs_scrambled_NP_MK_result_095.tsv"
+
+# write.table(testing_element, file = different_to_negative_control_output_path, sep = "\t", row.names = FALSE, col.names = TRUE, quote = FALSE)
+
+topTreat_result_diff_negative_control = "/home/kisa/coding/80K_MPRA/element_analysis_output/202501_80k_element_toptreat_results.tsv"
+topTreat_result_diff_negative_control = "/home/kisa/coding/80K_MPRA/element_analysis_output/202501_bwa_finest_80k_element_toptreat_results.tsv"
+topTreat_result_diff_negative_control = "/home/kisa/coding/80K_MPRA/element_analysis_output/202501_bwa_finest_no_outlier_filter_80k_element_toptreat_results.tsv"
+topTreat_result_diff_negative_control = "/home/kisa/coding/80K_MPRA/element_analysis_output/202501_80k_element_bbmap_outlier_removed_toptreat_results.tsv"
+topTreat_result_diff_negative_control = "/home/kisa/coding/80K_MPRA/element_analysis_output/202501_80k_element_bbmap_outlier_removed_toptreat_results_scrambled_NP_MK_result_095.tsv"
+topTreat_result_diff_negative_control = "/home/kisa/coding/80K_MPRA/element_analysis_output/WTC11_202503_80k_element_bbmap_outlier_removed_toptreat_results_scrambled_NP_MK_result_095.tsv"
+topTreat_result_diff_negative_control = "/home/kisa/coding/80K_MPRA/element_analysis_output/NGN2_202504_80k_element_bbmap_no_outlier_removal_bc10_toptreat_results_negative_ctrl_result_095.tsv"
+element_toptreat <- topTreat(testing_element_negative_control, coef = 1, number = Inf)
+element_toptreat$name <- row.names(element_toptreat)
+write.table(element_toptreat, file = topTreat_result_diff_negative_control, sep = "\t", row.names = FALSE, col.names = TRUE, quote = FALSE)
+
+test_element_plot <- plot_groups(mpralm_fit, 0.95, neg_label = negative_control, test_label = test_label)
+print(test_element_plot)
+
+
+testing_element_scrambled <- mpra_treat(mpralm_fit, 0.95, neg_label = scramble_control)
+topTreat_result_diff_scrambled = "/home/kisa/coding/80K_MPRA/element_analysis_output/NGN2_202504_80k_element_bbmap_no_outlier_removal_bc10_toptreat_results_scrambled_NP_MK_result_095.tsv"
+element_toptreat <- topTreat(testing_element_scrambled, coef = 1, number = Inf)
+element_toptreat$name <- row.names(element_toptreat)
+write.table(element_toptreat, file = topTreat_result_diff_scrambled, sep = "\t", row.names = FALSE, col.names = TRUE, quote = FALSE)
+
+test_element_plot <- plot_groups(mpralm_fit, 0.95, neg_label = scramble_control, test_label = test_label)
 print(test_element_plot)
 
 # # define negative label: C_negative_neuron_NP
