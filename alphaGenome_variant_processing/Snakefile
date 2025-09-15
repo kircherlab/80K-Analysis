@@ -1,0 +1,105 @@
+# Define directories
+SCRIPTS_DIR = "scripts"
+DATA_DIR = "/sc-projects/sc-proj-bih-reg-seqs/users/kisa11/projects/alphaGenome/results"
+DATA_DIR = "/sc-projects/sc-proj-bih-reg-seqs/users/kisa11/projects/alphaGenome/all_modalities_results"
+RESULTS_DIR = "/sc-projects/sc-proj-bih-reg-seqs/users/kisa11/projects/alphaGenome/aggregated_variant_scores_alphaGenome"
+RESULTS_DIR_ALL_TYPES = "/sc-projects/sc-proj-bih-reg-seqs/users/kisa11/projects/alphaGenome/all_types_aggregated_variant_scores_alphaGenome"
+
+# command to run the workflow:
+# snakemake --profile slurm_profile --sdm conda --conda-prefix /sc-projects/sc-proj-bih-reg-seqs/conda_envs/tmp --snakefile Snakefile --jobs 200 --printshellcmds --keep-going
+
+
+# Ensure output directory exists (Snakemake will create it automatically, but good to define)
+# A simple shell command can ensure this at the start of the workflow if desired,
+# but Snakemake often handles it per rule.
+# shell:
+#     mkdir -p {RESULTS_DIR}
+
+
+import re
+from glob import glob
+
+# Collect all matching filenames
+chunk_files = glob(f"{DATA_DIR}/chunk_*_*_variants_80k_alphaGenome_score.tsv.gz")
+
+# Extract (chunk_id, variant_count) tuples
+CHUNKS = [
+    re.search(r"chunk_(\d+)_(\d+)_variants_80k_alphaGenome_score.tsv.gz", f).groups()
+    for f in chunk_files
+]
+
+# Ensure each value is a string
+CHUNKS = [(chunk_id, variant_count) for chunk_id, variant_count in CHUNKS]
+
+# Optional: print for sanity check
+print(CHUNKS)
+
+
+INPUT_FILES = expand(
+    f"{DATA_DIR}/chunk_{{chunk_id}}_{{variant_count}}_variants_80k_alphaGenome_score.tsv.gz",
+    chunk_id=[c[0] for c in CHUNKS],
+    variant_count=[c[1] for c in CHUNKS],
+)
+
+rule all:
+    input:
+        # one modality
+        # expand(
+        #     f"{RESULTS_DIR}/chunk_{{chunk_id}}_{{variant_count}}_variants_80k_alphaGenome_score_processed_scores.tsv.gz",
+        #     zip,
+        #     chunk_id=[c[0] for c in CHUNKS],
+        #     variant_count=[c[1] for c in CHUNKS],
+        # )
+        expand(
+            f"{RESULTS_DIR_ALL_TYPES}/chunk_{{chunk_id}}_{{variant_count}}_variants_80k_alphaGenome_score_all_types_processed_scores.tsv.gz",
+            zip,
+            chunk_id=[c[0] for c in CHUNKS],
+            variant_count=[c[1] for c in CHUNKS],
+        )
+
+
+# rule to process each chunk file => combine the cell-type specific predictions into a single file
+rule process_chunk:
+    input:
+        tsv=f"{DATA_DIR}/chunk_{{chunk_id}}_{{variant_count}}_variants_80k_alphaGenome_score.tsv.gz"
+    output:
+        processed_tsv=f"{RESULTS_DIR}/chunk_{{chunk_id}}_{{variant_count}}_variants_80k_alphaGenome_score_processed_scores.tsv.gz"
+    params:
+        script=f"{SCRIPTS_DIR}/process_alphaGenome_chunk.py",
+        output_dir=RESULTS_DIR
+    log:
+        temp(f"{RESULTS_DIR}/logs/process_chunk_{{chunk_id}}_{{variant_count}}.log")
+    conda:
+        "envs/alphaGenome_processing.yaml"
+    resources:
+        mem_mb=8000,
+        time_min=60,
+        cpus=1,
+        partition="compute"
+    shell:
+        """
+        python {params.script} {input.tsv} --output_directory {params.output_dir} > {log} 2>&1
+        """
+
+# Process all prediction types
+rule process_chunk_all_types:
+    input:
+        tsv=f"{DATA_DIR}/chunk_{{chunk_id}}_{{variant_count}}_variants_80k_alphaGenome_score.tsv.gz"
+    output:
+        processed_tsv=f"{RESULTS_DIR_ALL_TYPES}/chunk_{{chunk_id}}_{{variant_count}}_variants_80k_alphaGenome_score_all_types_processed_scores.tsv.gz"
+    params:
+        script=f"{SCRIPTS_DIR}/process_all_types_alphaGenome_chunk.py",
+        output_dir=RESULTS_DIR_ALL_TYPES
+    log:
+        temp(f"{RESULTS_DIR_ALL_TYPES}/logs/process_chunk_{{chunk_id}}_{{variant_count}}.log")
+    conda:
+        "envs/alphaGenome_processing.yaml"
+    resources:
+        mem_mb=8000,
+        time_min=60,
+        cpus=1,
+        partition="compute"
+    shell:
+        """
+        python {params.script} {input.tsv} --output_directory {params.output_dir} > {log} 2>&1
+        """
