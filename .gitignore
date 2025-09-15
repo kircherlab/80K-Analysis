@@ -8,8 +8,8 @@
 *.json
 *.png
 *.svg
-*.vcf
 *.yaml
+*.vcf
 *.tsv
 *.feather
 *.csv
@@ -17,4 +17,7 @@
 
 # exclude tmp directory
 tmp/
-*results/*
+**results/
+# exclude github and snakemake folders
+**.snakemake/
+**.github/

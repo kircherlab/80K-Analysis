@@ -1,0 +1,19 @@
+# Input files
+master_TFBS_bed: "path/to/master_TFBS.bed"  #
+sequence_set_A_bed: "path/to/sequence_set_A.bed"
+sequence_set_B_bed: "path/to/sequence_set_B.bed"
+
+# Names for plotting and output files
+label_A: "Active"
+label_B: "Inactive"
+output_prefix: "TFBS_enrichment"
+# Statistical parameters
+fdr_threshold: 0.05
+min_findings: 5  # Minimum number of findings to consider a TFBS for plotting
+# Plotting parameters
+plot_title: "TFBS Enrichment Analysis"
+plot_xlabel: "Odds Ratio"
+plot_ylabel: "Transcription Factors"
+plot_size: [10, 8]  # Width, Height in inches
+plot_dpi: 300
+plot_format: "png"  # e.g., png, pdf, svg

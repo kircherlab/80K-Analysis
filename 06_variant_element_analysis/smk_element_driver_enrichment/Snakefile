@@ -1,0 +1,128 @@
+# Snakefile for TFBS enrichment workflow
+
+configfile: "config.yaml"
+
+import yaml
+
+with open("config.yaml") as f:
+    config = yaml.safe_load(f)
+
+# Configuration parameters
+## Plotting:
+label_A = config.get("label_A", "Active")
+label_B = config.get("label_B", "Inactive")
+output_prefix = config.get("output_prefix", "TFBS_enrichment")
+fdr_threshold = config.get("fdr_threshold", 0.05)
+plot_title = config.get("plot_title", "TFBS Enrichment Analysis")
+plot_xlabel = config.get("plot_xlabel", "Odds Ratio")
+plot_ylabel = config.get("plot_ylabel", "Transcription Factors")
+plot_size = config.get("plot_size", [10, 8])
+plot_dpi = config.get("plot_dpi", 300)
+plot_format = config.get("plot_format", "png")
+
+comparison_group = f"{label_A}_vs_{label_B}"
+
+
+## overlap of sequence bed files and the remap2022 bed file:
+### add target column (name of the TF)
+remap2022_bed_path = config.get("remap2022_bed_path", "resources/remap2022_nr_macs2_hg38_v1_0.bed.gz")
+rule add_target_column_to_remap2022_bed:
+    input:
+        bed=remap2022_bed_path
+    output:
+        bed_with_target="resources/remap2022_nr_macs2_hg38_v1_0_with_target.bed.gz"
+    conda:
+        "envs/bedtools.yaml"
+    shell:
+        r"""
+        zcat {input.bed} | \
+        awk 'BEGIN{{OFS="\t"}} {{$NF=$NF; split($4,a,":"); print $0, a[1]}}' | \
+        gzip > {output.bed_with_target}
+        """
+
+rule sort_remap_file:
+    input:
+        bed="resources/remap2022_nr_macs2_hg38_v1_0_with_target.bed.gz"
+    output:
+        sorted_bed="resources/remap2022_nr_macs2_hg38_v1_0_with_target_sorted.bed.gz"
+    conda:
+        "envs/bedtools.yaml"
+    shell:
+        r"""
+        zcat {input.bed} | \
+        sort -k1,1 -k2,2n | \
+        gzip > {output.sorted_bed}
+        """
+
+rule bedtools_intersect_remap:
+    input:
+        sequence_bed=config.get("sequence_set_A_bed", None),
+        sorted_remap_bed="resources/remap2022_nr_macs2_hg38_v1_0_with_target_sorted.bed.gz"
+    output:
+        intersected_bed=f"results/{label_A}_remap2022_intersected.bed.gz"
+    conda:
+        "envs/bedtools.yaml"
+    shell:
+        r"""
+        bedtools intersect -a {input.sequence_bed} -b {input.sorted_remap} -wo | \
+        gzip > {output.intersected_bed}
+        """
+
+rule filter_remap2022_overlap_using_peak_summit:
+    input:
+        remap_overlap_bed=f"results/{label_A}_remap2022_intersected.bed.gz"
+    output:
+        filtered_bed=f"results/{label_A}_remap2022_intersected_filtered_summit_overlap_no_border_overlap_min_10bp.bed.gz"
+    conda:
+        "envs/python.yaml"
+    shell:
+        (
+            "python scripts/filter_overlap_peak_summit_overlap.py "
+            "{input.remap_overlap_bed} "
+            "--output_path {output.filtered_bed}"
+        )
+
+rule count_tfbs_in_filtered_overlap:
+    input:
+        filtered_bed=f"results/{label_A}_remap2022_intersected_filtered_summit_overlap_no_border_overlap_min_10bp.bed.gz"
+    output:
+        tfbs_counts=f"results/{label_A}_tfbs_counts.tsv"
+    conda:
+        "envs/python.yaml"
+    shell:
+        (
+            "python scripts/count_remap_overlap_tfbs.py "
+            "{input.filtered_bed} "
+            "{output.tfbs_counts}"
+        )
+
+rule plot_TFBS_enrichment:
+    input:
+        results_file=f"results/{comparison_group}_tfbs_enrichment.tsv"
+    output:
+        plot=f"results/{output_prefix}_{comparison_group}.{plot_format}"
+    conda:
+        "envs/plotting_tfbs_enrichment.yaml"
+    shell:
+        (
+            "python scripts/plot_enriched_tfbs.py "
+            "{input.results_file} "
+            f"{comparison_group} "
+            f"{label_A} "
+            f"{label_B} "
+            "{output.plot} "
+            f"--threshold {fdr_threshold} "
+            f"--plot_title '{plot_title}' "
+            f"--plot_xlabel '{plot_xlabel}' "
+            f"--plot_ylabel '{plot_ylabel}' "
+            f"--plot_size {plot_size[0]} {plot_size[1]} "
+            f"--plot_dpi {plot_dpi} "
+            f"--plot_format {plot_format} "
+        )
+
+# Example usage:
+# snakemake plot_TFBS_enrichment --config comparison_group=active_vs_inactive
+# snakemake plot_TFBS_enrichment --config comparison_group=active_oc_vs_non_oc
+
+# The input file is produced by the tfbs_fisher_exact_test rule (not yet implemented)
+# and should be located in the results/ directory as <comparison_group>_tfbs_enrichment.tsv

@@ -1,0 +1,12 @@
+name: alphagenome_processing_env # A meaningful name for the environment
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python=3.10
+  - pandas
+  - tqdm # If your script uses tqdm
+  - pip
+  - pip:
+    - alphagenome

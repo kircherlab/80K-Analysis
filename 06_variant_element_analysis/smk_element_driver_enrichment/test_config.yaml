@@ -1,0 +1,10 @@
+label_A: "Active"
+label_B: "Inactive"
+output_prefix: "test_TFBS_enrichment"
+fdr_threshold: 0.05
+plot_title: "Test TFBS Enrichment Analysis"
+plot_xlabel: "Odds Ratio"
+plot_ylabel: "Transcription Factors"
+plot_size: [10, 8]
+plot_dpi: 150
+plot_format: "png"

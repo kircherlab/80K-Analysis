@@ -1,0 +1,9 @@
+software-deployment-method: conda
+default-resources:
+  mem: 8G
+  runtime: 60
+  cpus: 1
+  partition: compute
+# Other common profile options:
+latency-wait: 60
+verbose: true
