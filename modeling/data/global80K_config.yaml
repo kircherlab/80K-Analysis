@@ -1,0 +1,4 @@
+# This notebook loads global80K_config.yaml (yaml.load) but never indexes
+# into the resulting dict anywhere in the code -- no key from this file is
+# actually consumed. Kept as an empty, valid YAML document so the load
+# still succeeds.
