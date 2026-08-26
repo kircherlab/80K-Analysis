@@ -27,14 +27,13 @@ from pathlib import Path
 
 import pandas as pd
 
-# ── Configuration ──────────────────────────────────────────────────────────────
-DATA_BASE = Path("/home/kisa/coding")
+#  Configuration
+DATA_BASE = Path("./")
 
-GENCODE_GTF  = DATA_BASE / "80K_MPRA/gencode_v42/gencode.v42.annotation.gtf.gz"
-GTEX_RAW     = DATA_BASE / ("80K_MPRA/80K-Analysis/09_mpra_manuscript/results/"
-                             "variant_info/gtex_filtered/gtex_prefiltered_by_mpra_1_based.tsv.gz")
-META_PARQUET = DATA_BASE / ("IAWG_IGVF/data/neuron_variant/2604_metabrain_eQTL/"
-                             "neuro_Metabrain_eQTL_overlap.parquet")
+GENCODE_GTF  = DATA_BASE / "../../data/gencode.v42.gtf.gz"
+GTEX_RAW     = DATA_BASE / "../../data/gtex_prefiltered_by_mpra_1_based.tsv.gz"
+# NOTE: This file is too large to store in the repo
+META_PARQUET = DATA_BASE / "neuro_Metabrain_eQTL_overlap.parquet"
 
 OUT_DIR  = Path("data/eqtl")
 GTEX_OUT = OUT_DIR / "gtex_processed.tsv.gz"
@@ -52,7 +51,7 @@ NC_TO_UCSC = {
 }
 
 
-# ── GENCODE GTF parser ──────────────────────────────────────────────────────────
+#  GENCODE GTF parser
 
 def parse_gencode_tss(gtf_path: Path) -> dict:
     """
@@ -100,7 +99,7 @@ def parse_gencode_tss(gtf_path: Path) -> dict:
     return tss
 
 
-# ── GTEx processing ─────────────────────────────────────────────────────────────
+#  GTEx processing
 
 def process_gtex(raw_path: Path, tss_dict: dict, out_path: Path) -> None:
     """
@@ -155,7 +154,7 @@ def process_gtex(raw_path: Path, tss_dict: dict, out_path: Path) -> None:
     print(f"  Brain rows: {out['is_brain'].sum():,} | Non-brain: {(~out['is_brain']).sum():,}")
 
 
-# ── Metabrain processing ─────────────────────────────────────────────────────────
+#  Metabrain processing
 
 def process_metabrain(parquet_path: Path, out_path: Path) -> None:
     """
@@ -235,7 +234,7 @@ def process_metabrain(parquet_path: Path, out_path: Path) -> None:
     print(f"  significant (sig_eQTL): {out['is_sig'].sum():,}")
 
 
-# ── Entry point ─────────────────────────────────────────────────────────────────
+#  Entry point
 
 def main():
     for path in [GENCODE_GTF, GTEX_RAW, META_PARQUET]:

@@ -1,0 +1,33 @@
+category	species	model	locus	variant(s)	experimental perturbation	experimental evidence
+coronary artery disease						
+ non-coding interval	mouse	whole organism	CDKN2A/B	rs12555547rs10757274rs2383206rs10965244	homozygous deletion	increased mortalityreduced CDKN2A/B expressionincreased proliferation/reduced senescence in VSMCs
+ distal enhancer	human	LCLsHUVECs	CDKN2B-AS1	rs10811656rs10757278	siRNA/natural genetic variation	STAT1 binding disrupted by risk haplotypelong-range interaction between enhancer and CDKN2A/B locusSTAT1 inhibits CDKN2BAS expression
+ non-coding interval	human	VSMCs	CDKN2A/BCDKN2B-AS1	rs1333049	natural genetic variation	risk genotype associated with reduced gene expression and increased proliferation
+ intronic interval	human	coronary artery ECs	PHACTR1	rs9349379	heterozygous deletion	MEF2 binding disrupted by risk allele34 bp deletion leads to 35% reduction in PHACTR1 expression
+ intronic interval	human	coronary artery SMCs	SMAD3	rs17293632	natural genetic variation	SNP in open chromatin region, induced in TGFβ- or PDGF-BB-treated cellsAP-1/TCF21 binding disrupted by protective minor allele
+ distal enhancer	human	iPSC-ECs and VSMCs	PHACTR1	rs9349379	90 bp enhancer deletionhomozygous major/minor biallelic clones	enhancer deletion increased EDN1 expressionminor risk allele associates with 20% increase in EDN1 expression
+ intronic enhancer	human	coronary artery ECs	PLPP3	rs17114036	enhancer deletionCRISPR inhibition	SNP in endothelial enhancer induced by haemodynamicsenhancer deletion/repression leads to reduced PLPP3 expressionKLF2 binding disrupted by risk allele
+ non-coding interval	human	iPSC-VSMCs	CDKN2B-AS1	risk/non-risk haplotype	60 kb deletion of risk and non-risk haplotypes	deletion of risk haplotype leads to non-risk like expression profile in iPSC-VSMCs
+congenital heart disease						
+ distal enhancer	mouse	LacZ transgene	TBX5	rare variant	transgene expression	rare variant disrupts heart-specific expression and nuclear protein binding in vitro
+ intronic enhancer	humanrat	heart tissueHEK293 cellsH9C2 cells	MTRR	rs326119	natural genetic variation	minor allele disrupts CEBPA binding and associates with elevated plasma homocysteine levels
+ distal enhancer	human	normal iPSCs	GATA4	rs6601627rs118065347	GATA4 small deletion by CRISPR	non-coding variants genetically associated with aortic bicuspid valveGATA4 deficiency impairs EMT in iPSCs
+ missense variant	mouse	knock-in mouse model	PBX1	de novo mutation	CRISPR genetic editing	multiple developmental defects in knock-in mice, including ventricular septal defects and persistent truncus arteriosus
+long QT syndrome						
+ distal enhancer	humanratzebrafish	HL-1 cellszebrafish embryoRNVMs	NOS1AP	rs7539120	in vitro deletionNOS1AP overexpression	variant deletion reduces in vitro enhancer activityrisk haplotype increases transgenic reporter activity and nuclear protein binding in vitro
+ missense variant	human	patient-specific iPSCs	KCNH2	novel missense variant	correction of variant in patient cells/homozygous knock-in in healthy cells	prolongation of action potential in patient iPSC-CMs and reduced IKr.normalized phenotype in corrected cells
+ promoter region	human	human left ventricleHEK293 cells	PRKCA	rs9892651rs9909004rs7210446	natural genetic variation	minor protective allele associated with decreased PRKCA expressioninsert containing rs9909004 shows enhancer activity in HEK293 cells
+atrial fibrillation						
+ distal enhancer	human	ESC-CMs	PITX2c	rs2595104	knock-in of risk alleleapproximately 100 bp enhancer deletionsiRNA knock-down	30–54% reduced PITX2c expression upon SNP deletion; 27% reduction by risk alleleeffect dependent on TFAP2a/CITED2 preferential binding to non-risk allele
+ distal enhancerpromoter/exon	mouse	whole organism	GJA1KCNN3ZFHX3	many in each genomic interval	40 kb homozygous deletion85 kb homozygous deletion33 kb homozygous deletion	reduced GJA1 expression in atrialoss of KCNN3 expression in atria and ventriclesno significant expression changes
+ distal enhancer	human	HL-1 cellsHCFsiPSC-CMs	PRRX1	rs577676	PPRX1 gene knock-out	interaction between enhancer and PPRX1 promoter in cardiac fibroblastsvariant required for enhancer activityPRRX1 suppression leads to shortening of atrial action potential
+Brugada syndrome						
+ distal enhancer	mousehuman	cardiac tissue	SCN10ASCN5A	rs6801957	BAC transgenic mouse	genetic variant interacts with SCN5A promoterengineered enhancer deletion essential for cardiac SCN5A expressionrisk allele associated with reduced enhancer activity
+ 3′ UTR	human	blood samples	SCN5A	rs45592631	natural genetic variation	3′UTR variants identified in Tunisian familyeffect hypothesized to be dependent on miR-1270
+cardiomypathies						
+ distal enhancers	mouse	whole organism	MYL2MYH7	proximal to coding mutations	homozygous deletions	cardiac abnormalities upon deletion of both enhancers (reduced fractional shortening, cardiomegaly and cardiomyocyte disarray)
+ missense variant	human	patient-specific iPSCs	SCN5A	R1898H	genetic editing to correct mutation	36% reduction in peak sodium current in patient iPSC-CMs
+ missense variants	human	patient-specific iPSCs	MYH7	R453C	heterozygous and homozygous genetic editing	dose-dependent cardiomyopathy phenotypes (size, sarcomeric disarray, altered calcium handling)
+ promoter	human	IHKE cells	DSG2	rare variant	risk and non-risk alleles in vitro	reduced DSG2 transcriptional activity associated with minor allele preferential AP-1 binding to non-risk allele
+obesity						
+ distal enhancer	humanmouse	brain tissuewhole organism	FTO/IRX3	rs9930506	IRX3 knock-out	robust interaction between intronic FTO variants and IRX3 promoter in brain tissue IRX3-deficient mice show phenotypes consistent with role in control of body mass

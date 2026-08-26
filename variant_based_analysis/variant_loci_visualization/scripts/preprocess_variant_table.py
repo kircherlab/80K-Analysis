@@ -35,19 +35,16 @@ import pandas as pd
 
 # ── Input paths ──────────────────────────────────────────────────────────────────
 
-DATA_BASE = Path("/home/kisa/coding")
+DATA_BASE = Path("./")
 
 VARIANT_INFO = DATA_BASE / (
-    "80K_MPRA/80K-Analysis/09_mpra_manuscript/results/variant_info/"
-    "2602_variant_info_significant_annot_with_predictions.tsv.gz"
+    "data/2602_variant_info_significant_annot_with_predictions.tsv.gz"
 )
 EQTL_PER_VARIANT = DATA_BASE / (
-    "IAWG_IGVF/data/neuron_variant/2605_finemapped_eQTLs/2606_finemapped_eQTL/"
-    "gtex_brain_eqtl_per_variant.tsv.gz"
+    "data/eqtl/gtex_brain_eqtl_per_variant.tsv.gz"
 )
 EQTL_FULL_OVERLAP = DATA_BASE / (
-    "IAWG_IGVF/data/neuron_variant/2605_finemapped_eQTLs/2606_finemapped_eQTL/"
-    "gtex_brain_eqtl_full_overlap.tsv.gz"
+    "data/eqtl/gtex_brain_eqtl_full_overlap.tsv.gz"
 )
 
 OUT_DIR = Path("data/variant_table")
@@ -317,10 +314,6 @@ def main() -> None:
         print(f"  Brain high-confidence:     {n_gtex_brain:4d}  ({100*n_gtex_brain/n_total:.1f}%){brain_rsid_str}")
 
     # GWAS
-    # Note: has_brain_GWAS_trait is pre-computed in the upstream variant info table.
-    # It captures neurological/psychiatric/behavioral traits (e.g. insomnia, educational
-    # attainment, essential tremor, smoking) but also some broader traits (height, weight).
-    # Inspect GWAS_DISEASE_TRAIT column for the actual trait labels per variant.
     n_gwas_any   = _bool_col(annot, "has_any_GWAS_overlap").sum()
     gwas_brain_rows = annot[_bool_col(annot, "has_brain_GWAS_trait")]
     n_gwas_brain = len(gwas_brain_rows)

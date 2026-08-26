@@ -49,3 +49,7 @@ files:
     urinary_bladder_acety_methy_screen_active_cre: data/SCREEN_tissues/enrichment_over_tissues_filtered/urinary_bladder.acetylation_methylation_only_cCRE_open_filtered.bed.gz
     urinary_bladder_dnase_screen_active_cre: data/SCREEN_tissues/enrichment_over_tissues_filtered/urinary_bladder.dnase_only_cCRE_open_filtered.bed.gz
     metadata_corrected_spdi_202511: data/MPRA_251117_corrected_spdi.metadata.tsv.gz
+    80k_label_file: data/mpra_80k_seq_label.tsv.gz
+    MPRA_251117_corrected_spdi: data/MPRA_251117_corrected_spdi.metadata.tsv.gz
+    NGN2_2511_element_activity_dna_>=1_bcalm_normalized_scrambled_ctrl: data/cli_NGN2_202511_80k_element_bbmap_bcalm_normalized_bc10_toptreat_results_scrambled_NP_MK_result_095_dev.tsv.gz
+    gnomad_data_all_variants_local: data/all_80K_variants_for_gnomadDB_with_gnomad_info.tsv # produced by download_gnomadDB.py + get_info_from_gnomad.py

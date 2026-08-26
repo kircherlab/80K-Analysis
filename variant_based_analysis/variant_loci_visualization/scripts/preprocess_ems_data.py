@@ -39,14 +39,14 @@ from pathlib import Path
 
 import pandas as pd
 
-# ── Configuration ──────────────────────────────────────────────────────────────
-DATA_BASE = Path("/home/kisa/coding")
-
+# Configuration
+DATA_BASE = Path("./")
+# NOTE: these paths need to be downloaded manually from the fine-mapped EMS release and the gencode v42 release
+# https://www.finucanelab.org/data
 EMS_DIR   = DATA_BASE / "80K_MPRA/eQTL_fine-mapped/EMS_public"
 GTF_FILE  = DATA_BASE / "80K_MPRA/gencode_v42/gencode.v42.annotation.gtf.gz"
 MPRA_FILE = DATA_BASE / (
-    "80K_MPRA/80K-Analysis/09_mpra_manuscript/data/variant_effects/"
-    "2603_NGN2_variants_with_model_predictions_cadd16_cadd17_alphaGenome_encoder.tsv.gz"
+    "../../modeling/data/2605_NGN2_variants_with_model_predictions_cadd16_cadd17_alphaGenome_encoder_chrombpnet.tsv.gz"
 )
 
 OUT_DIR  = Path("data/eqtl")
@@ -55,7 +55,7 @@ EMS_OUT  = OUT_DIR / "ems_arcs_processed.tsv.gz"
 EMS_SIG_THRESHOLD = 0.001  # ems (calibrated causal probability) cutoff for is_sig
 
 
-# ── GENCODE GTF parser (mirrors process_gtex in preprocess_eqtl_data.py) ─────
+# GENCODE GTF parser (mirrors process_gtex in preprocess_eqtl_data.py)
 
 def parse_gencode_tss(gtf_path: Path) -> dict:
     """
@@ -104,7 +104,7 @@ def parse_gencode_tss(gtf_path: Path) -> dict:
     return tss
 
 
-# ── MPRA variant filter ────────────────────────────────────────────────────────
+# MPRA variant filter
 
 def load_mpra_positions(mpra_path: Path) -> pd.DataFrame:
     """
@@ -132,7 +132,7 @@ def load_mpra_positions(mpra_path: Path) -> pd.DataFrame:
     return out
 
 
-# ── EMS processing ─────────────────────────────────────────────────────────────
+#  EMS processing
 
 def process_ems(ems_dir: Path, tss_dict: dict,
                 mpra_pos: pd.DataFrame, out_path: Path) -> None:
@@ -190,7 +190,7 @@ def process_ems(ems_dir: Path, tss_dict: dict,
         df["v_start"] = v_pos1[v_pos1.notna()].astype(int) - 1        # 0-based
         df["v_end"]   = df["v_start"] + 1
 
-        # ── Filter: keep only MPRA library variants ────────────────────────────
+        #  Filter: keep only MPRA library variants
         df = df.merge(
             mpra_pos,
             left_on=["chrom_num", "v_start"],
@@ -201,7 +201,7 @@ def process_ems(ems_dir: Path, tss_dict: dict,
         if df.empty:
             continue
 
-        # ── Join canonical TSS ─────────────────────────────────────────────────
+        #  Join canonical TSS
         df["gene_id_base"] = df["g"].str.replace(r"\.\d+$", "", regex=True)
         df = df.merge(tss_df, on="gene_id_base", how="inner")
 
@@ -251,7 +251,7 @@ def process_ems(ems_dir: Path, tss_dict: dict,
     print(f"  Brain-tissue arcs: {out['is_brain'].sum():,}")
 
 
-# ── Entry point ────────────────────────────────────────────────────────────────
+#  Entry point
 
 def main():
     for path in [EMS_DIR, GTF_FILE, MPRA_FILE]:

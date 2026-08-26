@@ -1,0 +1,28 @@
+Location	Phenotype	Inheritance	Phenotype mapping key	Phenotype MIM number	Gene/Locus	Gene/Locus MIM number	Enhancers	gene_in_80K_design(Kircherlab)
+1q41-q42	{Autism susceptibility 11}		2	610836	AUTS11	610836		0
+2q24.2	Intellectual developmental disorder with autism and speech delay	AD	3	606053	TBR1, IDDAS	604616		only TBR1
+3q24	{?Autism susceptibility 16}		3	613410	SLC9A9, AUTS16	608396		0
+3q25-q27	{Autism susceptibility 8}	IC, Mu	2	607373	AUTS8	607373		0
+3q26.31	{Autism, susceptibility to, 20}	AD	3	618830	NLGN1	600568		0
+4q23	{Autism, susceptibility to, 19}		3	615091	EIF4E, EIF4EL1, AUTS19	133440		0
+7q22	{Autism susceptibility 1}	IC, Mu	2	209850	AUTS1	209850		0
+7q31	{Autism, susceptibility to, 9}		2	611015	AUTS9	611015		0
+7q35-q36.1	{Autism susceptibility 15}		3	612100	CNTNAP2, CASPR2, NRXN4, AUTS15, PTHSL1	604569		0
+7q36	{Autism, susceptibility to, 10}		2	611016	AUTS10	611016		0
+11q13.3-q13.4	{Autism susceptibility 17}		3	613436	SHANK2, CORTBP1, AUTS17	603290		only SHANK2
+12q14.2	{Autism susceptibility 13}		2	610908	AUTS13	610908		0
+13q13.2-q14.1	{Autism susceptibility 3}	IC, Mu	2	608049	AUTS3	608049		0
+14q11.2	Intellectual developmental disorder with autism and macrocephaly	AD	3	615032	CHD8, DUPLIN, KIAA1564, IDDAM	610528		only CHD8
+15q11	{Autism susceptibility 4}	AD	2	608636	AUTS4	608636		0
+16p11.2	{Autism susceptibility 14A}		2	611913	DEL16p11.2, C16DELp11.2, AUTS14A	611913		0
+16p11.2	Chromosome 16p11.2 deletion syndrome, 593kb		4	611913	DEL16p11.2, C16DELp11.2, AUTS14A	611913		0
+17q11	{Autism susceptibility 6}		2	609378	AUTS6	609378		0
+17q21	{Autism susceptibility 7}		2	610676	AUTS7	610676		0
+21p13-q11	{Autism susceptibility 12}		2	610838	AUTS12	610838		0
+Xp22.32-p22.31	{Autism susceptibility, X-linked 2}	IC, Mu, XL	3	300495	NLGN4, KIAA1260, AUTSX2, ASPGX2	300427		only NLGN4
+Xp22.32-p22.31	Intellectual developmental disorder, X-linked	IC, Mu, XL	3	300495	NLGN4, KIAA1260, AUTSX2, ASPGX2	300427		only NLGN5
+Xp22.11	{Autism, susceptibility to, X-linked 4}	XLR	3	300830	PTCHD1, AUTSX4	300828		only PTCHD1
+Xq13.1	{Autism susceptibility, X-linked 1}	XL	3	300425	NLGN3, ASPGX1, AUTSX1	300336		only NLGN3
+Xq28	{Autism susceptibility, X-linked 3}	XL	3	300496	MECP2, RTT, PPMX, AUTSX3, MRXSL, MRXS13	300005		only MECP2
+Xq28	{Autism, susceptibility to, X-linked 5}		3	300847	RPL10, DXS648, QM, AUTSX5, MRXS35	312173		0
+Xq28	{Autism, susceptibility to, X-linked 6}	XLR	3	300872	TMLHE, BBOX2, TMLH, TMLHED, AUTSX6	300777		0
