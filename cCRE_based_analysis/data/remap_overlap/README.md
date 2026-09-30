@@ -33,14 +33,14 @@ zcat tested_80k_MPRA_CREs_remap2022_filtered_summit_overlap_no_border_overlap_mi
 grep -Ff 2604_NGN2_scramble_ctrl_inactive_elements_name.tsv | \
 awk '{print $4 "\t" $8}' | \
 sort | \
-uniq -c > 2604_not_significant_counts.tsv
+uniq -c | gzip > 2604_not_significant_counts.tsv.gz
 ```
 
 - To generate the concordance figure with the elastic net model and the ridge regression enrichment analysis
 ```bash
 python run_tf_activity_inactivity_concordance.py \
  --active_counts data/remap_overlap/2604_active_elements_counts.tsv \
- --inactive_counts data/remap_overlap/2604_not_significant_counts.tsv \
+ --inactive_counts data/remap_overlap/2604_not_significant_counts.tsv.gz \
  --counts_no_header \
  --annotation data/remap_overlap/ngn2_element_activity_metadata_202511_bbmap_bcalm_normalization.tsv.gz \
  --elastic_net data/remap_overlap/2512_ngn2_activity_elastic_net_model_202511_bbmap_bcalm_normalization_coefficients_all_regions_removed_na_phastcons_R2_test_0.0308.tsv \

@@ -10,7 +10,7 @@ plot_variant(rsid = 'rs11789013',   brain_atac = c('astrocyte','cortical','hippo
 # potentially interesting based on GWAS associations
 print("potentially interesting based on GWAS associations")
 plot_variant(rsid = 'rs7970847',    brain_atac = c('astrocyte','cortical','hippocampus','motor'), show_ngn2_atac = FALSE, show_gtex = FALSE, show_ems = FALSE, arc_lwd = 2.5)
-plot_variant(rsid = 'rs17572795',    brain_atac = c('astrocyte','cortical','hippocampus','motor'), show_ngn2_atac = FALSE, show_gtex = FALSE, show_ems = FALSE, arc_lwd = 2.5)
+plot_variant(rsid = 'rs17572795', window= 300000L,   brain_atac = c('astrocyte','cortical','hippocampus','motor'), show_ngn2_atac = FALSE, show_gtex = FALSE, show_ems = FALSE, arc_lwd = 2.5)
 plot_variant(rsid = 'rs12203592',    brain_atac = c('astrocyte','cortical','hippocampus','motor'), show_ngn2_atac = FALSE, show_gtex = FALSE, show_ems = FALSE, arc_lwd = 2.5)
 plot_variant(rsid = 'rs10903341',    brain_atac = c('astrocyte','cortical','hippocampus','motor'), show_ngn2_atac = FALSE, show_gtex = FALSE, show_ems = FALSE, arc_lwd = 2.5)
 plot_variant(rsid = 'rs7236461',    brain_atac = c('astrocyte','cortical','hippocampus','motor'), show_ngn2_atac = FALSE, show_gtex = FALSE, show_ems = FALSE, arc_lwd = 2.5)

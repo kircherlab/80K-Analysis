@@ -3,6 +3,7 @@ files:
     npc_screen_active_cre: data/neural_progenitor_cell_ENCFF286QGB_ENCFF835JIA_ENCFF618RAO_ENCFF700SCP_cCRE_open_filtered.bed.gz
     WTC11_screen_active_cre: data/WTC11_ENCFF736FHB_ENCFF857KTM_ENCFF306ZMK_cCRE_open_filtered.bed.gz
     H9_screen_active_cre: data/H9_ENCFF903ZCB_ENCFF179HBV_ENCFF988WEQ_ENCFF963CHU_cCRE_open_filtered.bed.gz
+    H1_screen_active_cre: data/H1_ENCFF573NKX_ENCFF760NUN_ENCFF919FBG_ENCFF332TNJ_cCRE_open_filtered.bed.gz
     gluta_screen_active_cre: data/glutamatergic_neuron_ENCFF269VAY_ENCFF346LEZ_ENCFF118OBT_ENCFF536VOI_cCRE_open_filtered.bed.gz
     neural_stem_cell_screen_active_cre: data/neural_stem_cell_ENCFF287XRW_ENCFF872FDO_ENCFF110SOE_cCRE_open_filtered.bed.gz
     adrenal_gland_screen_active_cre: data/SCREEN_tissues/enrichment_over_tissues_filtered/adrenal_gland_cCRE_open_filtered.bed.gz

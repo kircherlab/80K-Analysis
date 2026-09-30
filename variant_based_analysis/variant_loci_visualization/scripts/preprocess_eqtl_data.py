@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-One-time eQTL preprocessing for plot_variants_v3.R.
+One-time eQTL preprocessing for scripts/plot_variants.R.
 
 Outputs
 -------
@@ -16,8 +16,8 @@ data/eqtl/metabrain_processed.tsv.gz
 
 Usage
 -----
-  cd /path/to/variant-browser
-  python src/preprocess_eqtl_data.py
+  cd variant_based_analysis/variant_loci_visualization/
+  python scripts/preprocess_eqtl_data.py
 """
 
 import gzip
@@ -30,10 +30,23 @@ import pandas as pd
 #  Configuration
 DATA_BASE = Path("./")
 
-GENCODE_GTF  = DATA_BASE / "../../data/gencode.v42.gtf.gz"
-GTEX_RAW     = DATA_BASE / "../../data/gtex_prefiltered_by_mpra_1_based.tsv.gz"
-# NOTE: This file is too large to store in the repo
-META_PARQUET = DATA_BASE / "neuro_Metabrain_eQTL_overlap.parquet"
+GENCODE_GTF  = DATA_BASE / "../data/gencode.v42.gtf.gz"
+GTEX_RAW     = DATA_BASE / "../data/gtex_prefiltered_by_mpra_1_based.tsv.gz"
+
+# Per-(variant x tissue x gene) MetaBrain cis-eQTL table restricted to the 80K MPRA
+# variants (columns: SPDI, SNPEffectAllele, GeneSymbol, GenePos, Tissue, MetaBeta,
+# MetaP, ...). Produced by the MetaBrain / MPRA overlap pipeline as
+# `metabrain_eqtl_full_clean.parquet` (~240 MB, too large for the repo — see README).
+META_PARQUET = DATA_BASE / "../data/metabrain_eqtl_full_clean.parquet"
+
+# MetaBrain significance threshold: an eQTL row is "significant" when MetaP < this.
+# 0.01 reproduces the sig_eQTL flag of the per-variant MetaBrain summary table.
+METABRAIN_SIG_P = 0.01
+
+# The GTEx arc track is disabled for the manuscript figures (all plot_variant()
+# calls pass show_gtex = FALSE). Set to True and provide GENCODE_GTF + GTEX_RAW to
+# regenerate data/eqtl/gtex_processed.tsv.gz.
+PROCESS_GTEX = False
 
 OUT_DIR  = Path("data/eqtl")
 GTEX_OUT = OUT_DIR / "gtex_processed.tsv.gz"
@@ -185,6 +198,15 @@ def process_metabrain(parquet_path: Path, out_path: Path) -> None:
     df.loc[flip_mask, "MetaBeta_alt"] = -df.loc[flip_mask, "MetaBeta"]
     print(f"  Flipped beta for {flip_mask.sum():,} rows (SNPEffectAllele == ref)")
 
+    # Significance flag. The full MetaBrain table has no sig_eQTL column, so derive
+    # it from MetaP. Keep only significant rows: non-significant eQTLs are never
+    # drawn (build_eqtl_arc_tracks() filters on is_sig) and dropping them keeps the
+    # processed table small enough to commit.
+    df["sig_eQTL"] = df["MetaP"] < METABRAIN_SIG_P
+    n_all = len(df)
+    df = df[df["sig_eQTL"]].copy()
+    print(f"  Significant rows (MetaP < {METABRAIN_SIG_P}): {len(df):,} / {n_all:,}")
+
     # Dedup mode 1: cortex_EUR
     df["is_cortex_EUR"] = df["Tissue"] == "cortex_EUR"
 
@@ -226,6 +248,11 @@ def process_metabrain(parquet_path: Path, out_path: Path) -> None:
     })
     out["g_chr"] = out["v_chr"]  # cis-eQTL: same chromosome
 
+    # Trim float precision to keep the committed file small. R only uses `beta`
+    # (sign + magnitude for arc colour) and `p_val` (diagnostic print).
+    out["beta"]  = out["beta"].round(5)
+    out["p_val"] = out["p_val"].map(lambda x: float(f"{x:.4g}"))
+
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     out.to_csv(out_path, sep="\t", index=False, compression="gzip")
     print(f"  Written {len(out):,} rows → {out_path}")
@@ -237,17 +264,23 @@ def process_metabrain(parquet_path: Path, out_path: Path) -> None:
 #  Entry point
 
 def main():
-    for path in [GENCODE_GTF, GTEX_RAW, META_PARQUET]:
+    required = [META_PARQUET]
+    if PROCESS_GTEX:
+        required += [GENCODE_GTF, GTEX_RAW]
+    for path in required:
         if not path.exists():
             print(f"ERROR: required file not found:\n  {path}", file=sys.stderr)
             sys.exit(1)
 
-    tss_dict = parse_gencode_tss(GENCODE_GTF)
-    process_gtex(GTEX_RAW, tss_dict, GTEX_OUT)
+    if PROCESS_GTEX:
+        tss_dict = parse_gencode_tss(GENCODE_GTF)
+        process_gtex(GTEX_RAW, tss_dict, GTEX_OUT)
+
     process_metabrain(META_PARQUET, META_OUT)
 
     print("\nDone. Preprocessed files:")
-    print(f"  {GTEX_OUT}")
+    if PROCESS_GTEX:
+        print(f"  {GTEX_OUT}")
     print(f"  {META_OUT}")
 
 
