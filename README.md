@@ -45,3 +45,63 @@ Three separate conda environments cover the code in this repository (see `enviro
 | `mpra80k_variant_plotting` | `variant_based_analysis/variant_loci_visualization/` Gviz locus plots | `conda env create -f environment/variant_plotting_environment.yml` |
 
 The BCalm environment additionally requires cloning [kircherlab/BCalm](https://github.com/kircherlab/BCalm) (v0.9.0 used here) and passing its path as the `<bcalm_path>` CLI argument which is loaded at runtime via `devtools::load_all()`, not installed as a package. External data dependencies too large to bundle in this repo (>25MB) are listed in `bigger_than_25mb.tsv`; files referenced from an absolute local path are listed in `not_accessible.tsv`.
+
+### 1. System Requirements
+
+**Operating system:** Linux (developed and tested on Ubuntu 24.04 LTS, x86_64, including under WSL2). Not tested on macOS or native Windows; the R/Bioconductor stack in particular is only expected to work on Linux.
+
+**Hardware:** No non-standard hardware - everything runs on CPU, no GPU required. Tested on a 14-core machine with 23 GB RAM. A normal desktop/laptop (4+ cores, 16 GB RAM) is sufficient for the demo below and for the individual figure notebooks, which read pre-processed tables of a few MB to tens of MB each. Re-running the two `generate_*_annotation_table.ipynb` pipeline notebooks against the *full* external datasets (rather than the bundled samples - see `bigger_than_25mb.tsv`) benefits from more RAM (32 GB) and several GB of free disk space.
+
+**Software dependencies (versions tested):**
+
+| Component | Version |
+|---|---|
+| Conda/Mamba | any recent Miniforge/Miniconda |
+| Python (`mpra80k_python` env) | 3.11 |
+| pandas | 2.2.3 |
+| numpy | 2.3.5 |
+| matplotlib | 3.11.1 |
+| pyranges | 0.1.4 |
+| upsetplot | 0.9.0 |
+| R (`mpra80k_variant_plotting` / `mpra80k_element_variant_processing` envs) | 4.4.3 |
+| Bioconductor Gviz | 1.50.0 |
+| Bioconductor rtracklayer | 1.66.0 |
+
+The complete, exact pinned dependency lists (every transitive package) are in `environment/*.yml` - the three environments are created directly from those files, so nothing above needs to be installed by hand. `bedtools` and `fimo` (MEME suite) are only needed if you regenerate certain intermediate files from raw/full external data from scratch (documented inline in the relevant notebook cells); they are not required to run the demo.
+
+### 2. Installation guide
+
+```bash
+git clone https://github.com/kircherlab/80K-Analysis.git
+cd 80K-Analysis
+
+conda env create -f environment/python_environment.yml
+# optional - only needed for perform_bcalm_elements_cli.R / perform_bcalm_variants_cli.R
+conda env create -f environment/element_variant_processing_environment.yml
+# optional - only needed for variant_based_analysis/variant_loci_visualization/
+conda env create -f environment/variant_plotting_environment.yml
+```
+
+**Typical install time:** ~10–20 minutes on a normal desktop with a broadband connection for the primary `mpra80k_python` environment alone (dominated by conda's dependency solve and package downloads); add roughly another 10–15 minutes each for the two optional R environments if you need them. Using `mamba env create` instead of `conda env create` typically cuts this to a few minutes.
+
+### 3. Demo
+
+The two pipeline notebooks that build the main annotation tables - `cCRE_based_analysis/generate_element_annotation_table.ipynb` and `variant_based_analysis/generate_variant_annotation_table.ipynb` - read a couple of external datasets that are too large to bundle (>25 MB, see `bigger_than_25mb.tsv`). Both notebooks ship with a `dummy_run = True` flag (default) that swaps those for small, real, bundled sample subsets (`subset_GTEx_49tissues_release1.*`, `subset_UKBB_94traits_release1.*`), so they run end-to-end out of the box with no downloads.
+
+**Instructions to run:**
+
+open either notebook in Jupyter/JupyterLab and "Run All". Both default to `writing = False`, so running them does not modify any file in the repo. Every cell's output is simply displayed inline.
+
+**Expected output:** printed summary statistics and intermediate dataframe previews in the notebook cells - e.g. SCREEN cCRE overlap counts, the number of brain-eQTL/UKBB variant overlaps found in the sample subsets, TF binding-site annotation summaries. Setting `writing = True` additionally (re)writes the processed annotation tables that are already bundled under `cCRE_based_analysis/data/` and `variant_based_analysis/data/` (e.g. `all_80k_MPRA_elements_annotations_table_2606_eQTL_phastCons_ReMap.tsv.gz`, `80k_tested_variant_annotation_table_with_readout.tsv.gz`).
+
+**Expected run time:** a couple of minutes each on a normal desktop. `generate_variant_annotation_table.ipynb` additionally performs a live Ensembl REST gene-symbol lookup, which adds a few more minutes and needs internet access.
+
+### 4. Instructions for use
+
+**To run on your own MPRA data:** replace the input tables referenced in `cCRE_based_analysis/data/global80K_config.yaml` (element/cCRE side) and at the top of `variant_based_analysis/generate_variant_annotation_table.ipynb` (variant side) with your own processed MPRA activity/variant-effect tables in the same column schema - see the first cells of each `generate_*_annotation_table.ipynb` for the expected columns, and `00_helpful_functions/helpful_functions.py` for shared parsing helpers. Re-run those two notebooks with `writing = True` to produce your own processed annotation tables, then run the downstream figure notebooks (Repository Contents section above) against them.
+
+**(Optional) Reproduction instructions:** to reproduce the manuscript figures exactly from the full external datasets rather than the bundled samples, set `dummy_run = False` in `generate_element_annotation_table.ipynb` / `generate_variant_annotation_table.ipynb` and place the full files listed in `bigger_than_25mb.tsv` at the paths given there.
+
+### License
+
+This repository is released under the [MIT License](LICENSE).
